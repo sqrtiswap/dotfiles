@@ -1,0 +1,15 @@
+#!/bin/ksh
+
+BLACK="#000000"
+#BLUE="#3b48e3"
+#GREEN="#18b218"
+GREY="#656565"
+#RED="#b81313"
+#YELLOW="#b4801e"
+
+XBMDIR="/home/alexander/Pictures/wallpaper-xbm/bw-bgnd"
+
+while true ; do
+	xsetroot -bitmap "$(find $XBMDIR -iname '*.xbm' | sort -R | head -1)" -bg $GREY -fg $BLACK
+	sleep 3600
+done

@@ -7,7 +7,7 @@ GREY="#656565"
 #RED="#b81313"
 #YELLOW="#b4801e"
 
-XBMDIR="/home/alexander/Pictures/wallpaper-xbm/bw-bgnd/Current/"
+XBMDIR="/home/alexander/Pictures/wallpaper-xbm/Current/"
 
 while true ; do
 	xsetroot -bitmap "$(find $XBMDIR -iname '*.xbm' | sort -R | head -1)" -bg $GREY -fg $BLACK

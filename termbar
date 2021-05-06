@@ -1,8 +1,5 @@
 #!/bin/sh
 
-## Debug
-#set -x
-
 trap 'exec $0' HUP # Restart itself
 trap 'tput cnorm; exit 1' INT QUIT TERM
 
@@ -13,12 +10,12 @@ cyanf="${esc}[36m";
 purplef="${esc}[35m"
 pipe="${purplef}|${reset}"
 
-today() {
+time() {
 	DATE=$(date '+%A, %d %B %Y ● %T %Z %z ● %V ● %j')
 }
 
-desktop_id() {
-	DESKTOP_ID=$(xprop -root _NET_CURRENT_DESKTOP | cut -d ' ' -f 3)
+group() {
+	GROUP=$(xprop -root _NET_CURRENT_DESKTOP | cut -d ' ' -f 3)
 }
 
 cpu() {
@@ -50,15 +47,15 @@ wifi() {
 tput civis
 
 while true; do
-	today
-	desktop_id
+	time
+	group
 	cpu
 	mem
 	bat
 	bat_status
 	wifi
 	tput cup 1 0
-	printf "[${DESKTOP_ID}] ${DATE} ${pipe} ${cyanf}CPU:${reset} ${CPU_SPEED} MHz (${CPU_TEMP}°) ${pipe} ${cyanf}Mem:${reset} ${MEM} "
+	printf "[${GROUP}] ${DATE} ${pipe} ${cyanf}CPU:${reset} ${CPU_SPEED} MHz (${CPU_TEMP}°) ${pipe} ${cyanf}Mem:${reset} ${MEM} "
 	printf "${pipe} ${cyanf}Bat:${reset} $BAT - ${BAT_STATUS} ${pipe} ${cyanf}SSID:${reset}${SSID}${pipe}"
 	sleep 1
 done

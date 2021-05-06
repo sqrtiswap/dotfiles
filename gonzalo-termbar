@@ -40,7 +40,7 @@ bat_status() {
 }
 
 mem() {
-	MEM=$(top -n | grep Memory | awk {'print $6'})
+	MEM=$(top -n | grep Memory | awk '{ print $6 }')
 }
 
 wifi() {
@@ -58,7 +58,7 @@ while true; do
 	bat_status
 	wifi
 	tput cup 1 0
-	echo -n "[${DESKTOP_ID}] ${DATE} ${pipe} ${cyanf}CPU:${reset} ${CPU_SPEED} MHz (${CPU_TEMP}°) ${pipe} ${cyanf}Mem:${reset} ${MEM} "
-	echo -n "${pipe} ${cyanf}Bat:${reset} $BAT - ${BAT_STATUS} ${pipe} ${cyanf}SSID:${reset}${SSID}${pipe}"
+	printf "[${DESKTOP_ID}] ${DATE} ${pipe} ${cyanf}CPU:${reset} ${CPU_SPEED} MHz (${CPU_TEMP}°) ${pipe} ${cyanf}Mem:${reset} ${MEM} "
+	printf "${pipe} ${cyanf}Bat:${reset} $BAT - ${BAT_STATUS} ${pipe} ${cyanf}SSID:${reset}${SSID}${pipe}"
 	sleep 1
 done

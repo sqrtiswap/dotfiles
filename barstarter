@@ -1,0 +1,15 @@
+#!/bin/sh
+
+FONT="-misc-fixed-medium-r-normal-*-15-*-*-*-*-*-iso10646-1"
+COLOUR="#000000"
+FONTCOLOUR="#d8d8d8"
+LEFTMONITOR="1920x20+0+0"
+RIGHTMONITOR="1920x20+1920+0"
+
+MONITORS=$(xprop -root _NET_DESKTOP_GEOMETRY | awk -F " = " '{ print $2 }')
+if [ "$MONITORS" = "3840, 1080" ] ; then
+	~/bin/lemonscript.sh | lemonbar -dp -g "$LEFTMONITOR" -B "$COLOUR" -F "$FONTCOLOUR" -f "$FONT" &
+	~/bin/lemonscript.sh | lemonbar -dp -g "$RIGHTMONITOR" -B "$COLOUR" -F "$FONTCOLOUR" -f "$FONT" &
+elif [ "$MONITORS" = "1920, 1080" ] ; then
+	~/bin/lemonscript.sh | lemonbar -dp -g "$LEFTMONITOR" -B "$COLOUR" -F "$FONTCOLOUR" -f "$FONT" &
+fi

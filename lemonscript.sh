@@ -166,7 +166,7 @@ Network() {
 		if [ "$WLANSTAT" = "active" ] ; then
 			WLANID=$(ifconfig iwm0  | awk '/(nwid|join)/ { print $3 }')
 			WLANSIG=$(ifconfig iwm0 | awk 'match($0, /.[0-9]%/) { print substr($0, RSTART, RLENGTH) }')
-			echo -n "%{F$GREEN}%{B$BLACK}$WLANID ($WLANSIG)%{F-}%{B-}"
+			echo -n "%{F$GREEN}%{B$BLACK}$WLANID($WLANSIG)%{F-}%{B-}"
 		else
 			echo -n "%{F$GREY}%{B$BLACK}iwm0%{F-}%{B-}"
 		fi

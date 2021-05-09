@@ -15,7 +15,7 @@ Battery() {
 		echo -n "%{F$GREY}%{B$BLACK}AC: "
 	elif [[ $ADAPTER = 1 ]] ; then
 		if [[ "$BATTERYTIME" = "unknown" ]] ; then
-			echo -n "%{F$BLUE}%{B$BLACK}AC: "
+			echo -n "%{F$BLUE}%{B$BLACK}!WARNING! AC: "
 		else
 			echo -n "%{F$GREEN}%{B$BLACK}AC: "
 		fi

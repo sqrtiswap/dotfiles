@@ -4,10 +4,16 @@ trap 'exec $0' HUP # Restart itself
 trap 'tput cnorm; exit 1' INT QUIT TERM
 
 _norm="\033[39m"
-_alrt="\033[31m"
+_alrt="\033[34m"
 _warn="\033[33m"
 _rset="\033[0m"
 _hide="\033[2m"
+_back="\033[22m"
+
+red="\033[31m"
+grey="${_norm}${_hide}"
+
+pipe="${_norm} |"
 
 set -A _bat "${_norm}" "${_warn}" "${_alrt}"
 set -A _pwr "${_norm}"
@@ -23,10 +29,8 @@ battery() {
 }
 
 calendar() {
-	[[ $(date "+%H") -ge 6 && $(date "+%H") -le 22 ]] \
-		&& echo -n "${_norm}" \
-		|| echo -n "${_warn}"
-	echo -n "$(date '+%a %d %b %H:%M')${_norm}"
+	sep="${grey}&${_back}${red}"
+	echo -n "${_norm}$(date "+${red}%A, %d %B %Y ${sep} %T %Z %z ${sep} %V ${sep} %j")${pipe}"
 }
 
 cpu() {
@@ -35,13 +39,28 @@ cpu() {
 }
 
 group() {
-	echo -n "${_hide}[ $(xprop -root 32c '\t$0' _NET_CURRENT_DESKTOP | cut -f 2) ]${_rset}"
+	echo -n "${red}[ $(xprop -root 32c '\t$0' _NET_CURRENT_DESKTOP | cut -f 2) ]${_rset}"
 }
 
 network() {
 	[[ -z "$(ifconfig "${_nic[0]}" | grep 'status: no carrier')" ]] \
 		&& (echo -n "${_net[0]}" ; return)
 	echo -n "$(ifconfig "${_nic[1]}" | awk '/ieee80211:/ { print "直" $3 "(" $8 ")" }')"
+}
+
+tasks() {
+	TASKSTODAY=$(grep -c due:"$(date +%Y-%m-%d)" ~/todo/todo.txt)
+	if [[ $TASKSTODAY != 0 ]] ; then
+		echo -n "${red}$TASKSTODAY"
+	else
+		echo -n "${grey}$TASKSTODAY"
+	fi
+	TASKSURGENT=$(grep -c '_urgent' ~/todo/todo.txt)
+	if [[ $TASKSURGENT != 0 ]] ; then
+		echo -n " ${red}$TASKSURGENT${pipe}"
+	else
+		echo -n " ${grey}$TASKSURGENT${pipe}"
+	fi
 }
 
 volume() {
@@ -55,23 +74,23 @@ volume() {
 	echo -n "$VOLUME%"
 }
 
-window() {
-	WID=$(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2)
-	WIN=$(xprop -id "$WID" '\t$0' _NET_WM_NAME | cut -d '"' -f 2)
-	echo -n "${WIN}"
-}
+#window() {
+	#WID=$(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2)
+	#WIN=$(xprop -id "$WID" '\t$0' _NET_WM_NAME | cut -d '"' -f 2)
+	#echo -n "${WIN}"
+#}
 
 tput civis	# hide cursor
 
 while true; do
-	_l="$(group) $(window)"
-	_r="$(cpu) $(battery) $(network) $(volume) $(calendar)"
+	_l=" $(calendar) $(tasks)"
+	_r="$(cpu) $(battery) $(network) $(volume) $(group) "
 
 	#tput clear cup 1 0
 	tput cup 1 0
-	printf "%-120.120s\r" "$_l"
-	tput cup 1 120
-	printf "%110.110s" "$_r"
+	printf "%-150.150s\r" "$_l"
+	tput cup 1 100
+	printf "%100.100s" "$_r"
 	sleep 1
 done
 

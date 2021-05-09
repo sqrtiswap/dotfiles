@@ -10,10 +10,15 @@ YELLOW="#b4801e"
 
 Battery() {
 	ADAPTER=$(apm -a)
+	BATTERYTIME=$(apm -m)
 	if [[ $ADAPTER = 0 ]] ; then
 		echo -n "%{F$GREY}%{B$BLACK}AC: "
 	elif [[ $ADAPTER = 1 ]] ; then
-		echo -n "%{F$GREEN}%{B$BLACK}AC: "
+		if [[ "$BATTERYTIME" = "unknown" ]] ; then
+			echo -n "%{F$BLUE}%{B$BLACK}AC: "
+		else
+			echo -n "%{F$GREEN}%{B$BLACK}AC: "
+		fi
 	else
 		echo -n "%{F$BLUE}%{B$BLACK}AC: "
 	fi
@@ -31,7 +36,6 @@ Battery() {
 			echo -n "%{F$RED}%{B$BLACK}$BATTERY%%"
 		fi
 	fi
-	BATTERYTIME=$(apm -m)
 	[[ "$BATTERYTIME" != "unknown" ]] && echo -n " ($BATTERYTIME m)"
 	echo -n "%{F-}%{B-}"
 }

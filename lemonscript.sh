@@ -30,10 +30,10 @@ Battery() {
 	elif [ "$BATTERY" -gt 10 ] ; then
 		echo -n "%{F$RED}%{B$BLACK}$BATTERY%%"
 	else
-		if [[ $ADAPTER != 1 ]] ; then
-			echo -n "%{F$RED}%{B$BLACK}$BATTERY%% CHARGE NOW!"
-		else
+		if [[ $ADAPTER = 0  && "$BATTERYTIME" != "unknown" ]] ; then
 			echo -n "%{F$RED}%{B$BLACK}$BATTERY%%"
+		else
+			echo -n "%{F$RED}%{B$BLACK}$BATTERY%% CHARGE NOW!"
 		fi
 	fi
 	[[ "$BATTERYTIME" != "unknown" ]] && echo -n " ($BATTERYTIME m)"

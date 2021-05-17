@@ -70,9 +70,9 @@ Cpu() {
 	echo -n "$CPULOAD%%%{F$GREY}%{B$BLACK} ● "
 	#CPUTEMP=$(sysctl hw.sensors.cpu0.temp0 | awk -F "=" '{ gsub(" degC", "", $2); print $2 }')
 	CPUTEMP=$(sysctl -n hw.sensors.cpu0.temp0 | cut -d '.' -f 1)
-	if [[ "$CPUTEMP" > 70 ]] ; then
+	if [[ "$CPUTEMP" -gt 70 ]] ; then
 		echo -n "%{F$RED}%{B$BLACK}"
-	elif [[ "$CPUTEMP" > 60 ]] ; then
+	elif [[ "$CPUTEMP" -gt 60 ]] ; then
 		echo -n "%{F$YELLOW}%{B$BLACK}"
 	else
 		echo -n "%{F$GREEN}%{B$BLACK}"

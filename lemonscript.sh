@@ -30,7 +30,7 @@ Battery() {
 	elif [ "$BATTERY" -gt 10 ] ; then
 		echo -n "%{F$RED}%{B$BLACK}$BATTERY%%"
 	else
-		if [[ $ADAPTER = 0  && $MANUALAC != 1 ]] ; then
+		if [[ $ADAPTER = 1 ]] ; then
 			echo -n "%{F$RED}%{B$BLACK}$BATTERY%%"
 		else
 			echo -n "%{F$RED}%{B$BLACK}$BATTERY%% CHARGE NOW!"

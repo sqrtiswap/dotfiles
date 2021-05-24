@@ -1,21 +1,21 @@
 #!/bin/sh
 
-FONT="-misc-fixed-medium-r-normal-*-15-*-*-*-*-*-iso10646-1"
-COLOUR="#000000"
-FONTCOLOUR="#d8d8d8"
+#FONT="-misc-fixed-medium-r-normal-*-15-*-*-*-*-*-iso10646-1"
+#COLOUR="#000000"
+#FONTCOLOUR="#d8d8d8"
 SCRIPTDIR="$HOME/sources/termbar"
-LEFTLEMONBAR="1920x20+0+0"
-RIGHTLEMONBAR="1920x20+1920+0"
-#LEFTTERMBAR="212x1+5+0"
-#RIGHTTERMBAR="212x1+1925+0"
+#LEFTLEMONBAR="1920x20+0+0"
+#RIGHTLEMONBAR="1920x20+1920+0"
+LEFTTERMBAR="212x1+5+0"
+RIGHTTERMBAR="212x1+1925+0"
 
 MONITORS=$(xprop -root _NET_DESKTOP_GEOMETRY | awk -F " = " '{ print $2 }')
 if [ "$MONITORS" = "3840, 1080" ] ; then
-	#xterm -name termbar -class termbar -geometry "$LEFTTERMBAR" -e "$SCRIPTDIR"/termbar.sh &
-	#xterm -name termbar -class termbar -geometry "$RIGHTTERMBAR" -e "$SCRIPTDIR"/termbar.sh &
-	"$SCRIPTDIR"/lemonscript.sh | lemonbar -dp -g "$LEFTLEMONBAR" -B "$COLOUR" -F "$FONTCOLOUR" -f "$FONT" &
-	"$SCRIPTDIR"/lemonscript.sh | lemonbar -dp -g "$RIGHTLEMONBAR" -B "$COLOUR" -F "$FONTCOLOUR" -f "$FONT" &
+	xterm -name termbar -class termbar -geometry "$LEFTTERMBAR" -e "$SCRIPTDIR"/termbar.sh &
+	xterm -name termbar -class termbar -geometry "$RIGHTTERMBAR" -e "$SCRIPTDIR"/termbar.sh &
+	#"$SCRIPTDIR"/lemonscript.sh | lemonbar -dp -g "$LEFTLEMONBAR" -B "$COLOUR" -F "$FONTCOLOUR" -f "$FONT" &
+	#"$SCRIPTDIR"/lemonscript.sh | lemonbar -dp -g "$RIGHTLEMONBAR" -B "$COLOUR" -F "$FONTCOLOUR" -f "$FONT" &
 elif [ "$MONITORS" = "1920, 1080" ] ; then
-	#xterm -name termbar -class termbar -geometry "$LEFTTERMBAR" -e "$SCRIPTDIR"/termbar.sh &
-	"$SCRIPTDIR"/lemonscript.sh | lemonbar -dp -g "$LEFTLEMONBAR" -B "$COLOUR" -F "$FONTCOLOUR" -f "$FONT" &
+	xterm -name termbar -class termbar -geometry "$LEFTTERMBAR" -e "$SCRIPTDIR"/termbar.sh &
+	#"$SCRIPTDIR"/lemonscript.sh | lemonbar -dp -g "$LEFTLEMONBAR" -B "$COLOUR" -F "$FONTCOLOUR" -f "$FONT" &
 fi

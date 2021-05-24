@@ -1,85 +1,187 @@
-#!/bin/sh
+#!/bin/ksh
 
 trap 'exec $0' HUP	# restart itself
 trap 'tput cnorm; exit 1' INT QUIT TERM
 
-esc="\033"
-#standard="${esc}[39m"
-reset="${esc}[0m"
-grey="${esc}[2m"
-#black="${esc}[30m"
-red="${esc}[31m"
-#green="${esc}[32m"
-#yellow="${esc}[33m"
-#blue="${esc}[34m"
-#magenta="${esc}[35m"
-#cyan="${esc}[36m"
-#white="${esc}[37m"
+_rset="\033[0m"
+_hide="\033[2m"
+_back="\033[22m"
+_crit="\033[31m"	# red
+_good="\033[32m"	# green
+_warn="\033[33m"	# yellow
+_alrt="\033[34m"	# blue
+_norm="\033[39m"	# white
 
-#brightblack="${esc}[90m"
-#brightred=${esc}[91m"
-#brightgreen="${esc}[92m"
-#brightyellow="${esc}[93m"
-#brightblue="${esc}[94m"
-#brightmagenta="${esc}[95m"
-#brightcyan="${esc}[96m"
-#brightwhite="${esc}[97m"
+grey="${_norm}${_hide}"
+pipe="${_back}${_norm} |"
 
-#pipe="${reset}|${reset}"
+red="\033[31m"
 
-calendar() {
-	sep="\033[0m\033[2m&\033[0m\033[31m"
-	#sep="${reset}${grey}&${reset}${red}"
-	DATE=$(date "+%A")
-	printf "\033[31m%s\033[0m" "$DATE"
+#black="\033[30m"
+#magenta="\033[35m"
+#cyan="\033[36m"
+#white="\033[37m"
+
+#brightblack="\033[90m"
+#brightred="\033[91m"
+#brightgreen="\033[92m"
+#brightyellow="\033[93m"
+#brightblue="\033[94m"
+#brightmagenta="\033[95m"
+#brightcyan="\033[96m"
+#brightwhite="\033[97m"
+
+set -A bat "${_good}" "${_warn}" "${_crit}" "${grey}" "${_alrt}"
+set -A net "${_rset}${_good}" "${grey}" "${_crit}"
+set -A nic "em0" "iwm0" "ure0"
+set -A vol "${_good}" "${grey}"
+
+battery() {
+# apm -b: 0 high, 1 low, 2 critical, 3 charging, 4 absent, 255 unknown
+	#_adapter=$(apm -a)
+	_status=$(sysctl -n hw.sensors.acpiac0.indicator0 | grep -c On)
+	_battery=${_back}$(apm -l)
+	[[ ${_status} -eq 1 ]] \
+		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_battery}%${pipe}" \
+		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_battery}% ($(apm -m))${pipe}"
 }
 
-group() {
-	GROUP=$(xprop -root 32c '\t$0' _NET_CURRENT_DESKTOP | cut -f 2)
-	printf "%s" "$GROUP"
+calendar() {
+	sep="${grey}&${_back}${red}"
+	echo -n "${_norm}$(date "+${red}%A, %d %B %Y ${sep} %T %Z %z ${sep} %V ${sep} %j")${pipe}"
 }
 
 cpu() {
-	CPUTEMP=$(sysctl -n hw.sensors.cpu0.temp0 | cut -d '.' -f 1)°C
-	CPUSPEED=$(printf "%4s" "$(sysctl -n hw.cpuspeed)")
-	printf "%s %s" "$CPUTEMP" "$CPUSPEED"
+	_cpuload=$((100-$(iostat -C | awk -F " " 'NR == 3 { print $6 }')))
+	_cputemp=$(sysctl -n hw.sensors.cpu0.temp0 | cut -d '.' -f 1)
+	_cpuspeed=$(printf "%4s" "$(sysctl -n hw.cpuspeed)")
+	_cpuperf=$(printf "%4s" "$(sysctl -n hw.setperf)%")
+	#echo -n "${_cpuload}% ${_cputemp}°C ${_cpuspeed} MHz @ ${_cpuperf}${pipe}"
+	if [ ${_cpuload} -ge 90 ] ; then
+		echo -n "${_crit}${_cpuload}% "
+	elif [ ${_cpuload} -ge 60 ] ; then
+		echo -n "${_warn}${_cpuload}% "
+	else
+		echo -n "${_good}${_cpuload}% "
+	fi
+	if [[ ${_cputemp} -gt 70 ]] ; then
+		echo -n "${_crit}${_cputemp}°C"
+	elif [[ ${_cputemp} -gt 60 ]] ; then
+		echo -n "${_warn}${_cputemp}°C"
+	else
+		echo -n "${_good}${_cputemp}°C"
+	fi
+	echo -n " ${grey}${_cpuspeed} MHz @ ${_cpuperf}${_rset}${pipe}"
 }
 
-battery() {
-	BAT=$(apm -l)
-	STATUS=$(sysctl hw.sensors.acpiac0.indicator0 | grep -c On)
-	if [ "${STATUS}" -eq "1" ]; then
-		BAT_STATUS=connected
+group() {
+	echo -n "${grey}$(xprop -root 32c '\t$0' _NET_CURRENT_DESKTOP | cut -f 2)${_rset}"
+}
+
+load() {
+	_sysload=$(systat -b | awk 'NR==3 { print $4 }')
+	if [[ "${_sysload}" > "4.00" ]] ; then
+		echo -n "${_crit}${_sysload}${pipe}"
+	elif [[ "${_sysload}" > "2.00" ]] ; then
+		echo -n "${_warn}${_sysload}${pipe}"
 	else
-		BAT_STATUS=${red}disconnected${reset}
+		echo -n "${_good}${_sysload}${pipe}"
 	fi
-	printf "%s (%s)" "$BAT" "$BAT_STATUS"
 }
 
 memory() {
-	MEM=$(top -n | awk -F "( |/)" 'NR == 7 { print $3 }')
-	printf "%s" "$MEM"
+	_mem=$(top -n | awk -F "( |/)" 'NR == 7 { print $3 }')
+	if [[ "0${_mem}" > "10000M" ]] ; then
+		echo -n "${_crit}${_mem}${pipe}"
+	elif [[ "0${_mem}" > "5000M" ]] ; then
+		echo -n "${_warn}${_mem}${pipe}"
+	else
+		echo -n "${_good}${_mem}${pipe}"
+	fi
+	#echo -n "${grey}${_mem}${_rset}${pipe}"
 }
 
 network() {
-	SSID=$(ifconfig | grep join | sed -e 's/.*join\(.*\)chan.*/\1/')
-	printf "%s" "$SSID"
+	_lanstat=$(ifconfig "${nic[0]}" | grep -c 'status: active')
+	_wlanstat=$(ifconfig "${nic[1]}" | grep -c 'status: active')
+	#_wlanid=$(ifconfig ${nic[1]} | awk '/(nwid|join)/ { print $3 }')
+	#_wlansig=$(ifconfig ${nic[1]} | awk 'match($0, /.[0-9]%/) { print substr($0, RSTART, RLENGTH) }')
+	_wlan=$(ifconfig "${nic[1]}" | awk '/ieee80211:/ { print $3 "(" $8 ")" }')
+	_hublanexist=$(ifconfig | grep -c "${nic[2]}:")
+	if [[ ${_lanstat} -ne 1 && ${_wlanstat} -ne 1 ]] ; then
+		if [[ ${_hublanexist} = 0 ]] ; then
+			echo -n "${net[2]}no network"
+		else
+			_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
+			_hublanstat=$(ifconfig "${nic[2]}" | grep -c inet)
+			[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \
+				&& echo -n "${net[1]}${nic[0]} ${nic[1]}${net[0]} ${nic[2]}" \
+				|| echo -n "${net[2]}no network"
+		fi
+	else
+		[[ ${_lanstat} -eq 1 ]] \
+			&& echo -n "${net[0]}${nic[0]} " \
+			|| echo -n "${net[1]}${nic[0]} "
+		[[ ${_wlanstat} -eq 1 ]] \
+			&& echo -n "${net[0]}${_wlan}" \
+			|| echo -n "${net[1]}${nic[1]}"
+		if [[ ${_hublanexist} -eq 1 ]] ; then
+			_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
+			_hublanstat=$(ifconfig "${nic[2]}" | grep -c inet)
+			[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \
+				&& echo -n " ${net[0]}${nic[2]}" \
+				|| echo -n " ${net[1]}${nic[2]}"
+		fi
+	fi
+	echo -n "${_rset}${pipe}"
 }
 
-#window() {
-	#WID=$(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2)
-	#WIN=$(xprop -id "$WID" '\t$0' _NET_WM_NAME | cut -d '"' -f 2)
-#}
+snapshot() {
+	_snapshot=$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)
+	_kernel=$(uname -v | grep -c 'GENERIC.MP')
+	[[ ${_kernel} -eq 1 ]] \
+		&& echo -n "${grey}${_snapshot}${pipe}" \
+		|| echo -n "${_alrt}${_snapshot}${pipe}"
+}
+
+tasks() {
+	_today=$(grep -c due:"$(date +%Y-%m-%d)" ~/todo/todo.txt)
+	[[ ${_today} != 0 ]] \
+		&& echo -n "${red}${_today} " \
+		|| echo -n "${grey}${_today} "
+	_urgent=$(grep -c '_urgent' ~/todo/todo.txt)
+	[[ ${_urgent} != 0 ]] \
+		&& echo -n "${_back}${red}${_urgent}${pipe}" \
+		|| echo -n "${grey}${_urgent}${pipe}"
+}
+
+volume() {
+	_volume=$(sndioctl -n output.level | awk '{ print int($0*100) }')
+	_omute=$(sndioctl -n output.mute)
+	#_imute=$(sndioctl -n input.mute)
+	#[[ ${_imute} -eq 1 ]] \
+		#&& echo -n "${_crit}mic on "
+	[[ ${_omute} -eq 1 ]] \
+		&& echo -n "${vol[${_omute}]}${_volume}%${pipe}" \
+		|| echo -n "${vol[${_omute}]}${_volume}%${pipe}"
+}
+
+window() {
+	_wid=$(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2)
+	_win=$(xprop -id "${_wid}" '\t$0' _NET_WM_NAME | cut -d '"' -f 2)
+	echo -n "${_win}"
+}
 
 tput civis	# hide cursor
 
 while true; do
+	#tput clear cup 1 0
 	tput cup 1 0
-	_l=" [ $(group) ] $(calendar)"
-	_r="CPU:$(cpu) MHz Mem:$(memory) Bat:$(battery) Net:$(network)"
-	printf "%-150.150s\r" "$_l"
-	tput cup 1 100
-	printf "%100.100s" "$_r"
+	_l=" $(calendar) $(tasks)"
+	_r="| $(volume) $(network) $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
+	printf "%-170.170s\r" "$_l"
+	tput cup 1 104
+	printf "%280.280s" "$_r"
 	sleep 1
 done
 

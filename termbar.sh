@@ -92,10 +92,10 @@ load() {
 }
 
 memory() {
-	_mem=$(printf "%6s" "$(top -n | awk -F "( |/)" 'NR == 7 { print $3 }')")
-	if [[ "${_mem}" > "10000M" ]] ; then
+	_mem=$(printf "%5s" "$(top -n | awk -F "( |/)" 'NR == 7 { print $3 }')")
+	if [[ "0${_mem}" > "10000M" ]] ; then
 		echo -n "${_crit}${_mem}${pipe}"
-	elif [[ "${_mem}" > "5000M" ]] ; then
+	elif [[ "0${_mem}" > "5000M" ]] ; then
 		echo -n "${_warn}${_mem}${pipe}"
 	else
 		echo -n "${_good}${_mem}${pipe}"

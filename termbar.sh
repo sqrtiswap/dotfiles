@@ -44,7 +44,7 @@ battery() {
 	_batpercent=$(printf "%3s" "$(apm -l)")
 	_battime=$(printf "%3s" "$(apm -m)")
 	[[ ${_status} -eq 1 ]] \
-		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_back}${_batpercent}%${pipe}" \
+		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_back}${_batpercent}% (---m)${pipe}" \
 		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_back}${_batpercent}% (${_battime}m)${pipe}"
 }
 
@@ -184,7 +184,7 @@ while true; do
 	_l=" $(calendar) $(tasks)"
 	_r="| $(volume) $(network) $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
 	printf "%-170.170s\r" "$_l"
-	tput cup 1 96
+	tput cup 1 92
 	printf "%300.300s" "$_r"
 	sleep 1
 done

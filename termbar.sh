@@ -144,11 +144,11 @@ snapshot() {
 }
 
 tasks() {
-	_today=$(grep -c due:"$(date +%Y-%m-%d)" ~/todo/todo.txt)
+	_today=$(printf "%2s" "$(grep -c due:"$(date +%Y-%m-%d)" ~/todo/todo.txt)")
 	[[ ${_today} != 0 ]] \
 		&& echo -n "${red}${_today} " \
 		|| echo -n "${grey}${_today} "
-	_urgent=$(grep -c '_urgent' ~/todo/todo.txt)
+	_urgent=$(printf "%2s" "$(grep -c '_urgent' ~/todo/todo.txt)")
 	[[ ${_urgent} != 0 ]] \
 		&& echo -n "${_back}${red}${_urgent}${pipe}" \
 		|| echo -n "${grey}${_urgent}${pipe}"

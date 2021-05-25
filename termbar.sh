@@ -102,6 +102,21 @@ memory() {
 	fi
 }
 
+music() {
+	#♫▮▮
+	_position=$(mpc | awk -F ' ' 'NR == 2 { gsub("#", "", $2); print $2" ("$3") " }')
+	_playstate=$(mpc | grep -c playing)
+	_pausestate=$(mpc | grep -c paused)
+	if [[ ${_playstate} -eq 1 ]] ; then
+		_music=$(printf "%24s" "${grey}${_position}mpd: play")
+	elif [[ ${_pausestate} -eq 1 ]] ; then
+		_music=$(printf "%24s" "${grey}${_position}mpd: pause")
+	else
+		_music=$(printf "%24s" "${grey}0/0 (0:00/0:00)mpd: no list")
+	fi
+	echo -n "${_music}${_back}"
+}
+
 network() {
 	_lanstat=$(ifconfig "${nic[0]}" | grep -c 'status: active')
 	_wlanstat=$(ifconfig "${nic[1]}" | grep -c 'status: active')
@@ -181,9 +196,9 @@ tput civis	# hide cursor
 while true; do
 	#tput clear cup 1 0
 	tput cup 1 0
-	_l=" $(calendar) $(tasks)"
+	_l=" $(calendar) $(tasks) $(music)"
 	_r="| $(volume) $(network) $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
-	printf "%-170.170s\r" "$_l"
+	printf "%-210.210s\r" "$_l"
 	tput cup 1 92
 	printf "%300.300s" "$_r"
 	sleep 1

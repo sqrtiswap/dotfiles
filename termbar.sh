@@ -182,7 +182,7 @@ while true; do
 	#tput clear cup 1 0
 	tput cup 1 0
 	_l=" $(calendar) $(tasks)"
-	_r="| $(network) $(volume) $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
+	_r="| $(volume) $(network) $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
 	printf "%-170.170s\r" "$_l"
 	tput cup 1 96
 	printf "%300.300s" "$_r"

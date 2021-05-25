@@ -43,7 +43,7 @@ battery() {
 	_battery=${_back}$(apm -l)
 	[[ ${_status} -eq 1 ]] \
 		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_battery}%${pipe}" \
-		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_battery}% ($(apm -m))${pipe}"
+		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_battery}% ($(apm -m)m)${pipe}"
 }
 
 calendar() {
@@ -90,15 +90,14 @@ load() {
 }
 
 memory() {
-	_mem=$(top -n | awk -F "( |/)" 'NR == 7 { print $3 }')
-	if [[ "0${_mem}" > "10000M" ]] ; then
+	_mem=$(printf "%6s" "$(top -n | awk -F "( |/)" 'NR == 7 { print $3 }')")
+	if [[ "${_mem}" > "10000M" ]] ; then
 		echo -n "${_crit}${_mem}${pipe}"
-	elif [[ "0${_mem}" > "5000M" ]] ; then
+	elif [[ "${_mem}" > "5000M" ]] ; then
 		echo -n "${_warn}${_mem}${pipe}"
 	else
 		echo -n "${_good}${_mem}${pipe}"
 	fi
-	#echo -n "${grey}${_mem}${_rset}${pipe}"
 }
 
 network() {
@@ -181,7 +180,7 @@ while true; do
 	_r="| $(volume) $(network) $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
 	printf "%-170.170s\r" "$_l"
 	tput cup 1 104
-	printf "%280.280s" "$_r"
+	printf "%250.250s" "$_r"
 	sleep 1
 done
 

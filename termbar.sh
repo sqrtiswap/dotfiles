@@ -136,7 +136,7 @@ network() {
 }
 
 snapshot() {
-	_snapshot=$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)
+	_snapshot=$(printf "%16s" "$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)")
 	_kernel=$(uname -v | grep -c 'GENERIC.MP')
 	[[ ${_kernel} -eq 1 ]] \
 		&& echo -n "${grey}${_snapshot}${pipe}" \

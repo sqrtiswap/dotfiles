@@ -155,7 +155,7 @@ tasks() {
 }
 
 volume() {
-	_volume=$(sndioctl -n output.level | awk '{ print int($0*100) }')
+	_volume=$(printf "%2s" "$(sndioctl -n output.level | awk '{ print int($0*100) }')")
 	_omute=$(sndioctl -n output.mute)
 	#_imute=$(sndioctl -n input.mute)
 	#[[ ${_imute} -eq 1 ]] \

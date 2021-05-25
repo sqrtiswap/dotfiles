@@ -4,8 +4,9 @@ trap 'exec $0' HUP	# restart itself
 trap 'tput cnorm; exit 1' INT QUIT TERM
 
 _rset="\033[0m"
-_hide="\033[2m"
-_back="\033[22m"
+_hide="\033[2m"		# make colour less vibrant
+_line="\033[9m"		# line through the output
+_back="\033[22m"	# reverse _hide
 _crit="\033[31m"	# red
 _good="\033[32m"	# green
 _warn="\033[33m"	# yellow
@@ -106,18 +107,19 @@ network() {
 	_wlanstat=$(ifconfig "${nic[1]}" | grep -c 'status: active')
 	#_wlanid=$(ifconfig ${nic[1]} | awk '/(nwid|join)/ { print $3 }')
 	#_wlansig=$(ifconfig ${nic[1]} | awk 'match($0, /.[0-9]%/) { print substr($0, RSTART, RLENGTH) }')
-	_wlan=$(ifconfig "${nic[1]}" | awk '/ieee80211:/ { print $3 "(" $8 ")" }')
+	_wlan=$(printf "%13s" "$(ifconfig "${nic[1]}" | awk '/ieee80211:/ { print $3 "(" $8 ")" }')")
 	_hublanexist=$(ifconfig | grep -c "${nic[2]}:")
 	if [[ ${_lanstat} -ne 1 && ${_wlanstat} -ne 1 ]] ; then
 		if [[ ${_hublanexist} = 0 ]] ; then
-			echo -n "${net[2]}no network"
+			_hubnet=$(printf "%24s" "${net[2]}no network")
 		else
 			_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
 			_hublanstat=$(ifconfig "${nic[2]}" | grep -c inet)
 			[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \
-				&& echo -n "${net[1]}${nic[0]} ${nic[1]}${net[0]} ${nic[2]}" \
-				|| echo -n "${net[2]}no network"
+				&& _hubnet="         ${net[1]}${nic[0]} ${nic[1]}${net[0]} ${nic[2]}" \
+				|| _hubnet=$(printf "%24s" "${net[2]}no network")
 		fi
+		echo -n "${_hubnet}"
 	else
 		[[ ${_lanstat} -eq 1 ]] \
 			&& echo -n "${net[0]}${nic[0]} " \
@@ -131,6 +133,8 @@ network() {
 			[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \
 				&& echo -n " ${net[0]}${nic[2]}" \
 				|| echo -n " ${net[1]}${nic[2]}"
+		else
+			echo -n " ${_line}${grey}${nic[2]}"
 		fi
 	fi
 	echo -n "${_rset}${pipe}"
@@ -178,10 +182,10 @@ while true; do
 	#tput clear cup 1 0
 	tput cup 1 0
 	_l=" $(calendar) $(tasks)"
-	_r="| $(volume) $(network) $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
+	_r="| $(network) $(volume) $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
 	printf "%-170.170s\r" "$_l"
-	tput cup 1 104
-	printf "%250.250s" "$_r"
+	tput cup 1 96
+	printf "%300.300s" "$_r"
 	sleep 1
 done
 

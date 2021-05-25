@@ -40,10 +40,11 @@ battery() {
 # apm -b: 0 high, 1 low, 2 critical, 3 charging, 4 absent, 255 unknown
 	#_adapter=$(apm -a)
 	_status=$(sysctl -n hw.sensors.acpiac0.indicator0 | grep -c On)
-	_battery=${_back}$(apm -l)
+	_batpercent=$(printf "%3s" "$(apm -l)")
+	_battime=$(printf "%3s" "$(apm -m)")
 	[[ ${_status} -eq 1 ]] \
-		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_battery}%${pipe}" \
-		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_battery}% ($(apm -m)m)${pipe}"
+		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_back}${_batpercent}%${pipe}" \
+		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_back}${_batpercent}% (${_battime}m)${pipe}"
 }
 
 calendar() {

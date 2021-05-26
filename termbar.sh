@@ -201,11 +201,11 @@ while true; do
 	tput cup 1 0
 	_l=" $(calendar) $(tasks) $(music)"
 	_r="| $(volume) $(network) $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
-	printf "%-240.240s\r" "$_l"
+	printf "%-220.220s\r" "$_l"
 	#printf "%-300.300s\r" "$_l"
 	tput cup 1 108
 	printf "%280.280s" "$_r"
-	sleep 1
+	sleep 5
 done
 
 tput cnorm	# show cursor

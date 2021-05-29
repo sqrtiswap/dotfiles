@@ -52,7 +52,7 @@ battery() {
 }
 
 calendar() {
-	sep="${_grey}&${_back}${_dred}"
+	sep="${_grey}•${_back}${_dred}"
 	echo -n "${_norm}$(date "+${_dred}%A, %d %B %Y ${sep} %T %Z %z ${sep} %V ${sep} %j")${pipe}"
 }
 
@@ -106,17 +106,21 @@ memory() {
 
 music() {
 	#♫▮▮
-	_position=$(mpc | awk -F ' ' 'NR == 2 { gsub("#", "", $2); print $2" ("$3") " }')
-	_playstate=$(mpc | grep -c playing)
-	_pausestate=$(mpc | grep -c paused)
-	if [[ ${_playstate} -eq 1 ]] ; then
-		_music="${_grey}${_position}"
-	elif [[ ${_pausestate} -eq 1 ]] ; then
-		_music="${_grey}${_position}"
-	else
-		_music="${_grey}0/0 (0:00/0:00) -------"
-	fi
-	echo -n "${_music}$(mpc -f %artist% current)${_back}"
+	#_position=$(mpc | awk -F ' ' 'NR == 2 { gsub("#", "", $2); print $2" ("$3") " }')
+	#_playstate=$(mpc | grep -c playing)
+	#_pausestate=$(mpc | grep -c paused)
+	_mpdstate=$(mpc | awk -F ' ' 'NR == 2 { gsub("#", "", $2); print $2" ("$3") mpd "$1 }')
+	#if [[ ${_playstate} -eq 1 ]] ; then
+		#_music="${_grey}${_position}"
+	#elif [[ ${_pausestate} -eq 1 ]] ; then
+		#_music="${_grey}${_position}"
+	#else
+		#_music="${_grey}0/0 (0:00/0:00) -------"
+	#fi
+	[[ -n ${_mpdstate} ]] \
+		&& echo -n "${_grey}${_mpdstate}${_back}" \
+		|| echo -n "${_grey}0/0 (0:00/0:00) mpd [-------]${_back}"
+	#echo -n "${_music}$(mpc -f %artist% current)${_back}"
 }
 
 network() {

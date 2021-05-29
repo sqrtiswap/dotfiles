@@ -106,27 +106,16 @@ memory() {
 
 music() {
 	#♫▮▮
-	#_position=$(mpc | awk -F ' ' 'NR == 2 { gsub("#", "", $2); print $2" ("$3") " }')
-	#_playstate=$(mpc | grep -c playing)
-	#_pausestate=$(mpc | grep -c paused)
 	_mpdstate=$(mpc | awk -F ' ' 'NR == 2 { gsub("#", "", $2); print $2" ("$3") mpd "$1 }')
-	#if [[ ${_playstate} -eq 1 ]] ; then
-		#_music="${_grey}${_position}"
-	#elif [[ ${_pausestate} -eq 1 ]] ; then
-		#_music="${_grey}${_position}"
-	#else
-		#_music="${_grey}0/0 (0:00/0:00) -------"
-	#fi
 	[[ -n ${_mpdstate} ]] \
 		&& echo -n "${_grey}${_mpdstate}${_back}" \
 		|| echo -n "${_grey}0/0 (0:00/0:00) mpd [-------]${_back}"
-	#echo -n "${_music}$(mpc -f %artist% current)${_back}"
 }
 
 network() {
 	_lanstat=$(ifconfig "${nic[0]}" | grep -c 'status: active')
 	_wlanstat=$(ifconfig "${nic[1]}" | grep -c 'status: active')
-	_wlan="$(ifconfig "${nic[1]}" | awk '/ieee80211:/ { print $3 "(" $8 ")" }')"
+	_wlan=$(ifconfig "${nic[1]}" | awk '/ieee80211:/ { print $3 "(" $8 ")" }')
 	_hublanexist=$(ifconfig | grep -c "${nic[2]}:")
 	if [[ ${_lanstat} -ne 1 && ${_wlanstat} -ne 1 ]] ; then
 		if [[ ${_hublanexist} -eq 0 ]] ; then
@@ -135,7 +124,7 @@ network() {
 			_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
 			_hublanstat=$(ifconfig "${nic[2]}" | grep -c inet)
 			[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \
-				&& _netstate="${net[1]}${nic[0]} ${nic[1]}${net[0]} ${nic[2]}" \
+				&& _netstate=$(printf "%12s" "${net[1]}${nic[0]} ${nic[1]}${net[0]} ${nic[2]}") \
 				|| _netstate="${net[2]}no network"
 		fi
 	else
@@ -154,13 +143,12 @@ network() {
 		else
 			_hublanstate=" ${_line}${_grey}${nic[2]}"
 		fi
-		_netstate="${_lanstate}${_wlanstate}${_hublanstate}"
+		_netstate=$(printf "%12s" "${_lanstate}${_wlanstate}${_hublanstate}")
 	fi
 	echo -n "${_netstate}${_rset}${pipe}"
 }
 
 snapshot() {
-	#_snapshot=$(printf "%16s" "$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)")
 	_snapshot=$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)
 	_kernel=$(uname -v | grep -c 'GENERIC.MP')
 	[[ ${_kernel} -eq 1 ]] \
@@ -169,12 +157,10 @@ snapshot() {
 }
 
 tasks() {
-	#_today=$(printf "%2s" "$(grep -c due:"$(date +%Y-%m-%d)" ~/todo/todo.txt)")
 	_today=$(grep -c due:"$(date +%Y-%m-%d)" ~/todo/todo.txt)
 	[[ ${_today} != 0 ]] \
 		&& echo -n "${_dred}${_today} " \
 		|| echo -n "${_grey}${_today} "
-	#_urgent=$(printf "%2s" "$(grep -c '_urgent' ~/todo/todo.txt)")
 	_urgent=$(grep -c '_urgent' ~/todo/todo.txt)
 	[[ ${_urgent} != 0 ]] \
 		&& echo -n "${_back}${_dred}${_urgent}${pipe}" \
@@ -206,8 +192,7 @@ while true; do
 	_l=" $(calendar) $(tasks) $(music)"
 	_r="| $(volume) $(network) $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
 	printf "%-220.220s\r" "$_l"
-	#printf "%-300.300s\r" "$_l"
-	tput cup 1 108
+	tput cup 1 99
 	printf "%280.280s" "$_r"
 	sleep 5
 done

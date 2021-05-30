@@ -189,12 +189,13 @@ tput civis	# hide cursor
 while true; do
 	#tput clear cup 1 0
 	tput cup 1 0
-	_l=" $(calendar) $(tasks) $(music)"
-	_r="| $(volume) $(network) $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
-	printf "%-220.220s\r" "$_l"
-	tput cup 1 99
-	printf "%280.280s" "$_r"
-	sleep 5
+	#_l=" $(calendar) $(tasks) $(music) $(volume) $(network)"
+	_l=" $(calendar) $(tasks) $(network) $(volume) $(music)"
+	_r="| $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
+	printf "%-310.310s\r" "$_l"
+	tput cup 1 137
+	printf "%195.195s" "$_r"
+	sleep 1
 done
 
 tput cnorm	# show cursor

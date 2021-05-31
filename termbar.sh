@@ -178,22 +178,21 @@ volume() {
 		|| echo -n "${vol[${_omute}]}${_volume}%${pipe}"
 }
 
-window() {
-	_wid=$(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2)
-	_win=$(xprop -id "${_wid}" '\t$0' _NET_WM_NAME | cut -d '"' -f 2)
-	echo -n "${_win}"
-}
+#window() {
+	#_wid=$(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2)
+	#_win=$(xprop -id "${_wid}" '\t$0' _NET_WM_NAME | cut -d '"' -f 2)
+	#echo -n "${_win}"
+#}
 
 tput civis	# hide cursor
 
 while true; do
 	#tput clear cup 1 0
 	tput cup 1 0
-	#_l=" $(calendar) $(tasks) $(music) $(volume) $(network)"
 	_l=" $(calendar) $(tasks) $(network) $(volume) $(music)"
 	_r="| $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
 	printf "%-310.310s\r" "$_l"
-	tput cup 1 137
+	tput cup 1 138
 	printf "%195.195s" "$_r"
 	sleep 1
 done

@@ -33,8 +33,7 @@ _dred="\033[31m"	# dark red
 #brightwhite="\033[97m"
 
 set -A bat "${_good}" "${_warn}" "${_crit}" "${_grey}" "${_alrt}"
-set -A eta " ($(apm -m))m)" ""
-#set -A eta "($(printf "%3s" "$(apm -m)")m)" ""
+set -A eta "($(printf "%3s" "$(apm -m)")m)" " ${_grey}(---m)"
 set -A net "${_rset}${_good}" "${_grey}" "${_crit}"
 set -A nic "em0" "iwm0" "ure0"
 set -A vol "${_good}" "${_grey}"
@@ -43,9 +42,7 @@ battery() {
 # apm -b: 0 high, 1 low, 2 critical, 3 charging, 4 absent, 255 unknown
 	#_adapter=$(apm -a)
 	_status=$(sysctl -n hw.sensors.acpiac0.indicator0 | grep -c On)
-	#_batpercent=$(printf "%3s" "$(apm -l)")
-	_batpercent="$(apm -l)"
-	#_battime=$(printf "%3s" "$(apm -m)")
+	_batpercent=$(printf "%3s" "$(apm -l)")
 	[[ ${_status} -eq 1 ]] \
 		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_back}${_batpercent}%${eta[1]}${pipe}" \
 		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_back}${_batpercent}%${eta[0]}${pipe}"
@@ -53,17 +50,18 @@ battery() {
 
 calendar() {
 	sep="${_grey}•${_back}${_dred}"
-	echo -n "${_norm}$(date "+${_dred}%A, %d %B %Y ${sep} %T %Z %z ${sep} %V ${sep} %j")${pipe}"
+	echo -n "$(date "+${_dred}%A, %d %B %Y ${sep} %T %Z %z ${sep} %V ${sep} %j")${pipe}"
+	#echo -n "${_norm}$(date "+${_dred}%A, %d %B %Y ${sep} %T %Z %z ${sep} %V ${sep} %j")${pipe}"
 }
 
 cpu() {
-	_cpuload=$((100-$(iostat -C | awk -F " " 'NR == 3 { print $6 }')))
+	_cpuload=$(printf "%2s" "$((100-$(iostat -C | awk -F " " 'NR == 3 { print $6 }')))")
 	_cputemp=$(sysctl -n hw.sensors.cpu0.temp0 | cut -d '.' -f 1)
 	_cpuspeed=$(printf "%4s" "$(sysctl -n hw.cpuspeed)")
 	_cpuperf=$(printf "%4s" "$(sysctl -n hw.setperf)%")
-	if [ ${_cpuload} -ge 90 ] ; then
+	if [ "${_cpuload}" -ge 90 ] ; then
 		echo -n "${_crit}${_cpuload}% "
-	elif [ ${_cpuload} -ge 60 ] ; then
+	elif [ "${_cpuload}" -ge 60 ] ; then
 		echo -n "${_warn}${_cpuload}% "
 	else
 		echo -n "${_good}${_cpuload}% "
@@ -149,7 +147,7 @@ network() {
 }
 
 snapshot() {
-	_snapshot=$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)
+	_snapshot=$(printf "%16s" "$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)")
 	_kernel=$(uname -v | grep -c 'GENERIC.MP')
 	[[ ${_kernel} -eq 1 ]] \
 		&& echo -n "${_grey}${_snapshot}${pipe}" \
@@ -191,10 +189,10 @@ while true; do
 	tput cup 1 0
 	_l=" $(calendar) $(tasks) $(network) $(volume) $(music)"
 	_r="| $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group)"
-	printf "%-310.310s\r" "$_l"
-	tput cup 1 138
-	printf "%195.195s" "$_r"
-	sleep 1
+	printf "%-315.315s\r" "$_l"
+	tput cup 1 127
+	printf "%215.215s" "$_r"
+	sleep 5
 done
 
 tput cnorm	# show cursor

@@ -1,15 +1,26 @@
-#!/bin/ksh
+#!/bin/sh
 
-BLACK="#000000"
-#BLUE="#3b48e3"
-#GREEN="#18b218"
-GREY="#656565"
-#RED="#b81313"
-#YELLOW="#b4801e"
+make_wallpaper() {
+	_wallpaperdir="$HOME"/Pictures/wallpaper
+	xwallpaper --output eDP-1 --maximize "$(find "${_wallpaperdir}" -type f | sort -R | head -1)" --output DP-1-9 --maximize "$(find "${_wallpaperdir}" -type f | sort -R | head -1)"
+}
 
-XBMDIR="/home/alexander/Pictures/wallpaper-xbm/Current/"
+make_xbmpaper() {
+	BLACK="#000000"
+	#BLUE="#3b48e3"
+	#GREEN="#18b218"
+	GREY="#656565"
+	#RED="#b81313"
+	#YELLOW="#b4801e"
+	_xbmdir="$HOME/Pictures/wallpaper-xbm/Current/"
+	while true ; do
+		xsetroot -bitmap "$(find "${_xbmdir}" -iname '*.xbm' | sort -R | head -1)" -bg $GREY -fg $BLACK
+		sleep 3600
+	done
+}
 
-while true ; do
-	xsetroot -bitmap "$(find $XBMDIR -iname '*.xbm' | sort -R | head -1)" -bg $GREY -fg $BLACK
-	sleep 3600
-done
+if command -v xwallpaper > /dev/null ; then
+	make_wallpaper
+else
+	make_xbmpaper
+fi

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-_scriptdir="$HOME/sources/termbar"
+_bardir="$HOME/sources/termbar"
 _monitors=$(xprop -root _NET_DESKTOP_GEOMETRY | awk -F " = " '{ print $2 }')
 
 make_lemonbar() {
@@ -10,10 +10,10 @@ make_lemonbar() {
 	_left="1920x20+0+0"
 	_right="1920x20+1920+0"
 	if [ "${_monitors}" = "3840, 1080" ] ; then
-		"${_scriptdir}"/lemonscript.sh | lemonbar -dp -g "${_left}" -B "${_colour}" -F "${_fontcolour}" -f "${_font}" &
-		"${_scriptdir}"/lemonscript.sh | lemonbar -dp -g "${_right}" -B "${_colour}" -F "${_fontcolour}" -f "${_font}" &
+		"${_bardir}"/lemonscript.sh | lemonbar -dp -g "${_left}" -B "${_colour}" -F "${_fontcolour}" -f "${_font}" &
+		"${_bardir}"/lemonscript.sh | lemonbar -dp -g "${_right}" -B "${_colour}" -F "${_fontcolour}" -f "${_font}" &
 	elif [ "${_monitors}" = "1920, 1080" ] ; then
-		"${_scriptdir}"/lemonscript.sh | lemonbar -dp -g "${_left}" -B "${_colour}" -F "${_fontcolour}" -f "${_font}" &
+		"${_bardir}"/lemonscript.sh | lemonbar -dp -g "${_left}" -B "${_colour}" -F "${_fontcolour}" -f "${_font}" &
 	fi
 }
 
@@ -21,10 +21,10 @@ make_termbar() {
 	_left="214x1+0+0"
 	_right="214x1+1920+0"
 	if [ "${_monitors}" = "3840, 1080" ] ; then
-		xterm -name termbar -class termbar -geometry "${_left}" -e "${_scriptdir}"/termbar.sh &
-		xterm -name termbar -class termbar -geometry "${_right}" -e "${_scriptdir}"/termbar.sh &
+		xterm -name termbar -class termbar -geometry "${_left}" -e "${_bardir}"/termbar.sh &
+		xterm -name termbar -class termbar -geometry "${_right}" -e "${_bardir}"/termbar.sh &
 	elif [ "${_monitors}" = "1920, 1080" ] ; then
-		xterm -name termbar -class termbar -geometry "${_left}" -e "${_scriptdir}"/termbar.sh &
+		xterm -name termbar -class termbar -geometry "${_left}" -e "${_bardir}"/termbar.sh &
 	fi
 }
 

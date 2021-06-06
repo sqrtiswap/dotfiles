@@ -18,20 +18,6 @@ pipe="${_back}${_norm} |"
 
 _dred="\033[31m"	# dark red
 
-#black="\033[30m"
-#magenta="\033[35m"
-#cyan="\033[36m"
-#white="\033[37m"
-
-#brightblack="\033[90m"
-#brightred="\033[91m"
-#brightgreen="\033[92m"
-#brightyellow="\033[93m"
-#brightblue="\033[94m"
-#brightmagenta="\033[95m"
-#brightcyan="\033[96m"
-#brightwhite="\033[97m"
-
 set -A bat "${_good}" "${_warn}" "${_crit}" "${_grey}" "${_alrt}"
 set -A eta "($(printf "%3s" "$(apm -m)")m)" " ${_grey}(---m)"
 set -A net "${_rset}${_good}" "${_grey}" "${_crit}"
@@ -166,6 +152,9 @@ tasks() {
 }
 
 volume() {
+	#mute=$(mixerctl outputs.master.mute | awk -F '=' '{ print $2 }')
+	#lspk=$(($(mixerctl outputs.master | awk -F '(=|,)' '{ print $2 }')*100/255))
+	#rspk=$(($(mixerctl outputs.master | awk -F '(=|,)' '{ print $3 }')*100/255))
 	_volume=$(printf "%2s" "$(sndioctl -n output.level | awk '{ print int($0*100) }')")
 	_omute=$(sndioctl -n output.mute)
 	#_imute=$(sndioctl -n input.mute)
@@ -179,7 +168,7 @@ volume() {
 #window() {
 	#_wid=$(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2)
 	#_win=$(xprop -id "${_wid}" '\t$0' _NET_WM_NAME | cut -d '"' -f 2)
-	#echo -n "${_win}"
+	#echo -n "${_grey}${_win}${_back}"
 #}
 
 tput civis	# hide cursor

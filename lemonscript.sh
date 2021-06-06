@@ -1,84 +1,61 @@
 #!/bin/ksh
 
-BLACK="#000000"
-BLUE="#3b48e3"
-GREEN="#18b218"
-GREY="#656565"
-RED="#b81313"
-WHITE="#d8d8d8"
-YELLOW="#b4801e"
+#_norm="%{F#d8d8d8}"	# white
+_crit="%{F#b81313}"	# dark red
+_good="%{F#18b218}"	# green
+_warn="%{F#b4801e}"	# yellow
+_alrt="%{F#3b48e3}"	# blue
 
-Battery() {
-	ADAPTER=$(apm -a)
-	BATTERYTIME=$(apm -m)
-	if [[ $ADAPTER = 0 ]] ; then
-		echo -n "%{F$GREY}%{B$BLACK}AC: "
-	elif [[ $ADAPTER = 1 ]] ; then
-		if [[ $MANUALAC = 0 ]] ; then
-			echo -n "%{F$BLUE}%{B$BLACK}!WARNING! AC: "
-		else
-			echo -n "%{F$GREEN}%{B$BLACK}AC: "
-		fi
-	else
-		echo -n "%{F$BLUE}%{B$BLACK}AC: "
-	fi
-	BATTERY=$(apm -l)
-	if [ "$BATTERY" -gt 50 ] ; then
-		echo -n "%{F$GREEN}%{B$BLACK}$BATTERY%%"
-	elif [ "$BATTERY" -gt 25 ] ; then
-		echo -n "%{F$YELLOW}%{B$BLACK}$BATTERY%%"
-	elif [ "$BATTERY" -gt 10 ] ; then
-		echo -n "%{F$RED}%{B$BLACK}$BATTERY%%"
-	else
-		if [[ $ADAPTER = 1 ]] ; then
-			echo -n "%{F$RED}%{B$BLACK}$BATTERY%%"
-		else
-			echo -n "%{F$RED}%{B$BLACK}$BATTERY%% CHARGE NOW!"
-		fi
-	fi
-	[[ "$BATTERYTIME" != "unknown" ]] && echo -n " ($BATTERYTIME m)"
-	echo -n "%{F-}%{B-}"
+_grey="%{F#656565}"
+pipe="%{F-} |"
+
+_dred="%{F#b81313}"	# dark red
+
+set -A bat "${_good}" "${_warn}" "${_crit}" "${_grey}" "${_alrt}"
+set -A eta "($(apm -m)m)" ""
+set -A net "${_good}" "${_grey}" "${_crit}"
+set -A nic "em0" "iwm0" "ure0"
+set -A vol "${_good}" "${_grey}"
+
+battery() {
+# apm -b: 0 high, 1 low, 2 critical, 3 charging, 4 absent, 255 unknown
+	#_adapter=$(apm -a)
+	_status=$(sysctl -n hw.sensors.acpiac0.indicator0 | grep -c On)
+	_batpercent=$(apm -l)
+	[[ ${_status} -eq 1 ]] \
+		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_batpercent}%${eta[1]}%${pipe}" \
+		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_batpercent}%${eta[0]}%${pipe}"
 }
 
-Clock() {
-	#DATE=$(date "+%A, %d %B %Y")	# longform weekday, two-digit day of month, full-word month, four-digit year
-	#TIME=$(date "+%T %Z %z")	# HH:MM:ss timezone difference-to-utc
-	#WEEK=$(date "+%V")		# week of the year
-	#DAY=$(date "+%j")		# day of the year
-	SEPARATOR="%%{F$GREY}%%{$BLACK} ● %%{F$RED}%%{B$BLACK}"
-	echo -n "%{F$RED}%{B$BLACK}$(date "+%A, %d %B %Y\
-		$SEPARATOR\
-		%T %Z %z\
-		$SEPARATOR\
-		%V\
-		$SEPARATOR\
-		%j")%{F-}%{B-}"
-	#echo -n "%{F$RED}%{B$BLACK}$DATE%{F$GREY}%{B$BLACK} ● %{F$RED}%{B$BLACK}$TIME%{F$GREY}%{B$BLACK} ● %{F$RED}%{B$BLACK}$WEEK%{F$GREY}%{B$BLACK} ● %{F$RED}%{B$BLACK}$DAY%{F-}%{B-}"
+calendar() {
+	sep="%${_grey}•%${_dred}"
+	echo -n "$(date "+%${_dred}%A, %d %B %Y ${sep} %T %Z %z ${sep} %V ${sep} %j")${pipe}"
 }
 
-Cpu() {
-	#set -A cpu_values $(iostat -C | sed -n '3p')
-	#CPULOAD=$((100-${cpu_values[5]}))
-	CPULOAD=$((100-$(iostat -C | awk -F " " 'NR == 3 { print $6 }')))
-	if [ $CPULOAD -ge 90 ] ; then
-		echo -n "%{F$RED}%{B$BLACK}"
-	elif [ $CPULOAD -ge 60 ] ; then
-		echo -n "%{F$YELLOW}%{B$BLACK}"
+cpu() {
+	_cpuload=$(printf "%2s" "$((100-$(iostat -C | awk -F " " 'NR == 3 { print $6 }')))")
+	_cputemp=$(sysctl -n hw.sensors.cpu0.temp0 | cut -d '.' -f 1)
+	_cpuspeed=$(printf "%4s" "$(sysctl -n hw.cpuspeed)")
+	_cpuperf=$(printf "%4s" "$(sysctl -n hw.setperf)%")
+	if [ "${_cpuload}" -ge 90 ] ; then
+		echo -n "${_crit}${_cpuload}% "
+	elif [ "${_cpuload}" -ge 60 ] ; then
+		echo -n "${_warn}${_cpuload}% "
 	else
-		echo -n "%{F$GREEN}%{B$BLACK}"
+		echo -n "${_good}${_cpuload}% "
 	fi
-	echo -n "$CPULOAD%%%{F$GREY}%{B$BLACK} ● "
-	#CPUTEMP=$(sysctl hw.sensors.cpu0.temp0 | awk -F "=" '{ gsub(" degC", "", $2); print $2 }')
-	CPUTEMP=$(sysctl -n hw.sensors.cpu0.temp0 | cut -d '.' -f 1)
-	if [[ "$CPUTEMP" -gt 70 ]] ; then
-		echo -n "%{F$RED}%{B$BLACK}"
-	elif [[ "$CPUTEMP" -gt 60 ]] ; then
-		echo -n "%{F$YELLOW}%{B$BLACK}"
+	if [[ ${_cputemp} -gt 70 ]] ; then
+		echo -n "${_crit}${_cputemp}°C"
+	elif [[ ${_cputemp} -gt 60 ]] ; then
+		echo -n "${_warn}${_cputemp}°C"
 	else
-		echo -n "%{F$GREEN}%{B$BLACK}"
+		echo -n "${_good}${_cputemp}°C"
 	fi
-	echo -n "$CPUTEMP°C%{F-}%{B-}"
-	#CPUSPEED=$(apm | sed '1,2d;s/.*(//;s/)//')
+	echo -n " ${_grey}${_cpuspeed} MHz @ ${_cpuperf}%${pipe}"
+}
+
+group() {
+	echo -n "${_grey}$(xprop -root 32c '\t$0' _NET_CURRENT_DESKTOP | cut -f 2)"
 }
 
 #Ifload() {
@@ -86,138 +63,112 @@ Cpu() {
 	#echo -n "In: %{F#BBBB00}${if_load[0]}%{F-} kb/s Out: %{F#0000BB}${if_load[1]}%{F-} kb/s "
 #}
 
-Load() {
-	SYSLOAD=$(systat -b | awk 'NR==3 { print $4 }')
-	if [[ "$SYSLOAD" > "4.00" ]] ; then
-		echo -n "%{F$RED}%{B$BLACK}"
-	elif [[ "$SYSLOAD" > "2.00" ]] ; then
-		echo -n "%{F$YELLOW}%{B$BLACK}"
+load() {
+	_sysload=$(systat -b | awk 'NR==3 { print $4 }')
+	if [[ "${_sysload}" > "4.00" ]] ; then
+		echo -n "${_crit}${_sysload}${pipe}"
+	elif [[ "${_sysload}" > "2.00" ]] ; then
+		echo -n "${_warn}${_sysload}${pipe}"
 	else
-		echo -n "%{F$GREEN}%{B$BLACK}"
+		echo -n "${_good}${_sysload}${pipe}"
 	fi
-	echo -n "$SYSLOAD%{F-}%{B-}"
 }
 
-#Memory() {
-	#RELATIVE=$((100*($(top | awk -F "( |M)" 'NR == 7 { print $4 }'))/15639))
-	#ABSOLUTE=$(top | awk -F "( |/)" 'NR == 7 { print $3 }')
-	#if [[ "0$ABSOLUTE" > "10000M" ]] ; then
-		#echo -n "%{F$RED}%{B$BLACK}$ABSOLUTE%{F-}%{B-}"
-	#elif [[ "0$ABSOLUTE" > "5000M" ]] ; then
-		#echo -n "%{F$YELLOW}%{B$BLACK}$ABSOLUTE%{F-}%{B-}"
-	#else
-		#echo -n "%{F$GREEN}%{B$BLACK}$ABSOLUTE%{F-}%{B-}"
-	#fi
+memory() {
+	_mem=$(printf "%5s" "$(top -n | awk -F "( |/)" 'NR == 7 { print $3 }')")
+	if [[ "0${_mem}" > "10000M" ]] ; then
+		echo -n "${_crit}${_mem}${pipe}"
+	elif [[ "0${_mem}" > "5000M" ]] ; then
+		echo -n "${_warn}${_mem}${pipe}"
+	else
+		echo -n "${_good}${_mem}${pipe}"
+	fi
+}
+
+music() {
+	#♫▮▮
+	_mpdstate=$(mpc | awk -F ' ' 'NR == 2 { gsub("#", "", $2); print $2" ("$3") mpd "$1 }')
+	[[ -n ${_mpdstate} ]] \
+		&& echo -n "${_grey}${_mpdstate}" \
+		|| echo -n "${_grey}0/0 (0:00/0:00) mpd [-------]"
+}
+
+network() {
+	_lanstat=$(ifconfig "${nic[0]}" | grep -c 'status: active')
+	_wlanstat=$(ifconfig "${nic[1]}" | grep -c 'status: active')
+	_wlan=$(ifconfig "${nic[1]}" | awk '/ieee80211:/ { print $3 "(" $8 ")" }')
+	_hublanexist=$(ifconfig | grep -c "${nic[2]}:")
+	if [[ ${_lanstat} -ne 1 && ${_wlanstat} -ne 1 ]] ; then
+		if [[ ${_hublanexist} -eq 0 ]] ; then
+			_netstate="${net[2]}no network"
+		else
+			_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
+			_hublanstat=$(ifconfig "${nic[2]}" | grep -c inet)
+			[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \
+				&& _netstate=$(printf "%12s" "${net[1]}${nic[0]} ${nic[1]}${net[0]} ${nic[2]}") \
+				|| _netstate="${net[2]}no network"
+		fi
+	else
+		[[ ${_lanstat} -eq 1 ]] \
+			&& _lanstate="${net[0]}${nic[0]} " \
+			|| _lanstate="${net[1]}${nic[0]} "
+		[[ ${_wlanstat} -eq 1 ]] \
+			&& _wlanstate="${net[0]}${_wlan}" \
+			|| _wlanstate="${net[1]}${nic[1]}"
+		if [[ ${_hublanexist} -eq 1 ]] ; then
+			_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
+			_hublanstat=$(ifconfig "${nic[2]}" | grep -c inet)
+			[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \
+				&& _hublanstate=" ${net[0]}${nic[2]}" \
+				|| _hublanstate=" ${net[1]}${nic[2]}"
+		else
+			_hublanstate=""
+		fi
+		_netstate=$(printf "%12s" "${_lanstate}${_wlanstate}${_hublanstate}")
+	fi
+	echo -n "${_netstate}${pipe}"
+}
+
+snapshot() {
+	_snapshot=$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)
+	_kernel=$(uname -v | grep -c 'GENERIC.MP')
+	[[ ${_kernel} -eq 1 ]] \
+		&& echo -n "${_grey}${_snapshot}${pipe}" \
+		|| echo -n "${_alrt}${_snapshot}${pipe}"
+}
+
+tasks() {
+	_today=$(grep -c due:"$(date +%Y-%m-%d)" ~/todo/todo.txt)
+	[[ ${_today} != 0 ]] \
+		&& echo -n "${_dred}${_today} " \
+		|| echo -n "${_grey}${_today} "
+	_urgent=$(grep -c '_urgent' ~/todo/todo.txt)
+	[[ ${_urgent} != 0 ]] \
+		&& echo -n "${_dred}${_urgent}${pipe}" \
+		|| echo -n "${_grey}${_urgent}${pipe}"
+}
+
+volume() {
+	#mute=$(mixerctl outputs.master.mute | awk -F '=' '{ print $2 }')
+	#lspk=$(($(mixerctl outputs.master | awk -F '(=|,)' '{ print $2 }')*100/255))
+	#rspk=$(($(mixerctl outputs.master | awk -F '(=|,)' '{ print $3 }')*100/255))
+	_volume=$(sndioctl -n output.level | awk '{ print int($0*100) }')
+	_omute=$(sndioctl -n output.mute)
+	#_imute=$(sndioctl -n input.mute)
+	#[[ ${_imute} -eq 1 ]] \
+		#&& echo -n "${_crit}mic on "
+	[[ ${_omute} -eq 1 ]] \
+		&& echo -n "${vol[${_omute}]}${_volume}%%${pipe}" \
+		|| echo -n "${vol[${_omute}]}${_volume}%%${pipe}"
+}
+
+#window() {
+	#_wid=$(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2)
+	#_win=$(xprop -id "${_wid}" '\t$0' _NET_WM_NAME | cut -d '"' -f 2)
+	#echo -n "${_grey}${_win}"
 #}
 
-Music() {
-	EXCHANGE=$(mpc -f %artist% current | grep -c 'Slash featuring Myles Kennedy & The Conspirators')
-	if [ "$EXCHANGE" = 1 ] ; then
-		PLAYING=$(mpc -f %artist%\ ♫\ %title% current | sed 's/Slash featuring Myles Kennedy & The Conspirators/SMKC/')
-		PAUSED=$(mpc -f %artist%\ ▮▮\ %title% current | sed 's/Slash featuring Myles Kennedy & The Conspirators/SMKC/')
-	else
-		PLAYING=$(mpc -f %artist%\ ♫\ %title% current)
-		PAUSED=$(mpc -f %artist%\ ▮▮\ %title% current)
-	fi
-	POSITION=$(mpc | awk -F ' ' 'NR == 2 { gsub("#", "", $2); print $2" ("$3") " }')
-	PLAYSTATE=$(mpc | grep -c playing)
-	PAUSESTATE=$(mpc | grep -c paused)
-	if [ "$PLAYSTATE" = 1 ] ; then
-		echo -n "%{F$GREY}%{B$BLACK}$POSITION$PLAYING%{F-}%{B-}"
-	elif [ "$PAUSESTATE" = 1 ] ; then
-		echo -n "%{F$GREY}%{B$BLACK}$POSITION$PAUSED%{F-}%{B-}"
-	else
-		echo -n "%{F$GREY}%{B$BLACK}0/0 (0:00/0:00) -------%{F-}%{B-}"
-	fi
-}
-
-Volume() {
-	#MUTE=$(mixerctl outputs.master.mute | awk -F '=' '{ print $2 }')
-	#LSPK=$(($(mixerctl outputs.master | awk -F '(=|,)' '{ print $2 }')*100/255))
-	#RSPK=$(($(mixerctl outputs.master | awk -F '(=|,)' '{ print $3 }')*100/255))
-	MUTE=$(sndioctl output.mute | awk -F '=' '{ print $2 }')
-	SPK=$(sndioctl output.level | awk -F '=' '{ print $2 }')
-	if [[ $MUTE = 0 ]] ; then
-		echo -n "%{F$GREEN}%{B$BLACK}$SPK%{F-}%{B-}"
-		#echo -n "%{F$GREEN}%{B$BLACK}$LSPK,$RSPK%{F-}%{B-}"
-	else
-		echo -n "%{F$GREY}%{B$BLACK}$SPK%{F-}%{B-}"
-		#echo -n "%{F$GREY}%{B$BLACK}$LSPK,$RSPK%{F-}%{B-}"
-	fi
-}
-
-Network() {
-	LANSTAT=$(ifconfig em0 | awk '/status:/ { print $2 }')
-	WLANSTAT=$(ifconfig iwm0 | awk '/status:/ { print $2 }')
-	HUBLANEXIST=$(ifconfig | grep -c 'ure0:')
-	if [ "$LANSTAT" != "active" ] && [ "$WLANSTAT" != "active" ] ; then
-		if [[ $HUBLANEXIST = 0 ]] ; then
-			echo -n "%{F$RED}%{B$BLACK}no network%{F-}%{B-}"
-		else
-			HUBLANUP=$(ifconfig ure0 | grep -c UP)
-			HUBLANSTAT=$(ifconfig ure0 | grep -c inet)
-			if [[ $HUBLANUP = 1 ]] && [[ $HUBLANSTAT -gt 0 ]] ; then
-				echo -n "%{F$GREY}%{B$BLACK}em0 iwm0%{F$GREEN}%{B$BLACK} ure0%{F-}%{B-}"
-			else
-				echo -n "%{F$RED}%{B$BLACK}no network%{F-}%{B-}"
-			fi
-		fi
-	else
-		if [ "$LANSTAT" = "active" ] ; then
-			echo -n "%{F$GREEN}%{B$BLACK}em0 %{F-}%{B-}"
-		else
-			echo -n "%{F$GREY}%{B$BLACK}em0 %{F-}%{B-}"
-		fi
-		if [ "$WLANSTAT" = "active" ] ; then
-			WLANID=$(ifconfig iwm0  | awk '/(nwid|join)/ { print $3 }')
-			WLANSIG=$(ifconfig iwm0 | awk 'match($0, /.[0-9]%/) { print substr($0, RSTART, RLENGTH) }')
-			echo -n "%{F$GREEN}%{B$BLACK}$WLANID($WLANSIG)%{F-}%{B-}"
-		else
-			echo -n "%{F$GREY}%{B$BLACK}iwm0%{F-}%{B-}"
-		fi
-		if [[ $HUBLANEXIST = 1 ]] ; then
-			HUBLANUP=$(ifconfig ure0 | grep -c UP)
-			HUBLANSTAT=$(ifconfig ure0 | grep -c inet)
-			if [[ $HUBLANUP = 1 ]] && [[ $HUBLANSTAT -gt 0 ]] ; then
-				echo -n "%{F$GREEN}%{B$BLACK} ure0%{F-}%{B-}"
-			else
-				echo -n "%{F$GREY}%{B$BLACK} ure0%{F-}%{B-}"
-			fi
-		fi
-	fi
-}
-
-Snapshot() {
-	SNAPSHOT=$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)
-	KERNEL=$(uname -v | grep -c 'GENERIC.MP')
-	if [ "$KERNEL" = 1 ] ; then
-		echo -n "%{F$GREY}%{B$BLACK}$SNAPSHOT%{F-}%{B-}"
-	else
-		echo -n "%{F$RED}%{B$WHITE}NOT GENERIC.MP %{F$RED}%{B$BLACK}$SNAPSHOT%{F-}%{B-}"
-	fi
-}
-
-Tasks() {
-	TASKSTODAY=$(grep -c due:"$(date +%Y-%m-%d)" ~/todo/todo.txt)
-	if [[ $TASKSTODAY != 0 ]] ; then
-		echo -n "%{F$RED}%{B$BLACK}$TASKSTODAY"
-	else
-		echo -n "%{F$GREY}%{B$BLACK}$TASKSTODAY"
-	fi
-	TASKSURGENT=$(grep -c '_urgent' ~/todo/todo.txt)
-	if [[ $TASKSURGENT != 0 ]] ; then
-		echo -n " %{F$RED}%{B$BLACK}$TASKSURGENT%{F-}%{B-}"
-	else
-		echo -n " %{F$GREY}%{B$BLACK}$TASKSURGENT%{F-}%{B-}"
-	fi
-}
-
-Group() {
-	CURRENTGROUP=$(xprop -root 32c '\t$0' _NET_CURRENT_DESKTOP | cut -f 2)
-	echo -n "%{F$GREY}%{B$BLACK}$CURRENTGROUP%{F-}%{B-}"
-}
-
 while true ; do
-	echo "%{l} $(Clock) | $(Tasks) | $(Music) %{r}| $(Volume) | $(Network) | $(Cpu) | $(Load) | $(Battery) | $(Snapshot) | $(Group) "
+	echo "%{l} $(calendar) $(tasks) $(network) $(volume) $(music) %{r}${pipe} $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group) "
 	sleep 5
 done

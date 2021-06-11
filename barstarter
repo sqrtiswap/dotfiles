@@ -12,9 +12,9 @@ autoselect() {
 }
 
 clean_up_bars() {
-	kill -9 "$(pgrep -f termbar)"
-	pkill lemonbar
-	pkill xbattbar
+	pgrep -fq termbar && kill -9 "$(pgrep -f termbar)"
+	pgrep -q lemonbar && pkill lemonbar
+	pgrep -q xbattbar && pkill xbattbar
 }
 
 make_lemonbar() {

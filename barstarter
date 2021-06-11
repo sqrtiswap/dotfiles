@@ -60,5 +60,6 @@ x)
 	make_xbattbar
 	;;
 *)
+	clean_up_bars
 	autoselect
 esac

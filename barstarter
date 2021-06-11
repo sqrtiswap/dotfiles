@@ -46,7 +46,24 @@ make_xbattbar() {
 	xbattbar -a -p 30 -T top &
 }
 
+usage() { printf "barstarter - starts bars.
+
+Commandline arguments can be passed:
+=> help		- Show this message.
+=> lemonbar	- Start lemonbar.
+=> termbar	- Start termbar.
+=> xbattbar	- Start xbattbar.
+
+Not forcing a specific bar will start lemonbar if installed
+and termbar if not.
+"
+exit 0
+}
+
 case $1 in
+h)
+	usage
+	;;
 l)
 	clean_up_bars
 	make_lemonbar

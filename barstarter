@@ -3,6 +3,20 @@
 _bardir="$HOME/sources/termbar"
 _monitors=$(xprop -root _NET_DESKTOP_GEOMETRY | awk -F " = " '{ print $2 }')
 
+autoselect() {
+	if command -v lemonbar > /dev/null ; then
+		make_lemonbar
+	else
+		make_termbar
+	fi
+}
+
+clean_up_bars() {
+	kill -9 "$(pgrep -f termbar)"
+	pkill lemonbar
+	pkill xbattbar
+}
+
 make_lemonbar() {
 	_font="-misc-fixed-medium-r-normal-*-15-*-*-*-*-*-iso10646-1"
 	_colour="#000000"
@@ -28,9 +42,23 @@ make_termbar() {
 	fi
 }
 
-if command -v lemonbar > /dev/null ; then
+make_xbattbar() {
+	xbattbar -a -p 30 -T top &
+}
+
+case $1 in
+l)
+	clean_up_bars
 	make_lemonbar
-else
+	;;
+t)
+	clean_up_bars
 	make_termbar
-fi
-# xbattbar -a -p 30 -T top &
+	;;
+x)
+	clean_up_bars
+	make_xbattbar
+	;;
+*)
+	autoselect
+esac

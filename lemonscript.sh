@@ -21,10 +21,10 @@ battery() {
 # apm -b: 0 high, 1 low, 2 critical, 3 charging, 4 absent, 255 unknown
 	#_adapter=$(apm -a)
 	_status=$(sysctl -n hw.sensors.acpiac0.indicator0 | grep -c On)
-	_batpercent=$(apm -l)
+	_batpercent="$(apm -l)%"
 	[[ ${_status} -eq 1 ]] \
-		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_batpercent}%${eta[1]}%${pipe}" \
-		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_batpercent}%${eta[0]}%${pipe}"
+		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_batpercent}%${eta[1]}${pipe}" \
+		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_batpercent}%${eta[0]}${pipe}"
 }
 
 calendar() {
@@ -36,7 +36,7 @@ cpu() {
 	_cpuload=$(printf "%2s" "$((100-$(iostat -C | awk -F " " 'NR == 3 { print $6 }')))")
 	_cputemp=$(sysctl -n hw.sensors.cpu0.temp0 | cut -d '.' -f 1)
 	_cpuspeed=$(printf "%4s" "$(sysctl -n hw.cpuspeed)")
-	_cpuperf=$(printf "%4s" "$(sysctl -n hw.setperf)%")
+	_cpuperf=$(printf "%4s" "$(sysctl -n hw.setperf)%%")
 	if [ "${_cpuload}" -ge 90 ] ; then
 		echo -n "${_crit}${_cpuload}% "
 	elif [ "${_cpuload}" -ge 60 ] ; then
@@ -51,7 +51,7 @@ cpu() {
 	else
 		echo -n "${_good}${_cputemp}°C"
 	fi
-	echo -n " ${_grey}${_cpuspeed} MHz @ ${_cpuperf}%${pipe}"
+	echo -n " ${_grey}${_cpuspeed} MHz @ ${_cpuperf}${pipe}"
 }
 
 group() {
@@ -124,7 +124,7 @@ network() {
 		else
 			_hublanstate=""
 		fi
-		_netstate=$(printf "%12s" "${_lanstate}${_wlanstate}${_hublanstate}")
+		_netstate="${_lanstate}${_wlanstate}${_hublanstate}"
 	fi
 	echo -n "${_netstate}${pipe}"
 }
@@ -152,14 +152,15 @@ volume() {
 	#mute=$(mixerctl outputs.master.mute | awk -F '=' '{ print $2 }')
 	#lspk=$(($(mixerctl outputs.master | awk -F '(=|,)' '{ print $2 }')*100/255))
 	#rspk=$(($(mixerctl outputs.master | awk -F '(=|,)' '{ print $3 }')*100/255))
-	_volume=$(sndioctl -n output.level | awk '{ print int($0*100) }')
+	#_volume=$(sndioctl -n output.level | awk '{ print int($0*100) "%%" }')
+	_volume=$(sndioctl -n output.level)
 	_omute=$(sndioctl -n output.mute)
 	#_imute=$(sndioctl -n input.mute)
 	#[[ ${_imute} -eq 1 ]] \
 		#&& echo -n "${_crit}mic on "
 	[[ ${_omute} -eq 1 ]] \
-		&& echo -n "${vol[${_omute}]}${_volume}%%${pipe}" \
-		|| echo -n "${vol[${_omute}]}${_volume}%%${pipe}"
+		&& echo -n "${vol[${_omute}]}${_volume}${pipe}" \
+		|| echo -n "${vol[${_omute}]}${_volume}${pipe}"
 }
 
 #window() {

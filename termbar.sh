@@ -145,7 +145,7 @@ tasks() {
 	_today=$(grep -c due:"$(date +%Y-%m-%d)" ~/todo/todo.txt)
 	[[ ${_today} != 0 ]] \
 		&& echo -n "${_crit}${_today} " \
-		|| echo -n "${_grey}${_today} "
+		|| echo -n "${_grey}${_today}${_back} "
 	_urgent=$(grep -c '_urgent' ~/todo/todo.txt)
 	[[ ${_urgent} != 0 ]] \
 		&& echo -n "${_crit}${_dred}${_urgent}${pipe}" \
@@ -180,7 +180,7 @@ while true; do
 	tput cup 1 0
 	_l=" $(calendar) $(tasks) $(network) $(battery) $(music)"
 	_r="$(volume) $(cpu) $(memory) $(load) $(snapshot) $(group)"
-	printf "%-310.310s\r" "$_l"
+	printf "%-320.320s\r" "$_l"
 	tput cup 1 138
 	printf "%185.185s" "$_r"
 	sleep 5

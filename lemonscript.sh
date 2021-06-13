@@ -9,7 +9,7 @@ _alrt="%{F#3b48e3}"	# blue
 _grey="%{F#656565}"
 pipe="%{F-} |"
 
-_dred="%{F#b81313}"	# dark red
+_dred="%%{F#b81313}"	# dark red
 
 set -A bat "${_good}" "${_warn}" "${_crit}" "${_grey}" "${_alrt}"
 set -A eta "($(apm -m)m)" ""
@@ -21,22 +21,22 @@ battery() {
 # apm -b: 0 high, 1 low, 2 critical, 3 charging, 4 absent, 255 unknown
 	#_adapter=$(apm -a)
 	_status=$(sysctl -n hw.sensors.acpiac0.indicator0 | grep -c On)
-	_batpercent="$(apm -l)%"
+	_batpercent="$(apm -l)%%"
 	[[ ${_status} -eq 1 ]] \
-		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_batpercent}%${eta[1]}${pipe}" \
-		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_batpercent}%${eta[0]}${pipe}"
+		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_batpercent}${eta[1]}${pipe}" \
+		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_batpercent}${eta[0]}${pipe}"
 }
 
 calendar() {
-	sep="%${_grey}•%${_dred}"
-	echo -n "$(date "+%${_dred}%A, %d %B %Y ${sep} %T %Z %z ${sep} %V ${sep} %j")${pipe}"
+	sep="%${_grey}•${_dred}"
+	echo -n "$(date "+${_dred}%A, %d %B %Y ${sep} %T %Z %z ${sep} %V ${sep} %j")${pipe}"
 }
 
 cpu() {
 	_cpuload=$(printf "%2s" "$((100-$(iostat -C | awk -F " " 'NR == 3 { print $6 }')))")
 	_cputemp=$(sysctl -n hw.sensors.cpu0.temp0 | cut -d '.' -f 1)
 	_cpuspeed=$(printf "%4s" "$(sysctl -n hw.cpuspeed)")
-	_cpuperf=$(printf "%4s" "$(sysctl -n hw.setperf)%%")
+	_cpuperf=$(printf "%5s" "$(sysctl -n hw.setperf)%%")
 	if [ "${_cpuload}" -ge 90 ] ; then
 		echo -n "${_crit}${_cpuload}% "
 	elif [ "${_cpuload}" -ge 60 ] ; then
@@ -105,7 +105,7 @@ network() {
 			_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
 			_hublanstat=$(ifconfig "${nic[2]}" | grep -c inet)
 			[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \
-				&& _netstate=$(printf "%12s" "${net[1]}${nic[0]} ${nic[1]}${net[0]} ${nic[2]}") \
+				&& _netstate="${net[1]}${nic[0]} ${nic[1]}${net[0]} ${nic[2]}" \
 				|| _netstate="${net[2]}no network"
 		fi
 	else
@@ -130,7 +130,7 @@ network() {
 }
 
 snapshot() {
-	_snapshot=$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)
+	_snapshot=$(printf "%16s" "$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)")
 	_kernel=$(uname -v | grep -c 'GENERIC.MP')
 	[[ ${_kernel} -eq 1 ]] \
 		&& echo -n "${_grey}${_snapshot}${pipe}" \
@@ -140,11 +140,11 @@ snapshot() {
 tasks() {
 	_today=$(grep -c due:"$(date +%Y-%m-%d)" ~/todo/todo.txt)
 	[[ ${_today} != 0 ]] \
-		&& echo -n "${_dred}${_today} " \
+		&& echo -n "${_crit}${_today} " \
 		|| echo -n "${_grey}${_today} "
 	_urgent=$(grep -c '_urgent' ~/todo/todo.txt)
 	[[ ${_urgent} != 0 ]] \
-		&& echo -n "${_dred}${_urgent}${pipe}" \
+		&& echo -n "${_crit}${_urgent}${pipe}" \
 		|| echo -n "${_grey}${_urgent}${pipe}"
 }
 
@@ -152,7 +152,7 @@ volume() {
 	#mute=$(mixerctl outputs.master.mute | awk -F '=' '{ print $2 }')
 	#lspk=$(($(mixerctl outputs.master | awk -F '(=|,)' '{ print $2 }')*100/255))
 	#rspk=$(($(mixerctl outputs.master | awk -F '(=|,)' '{ print $3 }')*100/255))
-	#_volume=$(sndioctl -n output.level | awk '{ print int($0*100) "%%" }')
+	#_volume=$(printf "%2s" "$(sndioctl -n output.level | awk '{ print int($0*100) "%%" }')")
 	_volume=$(sndioctl -n output.level)
 	_omute=$(sndioctl -n output.mute)
 	#_imute=$(sndioctl -n input.mute)
@@ -170,6 +170,6 @@ volume() {
 #}
 
 while true ; do
-	echo "%{l} $(calendar) $(tasks) $(network) $(volume) $(music) %{r}${pipe} $(cpu) $(memory) $(load) $(battery) $(snapshot) $(group) "
+	echo "%{l} $(calendar) $(tasks) $(network) $(battery) $(music) %{r}$(volume) $(cpu) $(memory) $(load) $(snapshot) $(group) "
 	sleep 5
 done

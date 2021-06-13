@@ -12,7 +12,7 @@ pipe="%{F-} |"
 _dred="%%{F#b81313}"	# dark red
 
 set -A bat "${_good}" "${_warn}" "${_crit}" "${_grey}" "${_alrt}"
-set -A eta "($(apm -m)m)" ""
+#set -A eta "($(apm -m)m)" ""
 set -A net "${_good}" "${_grey}" "${_crit}"
 set -A nic "em0" "iwm0" "ure0"
 set -A vol "${_good}" "${_grey}"
@@ -22,9 +22,10 @@ battery() {
 	#_adapter=$(apm -a)
 	_status=$(sysctl -n hw.sensors.acpiac0.indicator0 | grep -c On)
 	_batpercent="$(apm -l)%%"
+	_eta="($(apm -m)m)"
 	[[ ${_status} -eq 1 ]] \
-		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_batpercent}${eta[1]}${pipe}" \
-		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_batpercent}${eta[0]}${pipe}"
+		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_batpercent}${pipe}" \
+		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_batpercent}${_eta}${pipe}"
 }
 
 calendar() {

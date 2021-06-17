@@ -33,7 +33,7 @@ battery() {
 	_eta="($(apm -m)m)"
 	[[ ${_status} -eq 1 ]] \
 		&& echo -n "${bat[0]}AC: ${bat[$(apm -b)]}${_back}${_batpercent}${pipe}" \
-		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_back}${_batpercent}${_eta}${pipe}"
+		|| echo -n "${bat[3]}AC: ${bat[$(apm -b)]}${_back}${_batpercent} ${_eta}${pipe}"
 }
 
 calendar() {

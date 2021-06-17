@@ -180,7 +180,7 @@ while true; do
 	tput cup 1 0
 	_l=" $(calendar) $(tasks) $(network) $(battery) $(music)"
 	_r="$(volume) $(cpu) $(memory) $(load) $(snapshot) $(group)"
-	printf "%-325.325s\r" "$_l"
+	printf "%-340.340s\r" "$_l"
 	tput cup 1 138
 	printf "%185.185s" "$_r"
 	sleep 5

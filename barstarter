@@ -12,7 +12,7 @@ autoselect() {
 }
 
 check_services() {
-	pgrep -q mpd || echo "mpd is not running. Aborting." && exit 1
+	pgrep -q mpd || exit 1
 }
 
 clean_up_bars() {

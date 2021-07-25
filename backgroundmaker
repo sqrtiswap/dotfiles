@@ -1,8 +1,8 @@
 #!/bin/sh
 
 make_wallpaper() {
-	_wallpaperdir="$HOME"/Pictures/wallpaper
-	xwallpaper --output eDP-1 --maximize "$(find "${_wallpaperdir}" -type f | sort -R | head -1)" --output DP-1-9 --maximize "$(find "${_wallpaperdir}" -type f | sort -R | head -1)"
+	_wallpaperdir="$HOME"/Pictures/wallpaper/pics-current/
+	xwallpaper --output eDP-1 --maximize "$(find "${_wallpaperdir}" -type f | sort -R | head -1)" --output DP-1 --maximize "$(find "${_wallpaperdir}" -type f | sort -R | head -1)"
 }
 
 make_xbmpaper() {
@@ -12,7 +12,7 @@ make_xbmpaper() {
 	GREY="#656565"
 	#RED="#b81313"
 	#YELLOW="#b4801e"
-	_xbmdir="$HOME/Pictures/wallpaper-xbm/Current/"
+	_xbmdir="$HOME"/Pictures/wallpaper/xbm-current/
 	while true ; do
 		xsetroot -bitmap "$(find "${_xbmdir}" -iname '*.xbm' | sort -R | head -1)" -bg $GREY -fg $BLACK
 		sleep 3600

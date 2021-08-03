@@ -20,7 +20,7 @@ _dred="\033[31m"	# dark red
 
 set -A bat "${_good}" "${_warn}" "${_crit}" "${_grey}" "${_alrt}"
 #set -A eta "($(printf "%3s" "$(apm -m)")m)" " ${_grey}(---m)"
-set -A net "${_rset}${_good}" "${_grey}" "${_crit}"
+set -A net "${_rset}${_good}" "${_grey}" "${_crit}" "${_rset}${_hide}${_line}"
 set -A nic "em0" "iwm0" "ure0"
 set -A vol "${_good}" "${_grey}"
 
@@ -126,7 +126,7 @@ network() {
 				&& _hublanstate=" ${net[0]}${nic[2]}" \
 				|| _hublanstate=" ${net[1]}${nic[2]}"
 		else
-			_hublanstate=" ${_line}${_grey}${nic[2]}"
+			_hublanstate=" ${net[3]}${nic[2]}"
 		fi
 		_netstate="${_lanstate}${_wlanstate}${_hublanstate}"
 	fi

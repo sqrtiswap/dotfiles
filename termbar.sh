@@ -93,8 +93,8 @@ music() {
 	#♫▮▮
 	_mpdstate=$(mpc | awk -F ' ' 'NR == 2 { gsub("#", "", $2); print $2" ("$3") mpd "$1 }')
 	[[ -n ${_mpdstate} ]] \
-		&& echo -n "${_grey}${_mpdstate}${_back}" \
-		|| echo -n "${_grey}0/0 (0:00/0:00) mpd [-------]${_back}"
+		&& echo -n "${_grey}${_mpdstate}" \
+		|| echo -n "${_grey}0/0 (0:00/0:00) mpd [-------]"
 }
 
 network() {
@@ -163,8 +163,8 @@ volume() {
 	#[[ ${_imute} -eq 1 ]] \
 		#&& echo -n "${_crit}mic on "
 	[[ ${_omute} -eq 1 ]] \
-		&& echo -n "${vol[${_omute}]}${_volume}${pipe}" \
-		|| echo -n "${vol[${_omute}]}${_volume}${pipe}"
+		&& echo -n "${_rset}${vol[${_omute}]}${_volume}${pipe}" \
+		|| echo -n "${_rset}${vol[${_omute}]}${_volume}${pipe}"
 }
 
 #window() {
@@ -180,10 +180,10 @@ while true; do
 	tput cup 1 0
 	_l=" $(calendar) $(tasks) $(network) $(battery) $(music)"
 	_r="$(volume) $(cpu) $(memory) $(load) $(snapshot) $(group)"
-	#printf "%-335.335s\r" "$_l"
-	printf "%-325.325s\r" "$_l"
+	#printf "%-325.325s\r" "$_l"
+	printf "%-320.320s\r" "$_l"
 	tput cup 1 142
-	printf "%181.181s" "$_r"
+	printf "%185.185s" "$_r"
 	sleep 1
 done
 

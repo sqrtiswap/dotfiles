@@ -1,0 +1,12 @@
+#!/bin/sh
+
+_def_kbd="de"
+_alt_kbd="ru"
+
+_cur_kbd=$(setxkbmap -query | awk '/^layout:/ { print $2 }')
+if [ "${_cur_kbd}" = "${_def_kbd}" ] ; then
+	setxkbmap -layout ${_alt_kbd} && xmessage -timeout 2 'Kbd layout changed to ru'
+else
+	setxkbmap -layout ${_def_kbd} && xmessage -timeout 2 'Kbd layout changed to de'
+fi
+exit 0

@@ -18,8 +18,7 @@ pipe="${_back}${_norm} |"
 
 _dred="\033[31m"	# dark red
 
-set -A bat "${_good}" "${_warn}" "${_crit}" "${_grey}" "${_alrt}"
-#set -A eta "($(printf "%3s" "$(apm -m)")m)" " ${_grey}(---m)"
+set -A bat "${_good}" "${_warn}" "${_crit}" "${_hide}" "${_alrt}"
 set -A net "${_rset}${_good}" "${_grey}" "${_crit}" "${_rset}${_hide}${_line}"
 set -A nic "em0" "iwm0" "ure0"
 set -A vol "${_good}" "${_grey}"
@@ -28,7 +27,6 @@ battery() {
 # apm -b: 0 high, 1 low, 2 critical, 3 charging, 4 absent, 255 unknown
 	#_adapter=$(apm -a)
 	_status=$(sysctl -n hw.sensors.acpiac0.indicator0 | grep -c On)
-	#_batpercent=$(printf "%4s" "$(apm -l)%")
 	_batpercent="$(apm -l)%"
 	_eta="($(apm -m)m)"
 	[[ ${_status} -eq 1 ]] \
@@ -38,7 +36,7 @@ battery() {
 
 calendar() {
 	sep="${_grey}•${_back}${_dred}"
-	echo -n "$(date "+${_dred}%A, %d %B %Y ${sep} %T %Z %z ${sep} %V ${sep} %j")${pipe}"
+	echo -n "${_rset}$(date "+${_dred}%A, %d %B %Y ${sep} %T %Z %z ${sep} %V ${sep} %j")${pipe}"
 }
 
 cpu() {
@@ -64,8 +62,15 @@ cpu() {
 }
 
 group() {
-	echo -n "${_grey}$(xprop -root 32c '\t$0' _NET_CURRENT_DESKTOP | cut -f 2)${_rset}"
+	echo -n "${_grey}$(xprop -root 32c '\t$0' _NET_CURRENT_DESKTOP | cut -f 2)"
 }
+
+#kbd() {
+	#_kbd=$(setxkbmap -query | awk '/^layout:/ { print $2}')
+	#[[ "${_kbd}" = "de" ]] \
+		#&& echo -n "${_rset}${_good}${_kbd}${pipe}" \
+		#|| echo -n "${_rset}${_crit}${_kbd}${pipe}"
+#}
 
 load() {
 	_sysload=$(systat -b | awk 'NR==3 { print $4 }')
@@ -145,11 +150,11 @@ tasks() {
 	_today=$(grep -c due:"$(date +%Y-%m-%d)" "$TODODIR"/todo.txt)
 	[[ ${_today} != 0 ]] \
 		&& echo -n "${_crit}${_today} " \
-		|| echo -n "${_grey}${_today}${_back} "
+		|| echo -n "${_hide}${_today} "
 	_urgent=$(grep -c ' +urgent' "$TODODIR"/todo.txt)
 	[[ ${_urgent} != 0 ]] \
-		&& echo -n "${_crit}${_dred}${_urgent}${pipe}" \
-		|| echo -n "${_grey}${_urgent}${pipe}"
+		&& echo -n "${_back}${_crit}${_urgent}${pipe}" \
+		|| echo -n "${pipe}"
 }
 
 volume() {
@@ -180,10 +185,10 @@ while true; do
 	tput cup 1 0
 	_l=" $(calendar) $(tasks) $(network) $(battery) $(music)"
 	_r="$(volume) $(cpu) $(memory) $(load) $(snapshot) $(group)"
-	#printf "%-325.325s\r" "$_l"
-	printf "%-320.320s\r" "$_l"
+	printf "%-319.319s\r" "$_l"
+	#printf "%-329.329s\r" "$_l"
 	tput cup 1 142
-	printf "%185.185s" "$_r"
+	printf "%181.181s" "$_r"
 	sleep 1
 done
 

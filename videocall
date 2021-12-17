@@ -1,10 +1,4 @@
 #!/bin/sh
-# This requires the following lines in
-# /etc/doas.conf
-# permit nopass alexander as root cmd sysctl args kern.audio.record=0
-# permit nopass alexander as root cmd sysctl args kern.audio.record=1
-# permit nopass alexander as root cmd sysctl args kern.video.record=0
-# permit nopass alexander as root cmd sysctl args kern.video.record=1
 
 doas sysctl kern.video.record=1
 doas sysctl kern.audio.record=1
@@ -13,7 +7,6 @@ doas chown alexander /dev/video0
 
 ENABLE_WASM=1
 
-#chrome --incognito --user-data-dir="/tmp" ;
 chrome --incognito
 
 ENABLE_WASM=0

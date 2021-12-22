@@ -139,14 +139,16 @@ snapshot() {
 }
 
 tasks() {
-	_today=$(grep -c due:"$(date +%Y-%m-%d)" ~/todo/todo.txt)
-	[[ ${_today} != 0 ]] \
-		&& echo -n "${_crit}${_today} " \
-		|| echo -n "${_grey}${_today} "
-	_urgent=$(grep -c '+urgent' ~/todo/todo.txt)
-	[[ ${_urgent} != 0 ]] \
-		&& echo -n "${_crit}${_urgent}${pipe}" \
-		|| echo -n "${_grey}${_urgent}${pipe}"
+	_todo=$(grep -c -e ' +urgent' -e due:"$(date +%Y-%m-%d)" "$TODODIR"/todo.txt)
+	[[ ${_todo} -gt 0 ]] \
+		&& echo -n "${_crit}${_todo}${pipe}" \
+		|| echo -n "${_hide}${_todo}${pipe}"
+	#[[ ${_today} != 0 ]] \
+		#&& echo -n "${_crit}${_today} " \
+		#|| echo -n "${_hide}${_today} "
+	#[[ ${_urgent} != 0 ]] \
+		#&& echo -n "${_back}${_crit}${_urgent}${pipe}" \
+		#|| echo -n "${pipe}"
 }
 
 volume() {
@@ -172,5 +174,5 @@ volume() {
 
 while true ; do
 	echo "%{l} $(calendar) $(tasks) $(network) $(battery) $(music) %{r}$(volume) $(cpu) $(memory) $(load) $(snapshot) $(group) "
-	sleep 5
+	sleep 1
 done

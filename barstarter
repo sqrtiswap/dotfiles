@@ -54,6 +54,7 @@ usage() { printf "barstarter - starts bars.
 
 Commandline arguments can be passed:
 => help		- Show this message.
+=> kill		- Just terminate the bar.
 => lemonbar	- Start lemonbar.
 => termbar	- Start termbar.
 => xbattbar	- Start xbattbar.
@@ -65,20 +66,23 @@ exit 0
 }
 
 case $1 in
-h)
+h*)
 	usage
 	;;
-l)
+k*)
+	clean_up_bars
+	;;
+l*)
 	clean_up_bars
 	check_services
 	make_lemonbar
 	;;
-t)
+t*)
 	clean_up_bars
 	check_services
 	make_termbar
 	;;
-x)
+x*)
 	clean_up_bars
 	make_xbattbar
 	;;

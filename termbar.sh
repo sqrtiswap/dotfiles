@@ -62,7 +62,8 @@ cpu() {
 	fi
 
 	#_cpuspeed=$(printf "%4s" "$(sysctl -n hw.cpuspeed)")
-	_cpuperf=$(printf "%4s" "$(sysctl -n hw.setperf)%")
+	#_cpuperf=$(printf "%4s" "$(sysctl -n hw.setperf)%")
+	_cpuperf="$(sysctl -n hw.setperf)%"
 
 	#echo -n " ${_grey}${_cpuspeed} MHz @ ${_cpuperf}${_rset}${pipe}"
 	echo -n " ${_grey}@ ${_cpuperf}${_rset}${pipe}"
@@ -121,39 +122,27 @@ network() {
 	_wlanstat=$(ifconfig "${nic[1]}" | grep -c 'status: active')
 	_wlan=$(ifconfig "${nic[1]}" | awk '/ieee80211:/ { print $3 "(" $8 ")" }')
 	_hublanexist=$(ifconfig | grep -c "${nic[2]}:")
-	if [[ ${_lanstat} -ne 1 && ${_wlanstat} -ne 1 ]] ; then
-		if [[ ${_hublanexist} -eq 0 ]] ; then
-			_netstate="${net[2]}no network"
-		else
-			_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
-			_hublanstat=$(ifconfig "${nic[2]}" | grep -c inet)
-			[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \
-				&& _netstate="${net[1]}${nic[0]} ${nic[1]}${_rset}${net[0]} ${nic[2]}" \
-				|| _netstate="${net[2]}no network"
-		fi
+	[[ ${_lanstat} -eq 1 ]] \
+		&& _lanstate="${net[0]}${nic[0]}${_rset} " \
+		|| _lanstate="${net[1]}${nic[0]}${_rset} "
+	[[ ${_wlanstat} -eq 1 ]] \
+		&& _wlanstate="${net[0]}${_wlan}${_rset}" \
+		|| _wlanstate="${net[1]}${nic[1]}${_rset}"
+	if [[ ${_hublanexist} -eq 1 ]] ; then
+		_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
+		_hublanstat=$(ifconfig "${nic[2]}" | grep -c inet)
+		[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \
+			&& _hublanstate=" ${net[0]}${nic[2]}" \
+			|| _hublanstate=" ${net[1]}${nic[2]}"
 	else
-		[[ ${_lanstat} -eq 1 ]] \
-			&& _lanstate="${net[0]}${nic[0]}${_rset} " \
-			|| _lanstate="${net[1]}${nic[0]}${_rset} "
-		[[ ${_wlanstat} -eq 1 ]] \
-			&& _wlanstate="${net[0]}${_wlan}${_rset}" \
-			|| _wlanstate="${net[1]}${nic[1]}${_rset}"
-		if [[ ${_hublanexist} -eq 1 ]] ; then
-			_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
-			_hublanstat=$(ifconfig "${nic[2]}" | grep -c inet)
-			[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \
-				&& _hublanstate=" ${net[0]}${nic[2]}" \
-				|| _hublanstate=" ${net[1]}${nic[2]}"
-		else
-			_hublanstate=" ${net[3]}${nic[2]}"
-		fi
-		_netstate="${_lanstate}${_wlanstate}${_hublanstate}"
+		_hublanstate=" ${net[3]}${nic[2]}"
 	fi
-	echo -n "${_netstate}${_rset}${pipe}"
+	echo -n "${_lanstate}${_wlanstate}${_hublanstate}${_rset}${pipe}"
 }
 
 snapshot() {
-	_snapshot=$(printf "%16s" "$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)")
+	#_snapshot=$(printf "%16s" "$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)")
+	_snapshot=$(awk -F "( |:)" 'NR == 1 { print $2" "$4 }' /etc/motd)
 	_kernel=$(uname -v | grep -c 'GENERIC.MP')
 	[[ ${_kernel} -eq 1 ]] \
 		&& echo -n "${_grey}${_snapshot}${pipe}" \
@@ -198,7 +187,7 @@ while true; do
 	#printf "%181.181s" "$_r"
 	_r="$(volume) $(cpu) $(fan) $(load) $(snapshot) $(group)"
 	printf "%185.185s" "$_r"
-	sleep 5
+	sleep 1
 done
 
 tput cnorm	# show cursor

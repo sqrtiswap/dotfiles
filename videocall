@@ -1,17 +1,42 @@
 #!/bin/sh
 
-doas sysctl kern.video.record=1
-doas sysctl kern.audio.record=1
+clean_up() {
+	ENABLE_WASM=0
 
-doas chown alexander /dev/video0
+	doas sysctl kern.video.record=0
+	doas sysctl kern.audio.record=0
 
-ENABLE_WASM=1
+	doas chown root /dev/video0
+}
 
-chrome --incognito
+prepare() {
+	doas sysctl kern.video.record=1
+	doas sysctl kern.audio.record=1
 
-ENABLE_WASM=0
+	doas chown alexander /dev/video0
 
-doas sysctl kern.video.record=0
-doas sysctl kern.audio.record=0
+	ENABLE_WASM=1
+}
 
-doas chown root /dev/video0
+usage() {
+	echo "Options are:
+	work:		Use bookmarks etc.
+	incognito:	Use a clean chrome"
+exit 1
+}
+
+case $1 in
+work)
+	prepare
+	chrome
+	clean_up
+	;;
+incognito)
+	prepare
+	chrome --incognito
+	clean_up
+	;;
+*)
+	usage
+	;;
+esac

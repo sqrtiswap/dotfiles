@@ -1,0 +1,33 @@
+#!/bin/ksh
+
+clean_up_nics() {
+	set -A nic "em0" "iwm0" "ure0"
+
+	_lanstat=$(ifconfig "${nic[0]}" | grep -c 'status: active')
+	[[ ${_lanstat} -eq 1 ]] \
+		&& doas ifconfig "${nic[0]}" down \
+		&& doas ifconfig "${nic[0]}" up
+
+	_wlanstat=$(ifconfig "${nic[1]}" | grep -c 'status: active')
+	[[ ${_wlanstat} -eq 1 ]] \
+		&& doas ifconfig "${nic[1]}" down \
+		&& doas ifconfig "${nic[1]}" up
+
+	_hublanexist=$(ifconfig | grep -c "${nic[2]}:")
+	if [[ ${_hublanexist} -eq 1 ]] ; then
+		_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
+		[[ ${_hublanup} -eq 1 ]] \
+			&& doas ifconfig "${nic[2]}" down \
+			&& doas ifconfig "${nic[2]}" up
+	fi
+}
+
+tuberlin() {
+	pass work/tuberlin/tubit
+	doas openconnect --verbose --protocol=anyconnect --user=xan7@tu-berlin.de vpn.tu-berlin.de
+}
+
+case $1 in
+	cleanup) clean_up_nics ;;
+	tuberlin) connect_tubit ;;
+esac

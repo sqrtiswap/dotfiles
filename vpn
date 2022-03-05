@@ -22,6 +22,10 @@ clean_up_nics() {
 	fi
 }
 
+fuberlin() {
+	pass work/fuberlin/zedat | doas openconnect --verbose --protocol=anyconnect --user=alexanderm@zedat.fu-berlin.de --passwd-on-stdin vpn.fu-berlin.de
+}
+
 tuberlin() {
 	#pass work/tuberlin/tubit
 	#doas openconnect --verbose --protocol=anyconnect --user=xan7@tu-berlin.de vpn.tu-berlin.de
@@ -30,6 +34,10 @@ tuberlin() {
 
 case $1 in
 cleanup)
+	clean_up_nics
+	;;
+fuberlin)
+	fuberlin
 	clean_up_nics
 	;;
 tuberlin)

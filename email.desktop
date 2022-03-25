@@ -5,6 +5,6 @@ Name=Email
 Comment=Wrapper for mymail
 Path=/home/alexander/bin
 Exec=mymail
-Icon=/home/alexander/.icons/email.png
+Icon=email.png
 Terminal=true
 Categories=ConsoleOnly;Utility;

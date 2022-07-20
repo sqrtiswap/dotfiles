@@ -1,9 +1,11 @@
-#! /bin/sh
-
-#https://www.zdf.de/comedy/heute-show/heute-show-vom-4-februar-2022-100.html
+#!/bin/sh
 
 if [ -n "$2" ] ; then
-	 _stream_id=$(youtube-dl -F "$2" | awk -F " " '/^hls/ { print $1 }' | tail -1)
+	_url_info=$(youtube-dl -F "$2")
+	if echo "${_url_info}" | grep -q '\[download\] Downloading video 2' ; then
+		_rest_starts=$(echo "${_url_info}" | grep -n '\[download\] Downloading video 2' | cut -d ':' -f 1)
+	fi
+	_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep -v 'audio only' | awk -F " " '/^hls/ { print $1 }' | tail -1)
 else
 	usage
 fi
@@ -13,11 +15,11 @@ download_stream() {
 }
 
 watch_with_mpv() {
-	mpv --ytdl-raw-options="${_stream_id}" "$2"
+	mpv --ytdl-raw-options=format="${_stream_id}" "$2"
 }
 
 usage() { cat << USAGE
-${0##*/} - watch videos from the ZDF Mediathek.
+${0##*/} - watch videos from the ZDF Mediathek or Tagesschau Sendungsarchiv.
 usage: ${0##*/}	download -> Download the best quality stream.
 		watch	 -> Watch the best quality stream with mpv(1).
 USAGE

@@ -7,7 +7,7 @@ if [ -n "$2" ] ; then
 	else
 		_rest_starts=$(echo "${_url_info}" | grep -c '')
 	fi
-	_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep -v 'audio only' | awk -F " " '/^hls/ { print $1 }' | tail -1)
+	_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep -v 'audio only' | awk -F " " '/^hls|^http|^mp4/ { print $1 }' | tail -1)
 else
 	usage
 fi
@@ -21,7 +21,7 @@ watch_with_mpv() {
 }
 
 usage() { cat << USAGE
-${0##*/} - watch videos from the ZDF Mediathek or Tagesschau Sendungsarchiv.
+${0##*/} - Watch or download videos from sites with non-standard stream IDs.
 usage: ${0##*/}	download -> Download the best quality stream.
 		watch    -> Watch the best quality stream with mpv(1).
 USAGE

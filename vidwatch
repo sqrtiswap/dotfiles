@@ -1,7 +1,7 @@
 #!/bin/sh
 
 _audio_only=0
-_tor=1
+_tor=0
 
 if [ -n "$2" ] ; then
 	if [ "${_tor}" -eq 1 ] ; then

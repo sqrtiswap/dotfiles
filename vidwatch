@@ -3,27 +3,30 @@
 _audio_only=0
 _tor=0
 
-if [ -n "$2" ] ; then
-	if [ "${_tor}" -eq 1 ] ; then
-		_url_info=$(youtube-dl --proxy "socks5://127.0.0.1:9150/" -F "$2")
+get_stream_id() {
+	if [ -n "$2" ] ; then
+		if [ "${_tor}" -eq 1 ] ; then
+			_url_info=$(youtube-dl --proxy "socks5://127.0.0.1:9150/" -F "$2")
+		else
+			_url_info=$(youtube-dl -F "$2")
+		fi
+		if echo "${_url_info}" | grep -q '\[download\] Downloading video 2' ; then
+			_rest_starts=$(echo "${_url_info}" | grep -n '\[download\] Downloading video 2' | cut -d ':' -f 1)
+		else
+			_rest_starts=$(echo "${_url_info}" | grep -c '')
+		fi
+		if [ "${_audio_only}" -eq 1 ] ; then
+			_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep 'audio only' | awk -F " " '/^hls|^http|^mp4/ { print $1 }' | tail -1)
+		else
+			_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep -v 'audio only' | awk -F " " '/^hls|^http|^mp4/ { print $1 }' | tail -1)
+		fi
 	else
-		_url_info=$(youtube-dl -F "$2")
+		usage
 	fi
-	if echo "${_url_info}" | grep -q '\[download\] Downloading video 2' ; then
-		_rest_starts=$(echo "${_url_info}" | grep -n '\[download\] Downloading video 2' | cut -d ':' -f 1)
-	else
-		_rest_starts=$(echo "${_url_info}" | grep -c '')
-	fi
-	if [ "${_audio_only}" -eq 1 ] ; then
-		_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep 'audio only' | awk -F " " '/^hls|^http|^mp4/ { print $1 }' | tail -1)
-	else
-		_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep -v 'audio only' | awk -F " " '/^hls|^http|^mp4/ { print $1 }' | tail -1)
-	fi
-else
-	usage
-fi
+}
 
 download_stream() {
+	get_stream_id "$@"
 	if [ "${_audio_only}" -eq 1 ] ; then
 		if [ "${_tor}" -eq 1 ] ; then
 			youtube-dl -x --proxy "socks5://127.0.0.1:9150/" -f "${_stream_id}" "$2"
@@ -40,6 +43,7 @@ download_stream() {
 }
 
 watch_with_mpv() {
+	get_stream_id "$@"
 	if [ "${_audio_only}" -eq 1 ] ; then
 		if [ "${_tor}" -eq 1 ] ; then
 			mpv --no-video --ytdl-raw-options=proxy="socks5://127.0.0.1:9150/" --ytdl-raw-options=format="${_stream_id}" "$2"

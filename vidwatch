@@ -4,11 +4,11 @@ _audio_only=0
 _tor=0
 
 get_stream_id() {
-	if [ -n "$2" ] ; then
+	if [ -n "$i" ] ; then
 		if [ "${_tor}" -eq 1 ] ; then
-			_url_info=$(youtube-dl --proxy "socks5://127.0.0.1:9150/" -F "$2")
+			_url_info=$(youtube-dl --proxy "socks5://127.0.0.1:9150/" -F "$i")
 		else
-			_url_info=$(youtube-dl -F "$2")
+			_url_info=$(youtube-dl -F "$i")
 		fi
 		if echo "${_url_info}" | grep -q '\[download\] Downloading video 2' ; then
 			_rest_starts=$(echo "${_url_info}" | grep -n '\[download\] Downloading video 2' | cut -d ':' -f 1)
@@ -20,48 +20,60 @@ get_stream_id() {
 		else
 			_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep -v 'audio only' | awk -F " " '/^hls|^http|^mp4/ { print $1 }' | tail -1)
 		fi
+	fi
+}
+
+download_stream() {
+	if [ -n "$2" ] ; then
+		shift 1
+		for i in "$@" ; do
+			get_stream_id "$i"
+			if [ "${_audio_only}" -eq 1 ] ; then
+				if [ "${_tor}" -eq 1 ] ; then
+					youtube-dl -x --proxy "socks5://127.0.0.1:9150/" -f "${_stream_id}" "$i"
+				else
+					youtube-dl -x -f "${_stream_id}" "$i"
+				fi
+			else
+				if [ "${_tor}" -eq 1 ] ; then
+					youtube-dl --proxy "socks5://127.0.0.1:9150/" -f "${_stream_id}" "$i"
+				else
+					youtube-dl -f "${_stream_id}" "$i"
+				fi
+			fi
+		done
 	else
 		usage
 	fi
 }
 
-download_stream() {
-	get_stream_id "$@"
-	if [ "${_audio_only}" -eq 1 ] ; then
-		if [ "${_tor}" -eq 1 ] ; then
-			youtube-dl -x --proxy "socks5://127.0.0.1:9150/" -f "${_stream_id}" "$2"
-		else
-			youtube-dl -x -f "${_stream_id}" "$2"
-		fi
-	else
-		if [ "${_tor}" -eq 1 ] ; then
-			youtube-dl --proxy "socks5://127.0.0.1:9150/" -f "${_stream_id}" "$2"
-		else
-			youtube-dl -f "${_stream_id}" "$2"
-		fi
-	fi
-}
-
 watch_with_mpv() {
-	get_stream_id "$@"
-	if [ "${_audio_only}" -eq 1 ] ; then
-		if [ "${_tor}" -eq 1 ] ; then
-			mpv --no-video --ytdl-raw-options=proxy="socks5://127.0.0.1:9150/" --ytdl-raw-options=format="${_stream_id}" "$2"
-		else
-			mpv --no-video --ytdl-raw-options=format="${_stream_id}" "$2"
-		fi
+	if [ -n "$2" ] ; then
+		shift 1
+		for i in "$@" ; do
+			get_stream_id "$i"
+			if [ "${_audio_only}" -eq 1 ] ; then
+				if [ "${_tor}" -eq 1 ] ; then
+					mpv --no-video --ytdl-raw-options=proxy="socks5://127.0.0.1:9150/" --ytdl-raw-options=format="${_stream_id}" "$i"
+				else
+					mpv --no-video --ytdl-raw-options=format="${_stream_id}" "$i"
+				fi
+			else
+				if [ "${_tor}" -eq 1 ] ; then
+					mpv --ytdl-raw-options=proxy="socks5://127.0.0.1:9150/" --ytdl-raw-options=format="${_stream_id}" "$i"
+				else
+					mpv --ytdl-raw-options=format="${_stream_id}" "$i"
+				fi
+			fi
+		done
 	else
-		if [ "${_tor}" -eq 1 ] ; then
-			mpv --ytdl-raw-options=proxy="socks5://127.0.0.1:9150/" --ytdl-raw-options=format="${_stream_id}" "$2"
-		else
-			mpv --ytdl-raw-options=format="${_stream_id}" "$2"
-		fi
+		usage
 	fi
 }
 
 usage() { cat << USAGE
 ${0##*/} - Watch or download videos from sites with non-standard stream IDs.
-usage: ${0##*/}	[-a] [-g] command
+usage: ${0##*/}	[-a] [-g] command URLs
 USAGE
 	exit 1
 }

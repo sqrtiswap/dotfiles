@@ -1,0 +1,3 @@
+#!/bin/sh
+
+notify-send -w "I am done. You can check for me."

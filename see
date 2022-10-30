@@ -92,5 +92,5 @@ shift $((OPTIND - 1))
 case $1 in
 	d*) download_stream "$@" ;;
 	w*) watch_with_mpv "$@" ;;
-	*) usage ;;
+	*) usage
 esac

@@ -19,8 +19,8 @@ get_stream_id() {
 			_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep 'audio only' | awk -F " " '/hls|http|mp4|bytevc|h264/ { print $1 }' | tail -1)
 			#_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep 'audio only' | awk -F " " '/^hls|^http|^mp4|^bytevc|^h264/ { print $1 }' | tail -1)
 		else
-			_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep -v 'audio only' | awk -F " " '/hls|http|mp4|bytevc|h264/ { print $1 }' | tail -1)
-			#_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep -v 'audio only' | awk -F " " '/^hls|^http|^mp4|^bytevc|^h264/ { print $1 }' | tail -1)
+			_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep -v -e 'audio only' -e 'video only' | awk -F " " '/hls|http|mp4|bytevc|h264/ { print $1 }' | tail -1)
+			#_stream_id=$(echo "${_url_info}" | head -"${_rest_starts}" | grep -v -e 'audio only' -e 'video only' | awk -F " " '/^hls|^http|^mp4|^bytevc|^h264/ { print $1 }' | tail -1)
 		fi
 	fi
 }

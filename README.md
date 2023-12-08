@@ -8,6 +8,7 @@ Structure:
 │   ├── alacritty
 │   ├── dunst
 │   ├── hikari
+│   ├── htop
 │   ├── tkremindrc
 │   ├── vis
 │   ├── xfe

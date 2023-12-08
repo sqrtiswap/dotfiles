@@ -18,6 +18,7 @@ link:
 	ln -sf ${dotdir}/home/.ksh_paths ~/.ksh_paths
 	ln -sf ${dotdir}/home/.kshrc ~/.kshrc
 	@echo "==== Linking .config ==========================================================="
+	ln -sf ${dotdir}/config/tkremindrc ~/.config/tkremindrc
 	ln -sf ${dotdir}/config/vis ~/.config/vis
 	ln -sf ${dotdir}/config/zathura ~/.config/zathura
 
@@ -40,6 +41,7 @@ unlink:
 	rm -f ~/.ksh_paths
 	rm -f ~/.kshrc
 	@echo "==== Removing links from .config ==============================================="
+	rm -f ~/.config/tkremindrc
 	rm -f ~/.config/vis
 	rm -f ~/.config/zathura
 

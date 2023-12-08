@@ -5,6 +5,7 @@ Structure:
 ├── bin
 │   └── emailinfo
 ├── config
+│   ├── tkremindrc
 │   ├── vis
 │   └── zathura
 └── home

@@ -10,7 +10,10 @@ Structure:
     ├── .bashrc
     ├── .exrc
     ├── .gitconfig
-    └── .gitignore
+    ├── .gitconfig
+    ├── .ksh_completions
+    ├── .ksh_paths
+    └── .kshrc
 ```
 
 ## Setup

@@ -1,0 +1,21 @@
+#!/bin/ksh
+
+export PLAN9=/usr/local/plan9
+
+set -A paths /bin \
+	/sbin \
+	/usr/bin \
+	/usr/sbin \
+	/usr/X11R6/bin \
+	/usr/local/bin \
+	/usr/local/sbin \
+	/usr/games \
+	$HOME/bin \
+	$PLAN9/bin
+for d in "${paths[@]}"; do
+	[[ -d "${d}" ]] && PATH="${PATH}:$d"
+done
+
+#PATH=/bin:/sbin/:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games:$HOME/bin:$PLAN9/bin
+
+export PATH

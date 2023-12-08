@@ -1,0 +1,197 @@
+#!/bin/ksh
+
+if [ -d "$TODODIR" ]; then
+	set -A complete_todo_1 -- -b -d -r -t -p -q \
+		append \
+		create \
+		'done' \
+		edit \
+		finished \
+		lc \
+		ld \
+		lp \
+		ls \
+		priority \
+		report \
+		today
+	set -A complete_todo -- append \
+		create \
+		'done' \
+		edit \
+		finished \
+		lc \
+		ld \
+		lp \
+		ls \
+		priority \
+		report \
+		today
+fi
+
+set -A complete_backup -- all \
+	bitrot \
+	checkout_restic \
+	prep \
+	restic
+
+set -A complete_upgrade -- after \
+	brew \
+	check \
+	conda \
+	fedora \
+	get \
+	help \
+	kernel \
+	mac \
+	openbsd \
+	usage
+
+set -A complete_lazyscript_1 -- all \
+	email \
+	gnome \
+	hublan \
+	morning \
+	pw \
+	qr \
+	sync \
+	threemafiles \
+	weather
+
+set -A complete_notmuch -- count \
+	dump \
+	help \
+	new \
+	search \
+	setup \
+	show \
+	tag
+
+set -A complete_videocall -- incognito \
+	work \
+	usage
+
+set -A complete_vpn -- cleanup \
+	fuberlin \
+	tuberlin
+
+if command -v sndioctl > /dev/null ; then
+	set -A complete_sndioctl -- $(sndioctl | cut -d= -f 1)
+fi
+
+set -A complete_got -- \
+	bl blame \
+	bo backout \
+	br branch \
+	ci commit \
+	co checkout \
+	cy cherrypick \
+	di diff \
+	he histedit \
+	im import \
+	in init \
+	log \
+	rb rebase \
+	ref \
+	rm remove \
+	rv revert \
+	sg stage \
+	st status \
+	tr tree \
+	ug unstage \
+	up update
+
+set -A complete_git -- \
+	co checkout \
+	cp cherry-pick \
+	clean clone \
+	ci commit \
+	config \
+	df diff \
+	graph \
+	lg log \
+	push up show \
+	st status
+
+#set -A SSH_KNOWN_HOSTS ~/.ssh/known_hosts
+#if [ -f /etc/ssh/ssh_known_hosts ]; then
+	#SSH_KNOWN_HOSTS="${SSH_KNOWN_HOSTS[@]} /etc/ssh/ssh_known_hosts"
+#fi
+#HOST_LIST=$(awk \
+	#'{split($1,a,","); gsub("].*", "", a[1]); gsub("\\[", "", a[1]); print a[1] " root@" a[1]}' \
+		#$SSH_KNOWN_HOSTS | sort | uniq)
+#set -A complete_ssh -- $HOST_LIST
+
+if [ ! -f /tmp/man_list ]; then
+	if [ "$OS" = "obsd" ] ; then
+		MANPATH=/usr/share/man man -k Nm~. | \
+			cut -d\( -f1 | \
+			tr -d , | \
+			sort | \
+			uniq > /tmp/man_list
+		set -A complete_man -- $(cat /tmp/man_list)
+	fi
+else
+	set -A complete_man -- $(cat /tmp/man_list)
+fi
+
+if [ ! -f /tmp/pkg_list ] ; then
+	set -A paths /bin \
+		/sbin \
+		/usr/bin \
+		/usr/sbin \
+		/usr/X11R6/bin \
+		/usr/local/bin \
+		/usr/local/sbin \
+		/usr/games \
+		$HOME/bin \
+		$PLAN9/bin
+	for d in "${paths[@]}"; do
+		[[ -d "${d}" ]] && /bin/ls -R "${d}" | grep -v "/" >> /tmp/pkg_list
+	done
+	#/bin/ls -R /{,usr/local/}{bin,sbin} /usr/X11R6/bin | grep -v "/" > /tmp/pkg_list
+fi
+set -A complete_doas_1 -- $(cat /tmp/pkg_list)
+
+set -A complete_kill -- -9 -HUP -INFO -KILL -TERM -SIGKILL
+
+set -A complete_ifconfig -- $(ifconfig | grep ^[a-z] | cut -d: -f1)
+
+set -A complete_signify_1 -- -C -G -S -V
+set -A complete_signify_2 -- -q -p -x -c -m -t -z
+set -A complete_signify_3 -- -p -x -c -m -t -z
+
+#pgrep -fq '/usr/sbin/vmd'
+#if [ $? = 0 ]; then
+	#set -A complete_vmctl -- console load reload start stop reset status send receive
+	#set -A complete_vmctl_2 -- $(vmctl status | awk '!/NAME/{print $NF}')
+#fi
+
+if [ -x /usr/sbin/rcctl ]; then
+	set -A complete_rcctl_1 -- disable enable get ls order set restart start stop
+	set -A complete_rcctl_2 -- $(rcctl ls all)
+fi
+
+set -A complete_make -- \
+	clean \
+	install \
+	port-lib-depends-check \
+	reinstall \
+	repackage
+
+set -A complete_gpg -- \
+		--armor \
+		--clearsign \
+		--decrypt \
+		--detach-sig \
+		--list-key \
+		--receive-keys \
+		--refresh \
+		--sign \
+		--verify
+
+function reload_completions {
+	if [ -e ~/.ksh_completions ]; then
+		. ~/.ksh_completions
+		echo "ksh completions reloaded"
+	fi
+}

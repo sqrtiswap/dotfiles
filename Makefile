@@ -12,6 +12,9 @@ install:
 	ln -sf ${dotdir}/home/.exrc ~/.exrc
 	ln -sf ${dotdir}/home/.gitconfig ~/.gitconfig
 	ln -sf ${dotdir}/home/.gitignore ~/.gitignore
+	ln -sf ${dotdir}/home/.ksh_completions ~/.ksh_completions
+	ln -sf ${dotdir}/home/.ksh_paths ~/.ksh_paths
+	ln -sf ${dotdir}/home/.kshrc ~/.kshrc
 
 uninstall:
 	@echo "==== Removing links from HOME =================================================="
@@ -23,5 +26,8 @@ uninstall:
 	rm -f ~/.exrc
 	rm -f ~/.gitconfig
 	rm -f ~/.gitignore
+	rm -f ~/.ksh_completions
+	rm -f ~/.ksh_paths
+	rm -f ~/.kshrc
 
 .PHONY: all install uninstall

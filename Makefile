@@ -20,6 +20,7 @@ link:
 	@echo "==== Linking .config ==========================================================="
 	ln -sf ${dotdir}/config/tkremindrc ~/.config/tkremindrc
 	ln -sf ${dotdir}/config/vis ~/.config/vis
+	ln -sf ${dotdir}/config/xfe ~/.config/xfe
 	ln -sf ${dotdir}/config/yt-dlp ~/.config/yt-dlp
 	ln -sf ${dotdir}/config/zathura ~/.config/zathura
 
@@ -44,6 +45,7 @@ unlink:
 	@echo "==== Removing links from .config ==============================================="
 	rm -f ~/.config/tkremindrc
 	rm -f ~/.config/vis
+	rm -f ~/.config/xfe
 	rm -f ~/.config/yt-dlp
 	rm -f ~/.config/zathura
 

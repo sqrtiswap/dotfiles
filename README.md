@@ -7,6 +7,7 @@ Structure:
 ├── config
 │   ├── tkremindrc
 │   ├── vis
+│   ├── xfe
 │   ├── yt-dlp
 │   └── zathura
 └── home

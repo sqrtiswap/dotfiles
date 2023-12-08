@@ -19,6 +19,7 @@ link:
 	ln -sf ${dotdir}/home/.kshrc ~/.kshrc
 	@echo "==== Linking .config ==========================================================="
 	ln -sf ${dotdir}/config/vis ~/.config/vis
+	ln -sf ${dotdir}/config/zathura ~/.config/zathura
 
 remove:
 	rm -f ~/bin/emailinfo
@@ -40,6 +41,7 @@ unlink:
 	rm -f ~/.kshrc
 	@echo "==== Removing links from .config ==============================================="
 	rm -f ~/.config/vis
+	rm -f ~/.config/zathura
 
 update:
 	mkdir -p ~/bin/

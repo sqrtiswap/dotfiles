@@ -1,5 +1,14 @@
 # dotfiles
 
+Clone into ~/sources/dotfiles:
+
+```
+~/sources/dotfiles
+└── home
+    ├── .gitconfig
+    └── .gitignore
+```
+
 ## Setup
 
 ```shell

@@ -1,0 +1,150 @@
+#!/bin/sh
+#
+# Copyright (c) 2021 Alexander Möller <alexander.moeller@detmold.com>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+_os=$(uname -s)
+
+_fail="\033[31m" # red
+_rset="\033[0m"  # reset colour
+
+autoselect() {
+	if [ "${_os}" = "OpenBSD" ] ; then
+		openbsd_walkthrough
+	elif [ "${_os}" = "Linux" ] ; then
+		if [ "$(awk -F "(\"| )" 'NR == 1 { print $2 }' /etc/os-release)" = "Fedora" ] ; then
+			upgrade_fedora
+		fi
+	elif [ "${_os}" = "Darwin" ] ; then
+		upgrade_macos
+	else
+		echo "OS is unknown. Aborting..." && exit 1
+	fi
+}
+
+[ "${_os}" = "OpenBSD" ] && _is_current=$(head -1 /etc/motd | grep -c CURRENT)
+
+openbsd_after_upgrade() {
+	mail
+	if [ "${_is_current}" -eq 1 ] ; then
+		doas pkg_add -u
+	else
+		doas pkg_add -Dsnap -u
+	fi
+	doas pkg_delete -ica
+	doas sysmerge
+	doas sysclean
+}
+
+openbsd_check_upgrade() {
+	ftp -MVo- https://ftp.openbsd.org/pub/OpenBSD/snapshots/"$(uname -m)"/BUILDINFO
+}
+
+openbsd_get_upgrade() {
+	if [ "${_is_current}" -eq 1 ] ; then
+		doas sysupgrade -n
+	else
+		doas sysupgrade -sn
+	fi
+}
+
+openbsd_kernel_chain() {
+	doas cp -v /bsd.necro /bsd.dead
+	doas cp -v /bsd.necra /bsd.necro
+	doas cp -v /bsd.last  /bsd.necra
+	doas cp -v /bsd       /bsd.last
+}
+
+openbsd_walkthrough() {
+	openbsd_check_upgrade
+	printf '%s' "Continue with this update? [y/n] "
+	IFS= read -r _continue
+	if [ "${_continue}" = "y" ] ; then
+		openbsd_get_upgrade && openbsd_kernel_chain
+		openbsd_after_upgrade
+	elif [ "${_continue}" = "n" ] ; then
+		printf '%s' "Still update packages? [y/n] "
+		IFS= read -r _update_packages
+		[ "${_update_packages}" = "y" ] && openbsd_after_upgrade
+	else
+		printf "%s" "${_fail}Unknow option. Running again.${_rset}\n"
+		openbsd_walkthrough
+	fi
+}
+
+upgrade_conda() {
+	if command -v conda > /dev/null ; then
+		conda upgrade --all
+	else
+		printf "conda is not installed.\n"
+	fi
+}
+
+upgrade_fedora() {
+	sudo dnf update --refresh
+	sudo dnf autoremove
+	flatpak update
+	upgrade_homebrew
+	upgrade_conda
+}
+
+upgrade_homebrew() {
+	if command -v brew > /dev/null ; then
+		brew update
+		brew upgrade
+	fi
+}
+
+upgrade_macos() {
+	upgrade_homebrew
+	if command -v ports > /dev/null ; then
+		echo "Have a look at the MacPorts documentation."
+		exit 1
+	fi
+	upgrade_conda
+}
+
+usage() { cat << USAGE
+${0##*/} - Upgrade local system
+usage: ${0##*/} command
+
+Commands are:
+	after  -> Run after rebooting the base update.
+	brew   -> Upgrade homebrew installs.
+	check  -> Check the date of the newest snapshot.
+	conda  -> Upgrade all conda environments.
+	fedora -> Upgrade fedora.
+	get    -> Get the newest snapshot.
+	help   -> Show this message.
+	kernel -> Move the kernel chain one entry along.
+	macos  -> Upgrade macos.
+	usage  -> Show this message.
+USAGE
+	exit 1
+}
+
+case $1 in
+	after*) openbsd_after_upgrade ;;
+	brew) upgrade_homebrew ;;
+	check*) openbsd_check_upgrade ;;
+	conda) upgrade_conda ;;
+	fedora) upgrade_fedora ;;
+	get*) openbsd_get_upgrade ;;
+	help) usage ;;
+	kernel*) openbsd_kernel_chain ;;
+	mac*) upgrade_macos ;;
+	o*) openbsd_walkthrough ;;
+	usage) usage ;;
+	*) autoselect ;;
+esac

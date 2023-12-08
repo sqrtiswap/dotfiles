@@ -39,6 +39,7 @@ remove:
 	rm -f ~/bin/emailinfo
 	rm -f ~/bin/mymail
 	rm -f ~/bin/pass
+	rm -f ~/bin/upgrade
 
 uninstall: remove unlink
 
@@ -78,5 +79,6 @@ update:
 	cp -f bin/emailinfo ~/bin/emailinfo
 	cp -f bin/mymail ~/bin/mymail
 	cp -f bin/pass ~/bin/pass
+	cp -f bin/upgrade ~/bin/upgrade
 
 .PHONY: install link remove uninstall unlink update

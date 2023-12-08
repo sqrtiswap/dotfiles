@@ -6,7 +6,8 @@ Structure:
 │   ├── check_mutt_mailboxes
 │   ├── emailinfo
 │   ├── mymail
-│   └── pass
+│   ├── pass
+│   └── upgrade
 ├── config
 │   ├── alacritty
 │   │   └── alacritty.yml

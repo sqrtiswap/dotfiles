@@ -6,7 +6,7 @@ Clone into `~/sources/dotfiles`:
 ~/sources/dotfiles
 └── home
     ├── .exrc
-    └── .gitconfig
+    ├── .gitconfig
     └── .gitignore
 ```
 

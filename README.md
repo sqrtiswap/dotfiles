@@ -15,7 +15,7 @@ Structure:
     ├── .bashrc
     ├── .exrc
     ├── .gitconfig
-    ├── .gitconfig
+    ├── .gitignore
     ├── .ksh_completions
     ├── .ksh_paths
     └── .kshrc

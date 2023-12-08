@@ -6,6 +6,7 @@ Structure:
 │   └── emailinfo
 ├── config
 │   ├── alacritty
+│   ├── dunst
 │   ├── tkremindrc
 │   ├── vis
 │   ├── xfe

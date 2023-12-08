@@ -427,11 +427,11 @@ agenda() {
 		&& drawsep 'REMIND' \
 		&& remt
 	drawsep 'PRIVATE todo (t)'
-	todo today
+	todo today "$1"
 	drawsep 'UNIVERSITY todo (ut)'
-	ut today
+	ut today "$1"
 	drawsep 'F.I.S.T. todo (ft)'
-	ft today
+	ft today "$1"
 	emailinfo greeting
 }
 

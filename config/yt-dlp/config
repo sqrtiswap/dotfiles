@@ -1,0 +1,15 @@
+--audio-format vorbis
+--console-title
+--default-search auto
+--hls-prefer-native
+--hls-use-mpegts
+--merge-output-format mkv
+--no-cache-dir
+--no-call-home
+--no-mtime
+--no-part
+--output ~/Downloads/%(title)s-%(id)s.%(ext)s
+--prefer-ffmpeg
+--prefer-free-formats
+--restrict-filenames
+--youtube-skip-dash-manifest

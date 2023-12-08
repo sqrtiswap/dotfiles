@@ -7,6 +7,7 @@ Structure:
 ├── config
 │   ├── tkremindrc
 │   ├── vis
+│   ├── yt-dlp
 │   └── zathura
 └── home
     ├── .bash_completions

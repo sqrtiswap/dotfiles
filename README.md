@@ -16,6 +16,8 @@ Structure:
 │   │   └── htoprc
 │   ├── mako
 │   │   └── config
+│   ├── mpDris2
+│   │   └── mpDris2.conf
 │   ├── tkremindrc
 │   ├── vis
 │   │   └── visrc.lua

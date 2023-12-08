@@ -23,6 +23,7 @@ link:
 	ln -sf ${dotdir}/config/hikari ~/.config/hikari
 	ln -sf ${dotdir}/config/htop ~/.config/htop
 	ln -sf ${dotdir}/config/mako ~/.config/mako
+	ln -sf ${dotdir}/config/mpDris2 ~/.config/mpDris2
 	ln -sf ${dotdir}/config/tkremindrc ~/.config/tkremindrc
 	ln -sf ${dotdir}/config/vis ~/.config/vis
 	ln -sf ${dotdir}/config/xfe ~/.config/xfe
@@ -53,6 +54,7 @@ unlink:
 	rm -f ~/.config/hikari
 	rm -f ~/.config/htop
 	rm -f ~/.config/mako
+	rm -f ~/.config/mpDris2
 	rm -f ~/.config/tkremindrc
 	rm -f ~/.config/vis
 	rm -f ~/.config/xfe

@@ -20,6 +20,7 @@ link:
 	@echo "==== Linking .config ==========================================================="
 	ln -sf ${dotdir}/config/alacritty ~/.config/alacritty
 	ln -sf ${dotdir}/config/dunst ~/.config/dunst
+	ln -sf ${dotdir}/config/hikari ~/.config/hikari
 	ln -sf ${dotdir}/config/tkremindrc ~/.config/tkremindrc
 	ln -sf ${dotdir}/config/vis ~/.config/vis
 	ln -sf ${dotdir}/config/xfe ~/.config/xfe
@@ -47,6 +48,7 @@ unlink:
 	@echo "==== Removing links from .config ==============================================="
 	rm -f ~/.config/alacritty
 	rm -f ~/.config/dunst
+	rm -f ~/.config/hikari
 	rm -f ~/.config/tkremindrc
 	rm -f ~/.config/vis
 	rm -f ~/.config/xfe

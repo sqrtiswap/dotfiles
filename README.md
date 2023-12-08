@@ -7,6 +7,7 @@ Structure:
 ├── config
 │   ├── alacritty
 │   ├── dunst
+│   ├── hikari
 │   ├── tkremindrc
 │   ├── vis
 │   ├── xfe

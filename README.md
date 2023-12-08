@@ -1,6 +1,6 @@
 # dotfiles
 
-Clone into ~/sources/dotfiles:
+Clone into `~/sources/dotfiles`:
 
 ```
 ~/sources/dotfiles

@@ -3,6 +3,8 @@ dotdir = $(shell pwd)
 .DEFAULT_GOAL := all
 
 install:
+	mkdir -p ~/bin/
+	cp -f bin/emailinfo ~/bin/emailinfo
 	@echo "==== Linking HOME =============================================================="
 	ln -sf ${dotdir}/home/.bash_completions ~/.bash_completions
 	ln -sf ${dotdir}/home/.bash_logout ~/.bash_logout
@@ -17,6 +19,7 @@ install:
 	ln -sf ${dotdir}/home/.kshrc ~/.kshrc
 
 uninstall:
+	rm -f ~/bin/emailinfo
 	@echo "==== Removing links from HOME =================================================="
 	rm -f ~/.bash_completions
 	rm -f ~/.bash_logout

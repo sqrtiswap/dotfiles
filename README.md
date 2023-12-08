@@ -2,6 +2,8 @@
 
 Structure:
 ```
+├── bin
+│   └── emailinfo
 └── home
     ├── .bash_completions
     ├── .bash_logout

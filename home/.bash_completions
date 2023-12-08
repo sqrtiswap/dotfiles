@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+complete -W "append create done edit finished lc ld lp ls priority report today usage" todo
+
+complete -W "all email gnomebatfix hublan_fix morning pw qr scan sync threema weather usage" lazyscript
+
+complete -W "all bitrot prep restic" backup

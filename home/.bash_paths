@@ -1,0 +1,53 @@
+#!/bin/bash
+
+PATH='/bin'
+
+# remove $1 from PATH
+path_delete() {
+	local _l=":$PATH:"
+	while [[ $_l =~ :$1: ]]; do
+		_l=${_l//:$1:/:}
+	done
+	_l=${_l%:}
+	_l=${_l#:}
+	PATH="$_l"
+}
+
+# prepend $1 to PATH
+path_prepend() {
+	path_delete "$1"
+	PATH="$1:$PATH"
+}
+
+# _append : append $1 to PATH
+path_append() {
+	path_delete "$1"
+	PATH="$PATH:$1"
+}
+
+export PLAN9=/usr/local/plan9
+
+paths=(/opt/homebrew/bin \
+	/opt/homebrew/sbin \
+	/Library/TeX/texbin \
+	/opt/homebrew/opt/llvm/bin \
+	/bin \
+	/sbin \
+	/usr/bin \
+	/usr/sbin \
+	/usr/X11R6/bin \
+	/usr/local/bin \
+	/usr/local/sbin \
+	/usr/games \
+	$HOME/bin \
+	/home/linuxbrew/.linuxbrew/bin \
+	/home/linuxbrew/.linuxbrew/sbin \
+	$PLAN9/bin)
+for d in "${paths[@]}"; do
+	[[ -d "${d}" ]] && path_append "$d"
+	#[[ -d "${d}" ]] && path_prepend "$d"
+done
+
+#PATH=/bin:/sbin/:/usr/bin:/usr/sbin:/usr/X11R6/bin:/usr/local/bin:/usr/local/sbin:/usr/games:$HOME/bin:$PLAN9/bin
+
+export PATH

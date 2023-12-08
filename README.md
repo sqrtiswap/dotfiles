@@ -3,6 +3,11 @@
 Structure:
 ```
 └── home
+    ├── .bash_completions
+    ├── .bash_logout
+    ├── .bash_paths
+    ├── .bash_profile
+    ├── .bashrc
     ├── .exrc
     ├── .gitconfig
     └── .gitignore

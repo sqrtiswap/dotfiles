@@ -1,0 +1,11 @@
+font=Inconsolata 12
+background-color=#323232
+text-color=#D8D8D8
+border-color=#B81313
+
+on-button-left=dismiss
+on-button-middle=none
+on-button-right=dismiss-group
+
+[urgency=high]
+text-color=#B81313

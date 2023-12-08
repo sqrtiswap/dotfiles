@@ -14,6 +14,8 @@ Structure:
 │   │   └── hikari.conf
 │   ├── htop
 │   │   └── htoprc
+│   ├── mako
+│   │   └── config
 │   ├── tkremindrc
 │   ├── vis
 │   │   └── visrc.lua

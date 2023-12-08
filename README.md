@@ -19,6 +19,8 @@ Structure:
 │   ├── mpDris2
 │   │   └── mpDris2.conf
 │   ├── tkremindrc
+│   ├── user-dirs.dirs
+│   ├── user-dirs.locale
 │   ├── vis
 │   │   └── visrc.lua
 │   ├── xfe

@@ -25,6 +25,8 @@ link:
 	ln -sf ${dotdir}/config/mako ~/.config/mako
 	ln -sf ${dotdir}/config/mpDris2 ~/.config/mpDris2
 	ln -sf ${dotdir}/config/tkremindrc ~/.config/tkremindrc
+	ln -sf ${dotdir}/config/user-dirs.dirs ~/.config/user-dirs.dirs
+	ln -sf ${dotdir}/config/user-dirs.locale ~/.config/user-dirs.locale
 	ln -sf ${dotdir}/config/vis ~/.config/vis
 	ln -sf ${dotdir}/config/xfe ~/.config/xfe
 	ln -sf ${dotdir}/config/yt-dlp ~/.config/yt-dlp
@@ -56,6 +58,8 @@ unlink:
 	rm -f ~/.config/mako
 	rm -f ~/.config/mpDris2
 	rm -f ~/.config/tkremindrc
+	rm -f ~/.config/user-dirs.dirs
+	rm -f ~/.config/user-dirs.locale
 	rm -f ~/.config/vis
 	rm -f ~/.config/xfe
 	rm -f ~/.config/yt-dlp

@@ -4,6 +4,8 @@ Structure:
 ```
 ├── bin
 │   └── emailinfo
+├── config
+│   └── vis
 └── home
     ├── .bash_completions
     ├── .bash_logout

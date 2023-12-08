@@ -17,6 +17,8 @@ link:
 	ln -sf ${dotdir}/home/.ksh_completions ~/.ksh_completions
 	ln -sf ${dotdir}/home/.ksh_paths ~/.ksh_paths
 	ln -sf ${dotdir}/home/.kshrc ~/.kshrc
+	@echo "==== Linking .config ==========================================================="
+	ln -sf ${dotdir}/config/vis ~/.config/vis
 
 remove:
 	rm -f ~/bin/emailinfo
@@ -36,6 +38,8 @@ unlink:
 	rm -f ~/.ksh_completions
 	rm -f ~/.ksh_paths
 	rm -f ~/.kshrc
+	@echo "==== Removing links from .config ==============================================="
+	rm -f ~/.config/vis
 
 update:
 	mkdir -p ~/bin/

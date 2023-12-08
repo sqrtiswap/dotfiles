@@ -263,7 +263,7 @@ if command -v khal > /dev/null ; then
 	alias khali='khal interactive'
 	alias khalt='khal list --day-format "" today 1d'
 	alias khalw='khal list today 7d'
-	alias calt='[ $(khalt | wc -l) -gt 1 ] && drawsep KHAL && khalt; [ $(remt | wc -l) -gt 0 ] && drawsep REMIND && remt'
+	alias calt='[ $(khalt | wc -l) -gt 0 ] && drawsep KHAL && khalt; [ $(remt | wc -l) -gt 0 ] && drawsep REMIND && remt'
 	alias calw='remind -cu+1 ~/.reminders; drawsep; khalw'
 	alias vsync='vdirsyncer sync'
 else
@@ -422,7 +422,7 @@ drawsep() {
 
 print_greeting() {
 	command -v khal > /dev/null \
-		&& [ $(khalt | wc -l) -gt 1 ] \
+		&& [ $(khalt | wc -l) -gt 0 ] \
 		&& drawsep 'KHAL' \
 		&& khalt
 	[ $(remt | wc -l) -gt 0 ] \

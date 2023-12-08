@@ -24,6 +24,7 @@ link:
 	ln -sf ${dotdir}/config/htop ~/.config/htop
 	ln -sf ${dotdir}/config/mako ~/.config/mako
 	ln -sf ${dotdir}/config/mpDris2 ~/.config/mpDris2
+	ln -sf ${dotdir}/config/mpd ~/.config/mpd
 	ln -sf ${dotdir}/config/tkremindrc ~/.config/tkremindrc
 	ln -sf ${dotdir}/config/user-dirs.dirs ~/.config/user-dirs.dirs
 	ln -sf ${dotdir}/config/user-dirs.locale ~/.config/user-dirs.locale
@@ -57,6 +58,7 @@ unlink:
 	rm -f ~/.config/htop
 	rm -f ~/.config/mako
 	rm -f ~/.config/mpDris2
+	rm -f ~/.config/mpd
 	rm -f ~/.config/tkremindrc
 	rm -f ~/.config/user-dirs.dirs
 	rm -f ~/.config/user-dirs.locale

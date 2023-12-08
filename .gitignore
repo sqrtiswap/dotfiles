@@ -1,3 +1,8 @@
 .DS_Store
+*log
 
+config/mpd/mpd.pid
+config/mpd/mpdstate
+config/mpd/database
+config/mpd/sticker.sql
 config/vis/plugins

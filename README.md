@@ -18,6 +18,8 @@ Structure:
 │   │   └── config
 │   ├── mpDris2
 │   │   └── mpDris2.conf
+│   ├── mpd
+│   │   └── mpd.conf
 │   ├── tkremindrc
 │   ├── user-dirs.dirs
 │   ├── user-dirs.locale

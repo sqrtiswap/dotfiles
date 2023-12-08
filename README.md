@@ -20,6 +20,9 @@ Structure:
 │   │   └── mpDris2.conf
 │   ├── mpd
 │   │   └── mpd.conf
+│   ├── ncmpcpp
+│   │   ├── bindings
+│   │   └── config
 │   ├── tkremindrc
 │   ├── user-dirs.dirs
 │   ├── user-dirs.locale

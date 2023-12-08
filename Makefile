@@ -35,7 +35,10 @@ link:
 	ln -sf ${dotdir}/config/zathura ~/.config/zathura
 
 remove:
+	rm -f ~/bin/check_mutt_mailboxes
 	rm -f ~/bin/emailinfo
+	rm -f ~/bin/mymail
+	rm -f ~/bin/pass
 
 uninstall: remove unlink
 
@@ -71,6 +74,9 @@ unlink:
 
 update:
 	mkdir -p ~/bin/
+	cp -f bin/check_mutt_mailboxes ~/bin/check_mutt_mailboxes
 	cp -f bin/emailinfo ~/bin/emailinfo
+	cp -f bin/mymail ~/bin/mymail
+	cp -f bin/pass ~/bin/pass
 
 .PHONY: install link remove uninstall unlink update

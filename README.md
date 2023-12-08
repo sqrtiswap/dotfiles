@@ -3,7 +3,10 @@
 Structure:
 ```
 ├── bin
-│   └── emailinfo
+│   ├── check_mutt_mailboxes
+│   ├── emailinfo
+│   ├── mymail
+│   └── pass
 ├── config
 │   ├── alacritty
 │   │   └── alacritty.yml

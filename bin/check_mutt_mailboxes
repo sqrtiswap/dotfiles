@@ -1,0 +1,63 @@
+#!/bin/sh
+#
+# Copyright (c) 2023 Alexander Möller <alexander.moeller@detmold.com>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+_fail='\033[31m' # red
+_good='\033[32m' # green
+_rset='\033[0m'  # reset colour
+
+_debug=0
+
+_accounts=$(find "$HOME"/Emails -depth 1 -type d | cut -d '/' -f 5 | grep -v '^[.]' | sort)
+
+find_missing() {
+	for f in ${_accounts} ; do
+		_accountpath="$HOME"/Emails/"$f"
+		_configfile=$(find "$HOME"/.config/mutt/accounts -maxdepth 1 -type f -name "*$f*")
+		_escaped_accountpath=$(echo "${_accountpath}" | sed 's/\//\\\//g')
+		_mailboxes=$(find "${_accountpath}" -mindepth 1 -type d | grep -v -e '/cur$' -e '/new$' -e '/tmp$' | sed "s/${_escaped_accountpath}\///g")
+		if [ -n "${_mailboxes}" ] ; then
+			IFS='
+	'
+			for i in ${_mailboxes} ; do
+				if [ "$f" = "g-gmail.com" ] ; then
+					i=$(echo "$i" | sed 's/\[Gmail\]/\\[Gmail\\]/')
+				fi
+				if grep -q "=$i" "${_configfile}" ; then
+					if [ "${_debug}" -eq 1 ] ; then
+						printf "${_good}%s: %s found${_rset}\n" "$f" "$i"
+					fi
+				else
+					printf "${_fail}%s: %s is missing${_rset}\n" "$f" "$i"
+				fi
+			done
+		fi
+	done
+}
+
+usage() {
+	echo "options: d - provide debug output"
+	exit 1
+}
+
+while getopts d arg; do
+	case ${arg} in
+		d) _debug=1 ;;
+		*) usage
+	esac
+done
+shift $((OPTIND - 1))
+
+find_missing

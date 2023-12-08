@@ -5,6 +5,7 @@ Structure:
 ├── bin
 │   └── emailinfo
 ├── config
+│   ├── alacritty
 │   ├── tkremindrc
 │   ├── vis
 │   ├── xfe

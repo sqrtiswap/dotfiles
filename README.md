@@ -6,14 +6,25 @@ Structure:
 │   └── emailinfo
 ├── config
 │   ├── alacritty
+│   │   └── alacritty.yml
 │   ├── dunst
+│   │   └── dunstrc
 │   ├── hikari
+│   │   ├── autostart
+│   │   └── hikari.conf
 │   ├── htop
+│   │   └── htoprc
 │   ├── tkremindrc
 │   ├── vis
+│   │   └── visrc.lua
 │   ├── xfe
+│   │   ├── xferc
+│   │   ├── xfirc
+│   │   └── xfwrc
 │   ├── yt-dlp
+│   │   └── config
 │   └── zathura
+│       └── zathurarc
 └── home
     ├── .bash_completions
     ├── .bash_logout

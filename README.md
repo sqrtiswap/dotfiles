@@ -1,9 +1,7 @@
 # dotfiles
 
-Clone into `~/sources/dotfiles`:
-
+Structure:
 ```
-~/sources/dotfiles
 └── home
     ├── .exrc
     ├── .gitconfig

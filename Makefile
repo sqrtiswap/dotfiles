@@ -1,12 +1,12 @@
-.DEFAULT_GOAL := all
+dotdir = $(shell pwd)
 
-all: install
+.DEFAULT_GOAL := all
 
 install:
 	@echo "==== Linking HOME =============================================================="
-	ln -sf ~/sources/dotfiles/home/.exrc ~/.exrc
-	ln -sf ~/sources/dotfiles/home/.gitconfig ~/.gitconfig
-	ln -sf ~/sources/dotfiles/home/.gitignore ~/.gitignore
+	ln -sf ${dotdir}/home/.exrc ~/.exrc
+	ln -sf ${dotdir}/home/.gitconfig ~/.gitconfig
+	ln -sf ${dotdir}/home/.gitignore ~/.gitignore
 
 uninstall:
 	@echo "==== Removing links from HOME =================================================="

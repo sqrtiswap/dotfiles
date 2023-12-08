@@ -1,10 +1,10 @@
 dotdir = $(shell pwd)
 
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := update
 
-install:
-	mkdir -p ~/bin/
-	cp -f bin/emailinfo ~/bin/emailinfo
+install: update link
+
+link:
 	@echo "==== Linking HOME =============================================================="
 	ln -sf ${dotdir}/home/.bash_completions ~/.bash_completions
 	ln -sf ${dotdir}/home/.bash_logout ~/.bash_logout
@@ -18,8 +18,12 @@ install:
 	ln -sf ${dotdir}/home/.ksh_paths ~/.ksh_paths
 	ln -sf ${dotdir}/home/.kshrc ~/.kshrc
 
-uninstall:
+remove:
 	rm -f ~/bin/emailinfo
+
+uninstall: remove unlink
+
+unlink:
 	@echo "==== Removing links from HOME =================================================="
 	rm -f ~/.bash_completions
 	rm -f ~/.bash_logout
@@ -33,4 +37,8 @@ uninstall:
 	rm -f ~/.ksh_paths
 	rm -f ~/.kshrc
 
-.PHONY: all install uninstall
+update:
+	mkdir -p ~/bin/
+	cp -f bin/emailinfo ~/bin/emailinfo
+
+.PHONY: install link remove uninstall unlink update

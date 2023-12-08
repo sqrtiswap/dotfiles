@@ -5,7 +5,7 @@ Structure:
 ├── bin
 │   └── emailinfo
 ├── config
-    ├── vis
+│   ├── vis
 │   └── zathura
 └── home
     ├── .bash_completions

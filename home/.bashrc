@@ -318,8 +318,6 @@ export FIREFLY_PRIMARY_BOX='malcha'
 export FIREFLY_PRIMARY_USER='alexanderm'
 alias firefly='firefly -c -k ~/.ssh/id_fuberlin'
 
-alias agenda=print_greeting
-
 alias hooksync='lazyscript sync hook'
 alias unisync='lazyscript sync uni'
 alias myscan='lazyscript scan'
@@ -420,7 +418,7 @@ drawsep() {
 	fi
 }
 
-print_greeting() {
+agenda() {
 	command -v khal > /dev/null \
 		&& [ $(khalt | wc -l) -gt 0 ] \
 		&& drawsep 'KHAL' \
@@ -474,13 +472,13 @@ else
 	else
 		if [ "$(id -u)" != 0 ] ; then
 			if grep -q "${_today}" "$LAZYDIR"/data/morning.run ; then
-				print_greeting
+				agenda
 			else
 				printf "${_fail}lazyscript morning seems to not have run yet.\nThe last run was on %s.${_rset}\nDo it now (%s)? [y/n] " "$(tail -1 "$LAZYDIR/data/morning.run")" "$(date +%F)"
 				IFS= read -r _morningrun
 				[ "${_morningrun}" = "y" ] \
 					&& lazyscript morning \
-					&& print_greeting
+					&& agenda
 			fi
 		fi
 	fi

@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# Copyright (c) 2023 Alexander Möller <alexander.moeller@detmold.com>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+PATH=$PATH:~/bin
+
+if [ -z "$MUTT" ] ; then
+	if command -v neomutt > /dev/null ; then
+		MUTT='neomutt'
+	else
+		MUTT='mutt'
+	fi
+fi
+
+fetch_mail() {
+	if command -v getmail > /dev/null ; then
+		getpop='getmail'
+	else
+		getpop='mpop'
+	fi
+	TERM=xterm-256color $getpop -a
+	TERM=xterm-256color mbsync -a
+	notmuch new
+}
+
+show_overview() {
+	printf "\n%s\n\n%s\n" "$(drawsep)" "$(emailinfo -q)"
+	printf "%s" "Fetch again (O) or return to $MUTT (default)? "
+	IFS= read -r _goback
+	if [ "${_goback}" = "O" ] ; then
+		fetch_mail
+		show_overview
+	else
+		exit 0
+	fi
+}
+
+show_overview

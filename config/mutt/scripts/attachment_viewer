@@ -1,0 +1,91 @@
+#!/bin/sh
+#
+# function: - copy file to temp dir so mutt won't delete it before being read
+#             by the application
+#           - along the way discern file type or use the one that was passed
+#           - use 'open' or 'open -a' if -n $3
+# arguments: $1 -> file name
+#            $2 -> file type
+#                  useful, when file magic isn't enough
+#                  set to '-' if it should not be discerned, e.g. Office docs
+#            $3 -> optional, specify application to use
+# examples: <file/type>; ~/.config/mutt/scripts/attachment_viewer %s
+#           text/html; ~/.config/mutt/scripts/attachment_viewer %s html
+# debugging: set debug='yes', writes debug file to ~/.config/mutt/debug/attachment_viewer
+#
+# see also:  man pages open(1), file(1), basename(1)
+
+muttdir="$HOME"/.config/mutt/
+tmpdir="${muttdir}"/.tmp_attach
+
+debug_file="${muttdir}"/debug/attachment_viewer
+debug="yes"
+
+# make sure directories exist
+mkdir -p "${tmpdir}" "${muttdir}"/debug
+
+# clean out tmpdir to not accumulate old files
+rm -f "${tmpdir}"/*
+
+filetype=$2
+open_with=$3
+
+# mutt puts everything in /tmp by default, get basic filename from full pathname
+filename=$(basename "$1")
+
+# get rid of the extension and save the name for later
+# NEEDS FIXING, SOMETIMES THERE ARE MORE THAN ONE DOT IN A FILENAME
+filestub=$(echo "${filename}" | cut -d"." -f 1)
+
+if [ "${debug}" = "yes" ] ; then
+	printf "%s
+1 (provided filename):  %s
+2 (provided filetype):  %s
+3 (application to use): %s
+Filename:               %s
+Filestub:               %s
+%s\n" \
+	"$(date '+%F (%T)')" \
+	"$1" \
+	"$2" \
+	"$3" \
+	"${filename}" \
+	"${filestub}" \
+	"$(perl -e 'print("-" x 80, "\n" )')" \
+	>> "${debug_file}"
+fi
+
+# if the type is empty try to figure it out
+[ -z "${filetype}" ] && filetype=$(file -bi "$1" | cut -d "/" -f2)
+
+# do nothing if filetype is '-'
+# otherwise rebuild: either from discerned or passed filetype
+if [ "${filetype}" = "-" ] ; then
+    newfile="${filename}"
+else
+    newfile="${filestub}"."${filetype}"
+fi
+newfile="${tmpdir}"/"${newfile}"
+
+# copy file to new spot so mutt doesn't delete it before the app views it
+cp "$1" "${newfile}"
+
+if [ $debug = "yes" ]; then
+	printf "File:      %s
+TYPE:      %s
+Newfile:   %s
+Open with: %s
+%s\n" \
+	"${filestub}" \
+	"${filetype}" \
+	"${newfile}" \
+	"${open_with}" \
+	"$(perl -e 'print("=" x 80, "\n" )')" \
+	>> "${debug_file}"
+fi
+
+if [ -z "${open_with}" ] ; then
+	open "${newfile}"
+else
+	open -a "${open_with}" "${newfile}"
+fi

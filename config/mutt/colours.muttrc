@@ -1,0 +1,94 @@
+# vim: set ft=muttrc:
+
+# order: foreground background
+
+# DEFAULT (but usually account specific)
+color normal  white     default
+color quoted  green     default
+color quoted1 blue      default
+color quoted2 cyan      default
+color quoted3 yellow    default
+color quoted4 red       default
+color quoted5 brightred default
+
+color index           white       default '.*' # index
+color index           brightwhite default "~N" # new mail
+color index           red         default "~T" # tagged mail
+color indicator       brightblack white
+color sidebar_divider white       default
+#color sidebar_divider brightblack default
+color sidebar_new     brightwhite default
+color status          brightwhite default
+
+# GLOBAL (same for all accounts)
+color sidebar_highlight red           default
+color sidebar_flagged   red           default
+color normal            default       default
+color error             black         brightred
+color tilde             yellow        default
+color message           cyan          default
+color markers           red           default
+color attachment        white         default
+color search            brightmagenta default
+color hdrdefault        brightgreen   default
+color signature         brightgreen   default
+color bold              black         default
+color underline         yellow        default
+color tree              default       default
+color header            default       default '^(To|CC):.*alexander*m*ller*'
+
+# Regex highlighting:
+color header blue          default ".*"
+color header brightmagenta default "^(From)"
+color header magenta       default "^(Errors-To|Sender|Resent)"
+color header brightcyan    default "^(Subject)"
+color header brightwhite   default "^(To)"
+color header white         default "^(CC|BCC)"
+color header magenta       default "^(Return|Reply-To)"
+color header cyan          default "^(User-Agent|X-Mailer|Content-Language)"
+color header red           default "(Spam|Virus|Warn)"
+color header yellow        default "^(List)"
+
+# Highlights inside the body of a message.
+color body brightred    default "[\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+"                  # email addresses
+color body brightred    default "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"          # also email addresses
+color body brightblue   default "(https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+"           # URL
+color body brightblue   default "(http|https|ftp|news|telnet|finger)://[^ \">\t\r\n]*" # more URLs
+color body brightblue   default "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"                     # mailto links
+color body brightblue   default "news:[^ \">\t\r\n]*"                                  # news stuff
+color body green        default "\`[^\`]*\`"                                           # Green text between ` and ` (code)
+color body brightblue   default "^# \.*"                                               # Headings as bold blue
+color body brightcyan   default "^## \.*"                                              # Subheadings as bold cyan
+color body brightgreen  default "^### \.*"                                             # Subsubheadings as bold green
+color body yellow       default "^(\t| )*(-|\\*) \.*"                                  # List items as yellow
+color body brightcyan   default "[;:][-o][)/(|]"                                       # emoticons
+color body brightcyan   default "[;:][)(|]"                                            # emoticons
+color body brightcyan   default "[ ][*][^*]*[*][ ]?"                                   # more emoticon?
+color body brightcyan   default "[ ]?[*][^*]*[*][ ]"                                   # more emoticon?
+color body red          default "(BAD signature)"                                      # bad encryption
+color body red          default "^gpg: BAD signature from.*"                           # bad encryption (gpg)
+color body cyan         default "(Good signature)"                                     # good encryption
+color body cyan         default "^gpg: Good signature .*"                              # good encryption (gpg)
+color body brightyellow default "^gpg: "                                               # other gpg stuff
+color body red          default "([a-z][a-z0-9+-]*://(((([a-z0-9_.!~*'();:&=+$,-]|%[0-9a-f][0-9a-f])*@)?((([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?|[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+)(:[0-9]+)?)|([a-z0-9_.!~*'()$,;:@&=+-]|%[0-9a-f][0-9a-f])+)(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*(/([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*(;([a-z0-9_.!~*'():@&=+$,-]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?(#([a-z0-9_.!~*'();/?:@&=+$,-]|%[0-9a-f][0-9a-f])*)?|(www|ftp)\\.(([a-z0-9]([a-z0-9-]*[a-z0-9])?)\\.)*([a-z]([a-z0-9-]*[a-z0-9])?)\\.?(:[0-9]+)?(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*(/([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*(;([-a-z0-9_.!~*'():@&=+$,]|%[0-9a-f][0-9a-f])*)*)*)?(\\?([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?(#([-a-z0-9_.!~*'();/?:@&=+$,]|%[0-9a-f][0-9a-f])*)?)[^].,:;!)? \t\r\n<>\"]"
+
+# Various smilies and the like
+color body brightgreen default "<[Gg]>"                                            # <g>
+color body brightgreen default "<[Bb][Gg]>"                                        # <bg>
+color body brightgreen default " [;:]-*[)>(<|]"                                    # :-) etc...
+color body brightblue  default "(^|[[:space:]])\\*[^[:space:]]+\\*([[:space:]]|$)" # *Bold* text.
+color body brightblue  default "(^|[[:space:]])_[^[:space:]]+_([[:space:]]|$)"     # _Underlined_ text.
+color body brightblue  default "(^|[[:space:]])/[^[:space:]]+/([[:space:]]|$)"     # /Italic/ text.
+
+# Colour definitions when on a mono screen
+mono bold      bold
+mono underline underline
+mono indicator reverse
+mono error     bold
+mono header    bold      "^(From|Subject|X-Junked-Because|X-Virus-hagbard):"
+mono body      bold      "^gpg: Good signature"
+mono body      bold      "^gpg: BAD signature from.*"
+mono body      bold      "(http|https|ftp|news|telnet|finger)://[^ \">\t\r\n]*"
+mono body      bold      "mailto:[-a-z_0-9.]+@[-a-z_0-9.]+"
+mono body      bold      "news:[^ \">\t\r\n]*"
+mono body      bold      "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"

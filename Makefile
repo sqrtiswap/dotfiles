@@ -36,6 +36,16 @@ link:
 	@ln -sf ${dotdir}/config/mpDris2 ~/.config/mpDris2
 	@echo "---> mpd config"
 	@ln -sf ${dotdir}/config/mpd ~/.config/mpd
+	@echo "---> mutt(1) config & scripts"
+	@mkdir -p ~/.config/mutt
+	@ln -sf ${dotdir}/config/mutt/bindings.muttrc ~/.config/mutt/bindings.muttrc
+	@ln -sf ${dotdir}/config/mutt/colours.muttrc ~/.config/mutt/colours.muttrc
+	@ln -sf ${dotdir}/config/mutt/global.muttrc ~/.config/mutt/global.muttrc
+	@ln -sf ${dotdir}/config/mutt/macros.muttrc ~/.config/mutt/macros.muttrc
+	@ln -sf ${dotdir}/config/mutt/mailcap ~/.config/mutt/mailcap
+	@ln -sf ${dotdir}/config/mutt/message-hooks.muttrc ~/.config/mutt/message-hooks.muttrc
+	@ln -sf ${dotdir}/config/mutt/muttrc ~/.config/mutt/muttrc
+	@ln -sf ${dotdir}/config/mutt/scripts ~/.config/mutt/scripts
 	@echo "---> ncmpcpp(1) config"
 	@ln -sf ${dotdir}/config/ncmpcpp ~/.config/ncmpcpp
 	@echo "---> tkremind(1) config"
@@ -93,6 +103,15 @@ unlink:
 	@rm -f ~/.config/mpDris2
 	@echo "---> mpd config"
 	@rm -f ~/.config/mpd
+	@echo "---> mutt(1) config & scripts"
+	@rm -f ~/.config/mutt/bindings.muttrc
+	@rm -f ~/.config/mutt/colours.muttrc
+	@rm -f ~/.config/mutt/global.muttrc
+	@rm -f ~/.config/mutt/macros.muttrc
+	@rm -f ~/.config/mutt/mailcap
+	@rm -f ~/.config/mutt/message-hooks.muttrc
+	@rm -f ~/.config/mutt/muttrc
+	@rm -f ~/.config/mutt/scripts
 	@echo "---> ncmpcpp(1) config"
 	@rm -f ~/.config/ncmpcpp
 	@echo "---> tkremind(1) config"

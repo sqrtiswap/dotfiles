@@ -1,0 +1,155 @@
+# vim: set ft=muttrc:
+
+set hostname = local                      # Override hostname to not leak the real one in headers
+set hidden_host                           # Hide host details
+set sort = threads                        # Sort emails in threads
+set sort_aux = last-date-received         # Sort threads by the date of the last received email
+#set smtp_authenticators = 'gssapi:login' # List of auth methods to try when connecting to an smtp server
+set sleep_time = 0                        # Pause 0 seconds for informational messages
+set markers = no                          # Disables the `+` displayed at line wraps
+set mark_old = no                         # Unread mail stay unread until read
+set wait_key = no                         # mutt won't ask "press key to continue"
+set fast_reply                            # skip to compose when replying
+set fcc_attach                            # save attachments with the body
+set forward_format = "Fwd: %s"            # format of subject when forwarding
+set forward_quote                         # include message in forwards
+set reverse_name                          # reply as whomever it was to
+set include                               # include message in replies
+set mail_check = 60                       # to avoid lags using IMAP with some email providers, e.g. yahoo
+set print = ask-yes                       # Ask before printing
+set delete = ask-yes                      # Ask before deleting
+set charset = utf-8
+set send_charset = utf-8"
+#set ascii_chars = yes                     # Use ascii when displaying trees
+#set edit_headers                          # Edit basic headers during compose
+#set nobeep                                # We don't need no beeping software.
+#set nosmart_wrap                          # Don't want smart wrapping.
+#set nomarkers                             # Don't want any wrap markers.
+#set mime_forward                          # Forward message as MIME attachments.
+#set fcc_clear                             # Keep fcc's clear of signatures and encryption.
+#set tilde                                 # Fill out messages with '~'.
+#set noconfirmappend                       # Just append, don't hassle me.
+#set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+#set to_chars = " +TCF "                   # Drop the "L".
+push <show-version>                       # Show version on startup
+#set display_filter = "tac | sed '/\\\[-- Autoview/,+1d' | tac" # Suppress autoview messages
+
+# FORMATS
+set date_format = "%Y/%m/%d %k:%M"
+set index_format = "%4C %Z %?X?A& ? %D (%d)  %-30.30L %s (%c)"
+set status_format = "-%r-(%v) %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]---(%s)-%>-(%P)---"
+set compose_format = "--(%v) Compose (host: %h) [Approx. msg size: %l | Atts: %a]%>-"
+set pager_format = "(%P) [%Z] %C/%m --- %D (%d) --- %s %>- %.30n"
+
+# MAILCAP, MIME
+set mailcap_path = ~/.config/mutt/mailcap:$mailcap_path         # Path to mailcap file
+set mime_type_query_command = "file --mime-type -b %s"          # How to figure out file types
+set mime_forward = yes                                          # Attachments are forwarded with mail
+set rfc2047_parameters = yes                                    # Decode RFC2047-encoded MIME parameters
+alternative_order text/plain text/enriched text/html            # Order in which email is displayed
+
+# AUTO VIEW
+auto_view text/html
+auto_view application/pgp-encrypted
+
+# EDITOR
+set editor = "nvim +'set cc=72 ft=mail noautoindent et'"
+
+# ALIASES
+set alias_file = ~/.config/mutt/aliases # Path to alias file
+set sort_alias = address                # Sort alias by address within mutt (not the file)
+set reverse_alias = yes                 # Display alias name instead of address if it is known
+
+# ATTACHMENTS
+attachments +A */.*
+attachments +I application/pdf
+attachments +I image/.*
+
+# HEADERS
+#ignore *                                    # ignore all headers
+#unignore from: to: cc: bcc: date: subject:  # show only these
+#unhdr_order *                               # some distros order things by default
+#hdr_order from: to: cc: bcc: date: subject: # and in this order
+unignore *                                  # show full header
+hdr_order Date: Local-Date: From: To: CC: BCC: Reply-To: Mail-Followup-To: Subject: Organization: User-Agent: X-Mailer:
+
+##########
+# BINDINGS
+##########
+
+# UNBIND
+#bind index @ noop      # null out any folder specific bindings
+bind index,pager i noop
+bind index,pager g noop
+bind index \Cf noop
+bind index h noop
+bind editor <space> noop
+
+# General rebindings
+bind index j next-entry
+bind index k previous-entry
+bind attach <return> view-mailcap
+bind attach l view-mailcap
+bind index G last-entry
+bind index gg first-entry
+bind pager,attach h exit
+bind pager j next-line
+bind pager k previous-line
+bind pager l view-attachments
+bind index,pager D delete-message
+bind index U undelete-message
+bind index L limit
+bind index l display-message
+bind index,query <space> tag-entry
+#bind browser h goto-parent
+macro browser h '<change-dir><kill-line>..<enter>' "Go to parent folder"
+#bind index,pager H view-raw-message
+bind browser l select-entry
+#bind pager,browser gg top-page
+#bind pager,browser G bottom-page
+bind index,pager,browser d half-down
+bind index,pager,browser u half-up
+bind index,pager S sync-mailbox
+bind index,pager R group-reply
+bind index \031 previous-undeleted	# Mouse wheel
+bind index \005 next-undeleted		# Mouse wheel
+bind pager \031 previous-line		# Mouse wheel
+bind pager \005 next-line		# Mouse wheel
+#scroll inside the message rather than the index
+bind pager <up> previous-line
+bind pager <down> next-line
+#bind editor <Tab> complete-query	# needs to be unset to allow tab completion for aliases to work
+
+macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
+macro index O "<shell-escape>mpop -a && mbsync -a && notmuch new<enter>" "sync all mail"
+
+# NOTMUCH INTEGRATION
+macro index \Cf "<enter-command>unset wait_key<enter><shell-escape>printf 'Enter a search term to find with notmuch: '; read x; echo \$x >~/.cache/mutt_terms<enter><limit>~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=<>;s/\^id:// for@a;$,=\"|\";print@a' | perl -le '@a=<>; chomp@a; s/\\+/\\\\+/ for@a;print@a' \`\"<enter>" "show only messages matching a notmuch pattern"
+macro index A "<limit>all\n" "show all messages (undo limit)"
+
+#########
+# SIDEBAR
+#########
+
+# LOOK
+set sidebar_visible = yes
+set sidebar_width = 40
+#set sidebar_component_depth = 0
+set sidebar_short_path = yes
+set sidebar_delim_chars = "/."
+set sidebar_folder_indent
+set sidebar_indent_string = "  "
+#set sidebar_sort_method = 'alpha'
+set sidebar_sort_method = 'unsorted'
+set sidebar_next_new_wrap = yes
+set mail_check_stats
+set sidebar_format = '%B%?F? [%F]?%* %?N?%N/? %?S?%S?'
+#set sidebar_format = '%.24B%?F? [%F]?%* %?N?%N/? %?S?%S?'
+
+# BINDINGS
+bind index,pager \Ck sidebar-prev
+bind index,pager \Cj sidebar-next
+bind index,pager \Cl sidebar-open
+#bind index,pager \Cp sidebar-prev-new
+#bind index,pager \Cn sidebar-next-new
+bind index,pager B sidebar-toggle-visible

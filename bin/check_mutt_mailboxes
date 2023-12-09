@@ -20,14 +20,14 @@ _rset='\033[0m'  # reset colour
 
 _debug=0
 
-_accounts=$(find "$HOME"/Emails -depth 1 -type d | cut -d '/' -f 5 | grep -v '^[.]' | sort)
+_accounts=$(find -L "$HOME"/Emails -depth 1 -type d | cut -d '/' -f 5 | grep -v '^[.]' | sort)
 
 find_missing() {
 	for f in ${_accounts} ; do
 		_accountpath="$HOME"/Emails/"$f"
-		_configfile=$(find "$HOME"/.config/mutt/accounts -maxdepth 1 -type f -name "*$f*")
+		_configfile=$(find -L "$HOME"/.config/mutt/accounts -maxdepth 1 -type f -name "*$f*")
 		_escaped_accountpath=$(echo "${_accountpath}" | sed 's/\//\\\//g')
-		_mailboxes=$(find "${_accountpath}" -mindepth 1 -type d | grep -v -e '/cur$' -e '/new$' -e '/tmp$' | sed "s/${_escaped_accountpath}\///g")
+		_mailboxes=$(find -L "${_accountpath}" -mindepth 1 -type d | grep -v -e '/cur$' -e '/new$' -e '/tmp$' | sed "s/${_escaped_accountpath}\///g")
 		if [ -n "${_mailboxes}" ] ; then
 			IFS='
 	'

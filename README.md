@@ -24,6 +24,17 @@ Structure:
 │   │   └── mpDris2.conf
 │   ├── mpd
 │   │   └── mpd.conf
+│   ├── mutt
+│   │   ├── bindings.muttrc
+│   │   ├── colours.muttrc
+│   │   ├── global.muttrc
+│   │   ├── macros.muttrc
+│   │   ├── mailcap
+│   │   ├── message-hooks.muttrc
+│   │   ├── muttrc
+│   │   └── scripts
+│   │       ├── attachment_viewer
+│   │       └── get_overview
 │   ├── ncmpcpp
 │   │   ├── bindings
 │   │   └── config

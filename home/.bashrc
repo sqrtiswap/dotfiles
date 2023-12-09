@@ -261,7 +261,7 @@ if command -v khal > /dev/null ; then
 	alias calw='remind -cu+1 ~/.reminders; drawsep; khalw'
 	alias vsync='vdirsyncer sync'
 else
-	alias calt='[ $(remt | wc -l) -gt 0 ] && remt'
+	alias calt='[ $(remt | wc -l) -gt 0 ] && drawsep REMIND && remt'
 	alias calw='remind -cu+1 ~/.reminders'
 fi
 
@@ -413,20 +413,14 @@ drawsep() {
 }
 
 agenda() {
-	command -v khal > /dev/null \
-		&& [ $(khalt | wc -l) -gt 0 ] \
-		&& drawsep 'KHAL' \
-		&& khalt
-	[ $(remt | wc -l) -gt 0 ] \
-		&& drawsep 'REMIND' \
-		&& remt
+	[ -z "$1" ] && calt
 	drawsep 'PRIVATE todo (t)'
 	todo today "$1"
 	drawsep 'UNIVERSITY todo (ut)'
 	ut today "$1"
 	drawsep 'F.I.S.T. todo (ft)'
 	ft today "$1"
-	emailinfo greeting
+	[ -z "$1" ] && emailinfo greeting
 }
 
 tmux_start() {

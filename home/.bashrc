@@ -413,14 +413,15 @@ drawsep() {
 }
 
 agenda() {
-	[ -z "$1" ] && calt
+	[ -z "$1" ] && command -v khal > /dev/null && khalt
+	[ -z "$1" ] && remt
 	drawsep 'PRIVATE todo (t)'
 	todo today "$1"
 	drawsep 'UNIVERSITY todo (ut)'
 	ut today "$1"
 	drawsep 'F.I.S.T. todo (ft)'
 	ft today "$1"
-	[ -z "$1" ] && emailinfo greeting
+	[ -n "$1" ] || emailinfo greeting
 }
 
 tmux_start() {

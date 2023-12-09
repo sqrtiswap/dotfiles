@@ -244,16 +244,10 @@ else
 	alias cal='cal -mwy'
 fi
 ## remind
-# -gaada
 alias remind='remind -m -b1'
-alias w2rem='remind -cu+2 ~/.reminders'
-alias m2rem='remind -cu2 ~/.reminders'
-remt() {
-	rem -n -b1 -@ \
-		| awk -v arg="$(date '+%Y/%m/%d ')" '{if(match($0,arg)){gsub(arg, "", $0); print $0}}' \
-		| sort
-}
 alias tkremind='tkremind -m -b1'
+alias rem='rem -m -b1 -@ -gaadd'
+alias remt='rem'
 if [ -n "$DISPLAY" ] || [ "$OS" = "macos" ] ; then
 	checkrun remind || backrem
 	[ "$OS" = "linux" ] && disown "$(pidof remind)"

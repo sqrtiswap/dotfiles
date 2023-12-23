@@ -125,14 +125,13 @@ set -o emacs
 # HISTORY
 # don't put duplicate lines or lines starting with space in the history.
 HISTCONTROL="erasedups:ignoreboth"
-#HISTIGNORE="[ ]*"
 HISTTIMEFORMAT='%F %T '
 # append to the history file, don't overwrite it
 shopt -s histappend
 HISTFILE="$HOME"/.bash_history
 HISTSIZE=10000
 HISTFILESIZE=2000
-# shopt -s cmdhist
+shopt -s cmdhist
 
 # SETTING FLAGS/OPTIONS
 if [ "$OS" = "obsd" ] ; then

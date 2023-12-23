@@ -265,8 +265,12 @@ else
 fi
 
 # WEATHER
-alias wberlin='lazyscript weather Berlin'
-alias wdetmold='lazyscript weather Detmold'
+weather() {
+	[ -n "$1" ] && location="$1" || location='Berlin'
+	curl https://wttr.in/"${location}"
+}
+alias wberlin='weather Berlin'
+alias wdetmold='weather Detmold'
 
 # MPV
 alias mpva='mpv --no-video'

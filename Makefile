@@ -36,6 +36,7 @@ link:
 	@ln -sf ${dotdir}/config/mpDris2 ~/.config/mpDris2
 	@echo "---> mpd config"
 	@ln -sf ${dotdir}/config/mpd ~/.config/mpd
+	@ln -sf ~/.config/mpd/mpd.conf ~/.mpdconf
 	@echo "---> mutt(1) config & scripts"
 	@mkdir -p ~/.config/mutt
 	@ln -sf ${dotdir}/config/mutt/bindings.muttrc ~/.config/mutt/bindings.muttrc
@@ -103,6 +104,7 @@ unlink:
 	@rm -f ~/.config/mpDris2
 	@echo "---> mpd config"
 	@rm -f ~/.config/mpd
+	@rm -f ~/.mpdconf
 	@echo "---> mutt(1) config & scripts"
 	@rm -f ~/.config/mutt/bindings.muttrc
 	@rm -f ~/.config/mutt/colours.muttrc

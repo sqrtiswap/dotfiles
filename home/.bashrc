@@ -306,7 +306,9 @@ alias ft='TODODIR=$FISTTODODIR todo'
 alias fticket='TODODIR=$FISTTODODIR ticket'
 
 # UNI
-export UNITODODIR="$HOME"/Cloud/fubox/Sonstiges/todo
+UNIDIR="$HOME"/documents/uni/
+alias uni='cd $UNIDIR && la'
+export UNITODODIR="$UNIDIR"/.todo
 alias ut='TODODIR=$UNITODODIR todo'
 alias uticket='TODODIR=$UNITODODIR ticket'
 
@@ -329,9 +331,6 @@ alias lit='cd $LITDIR && la'
 
 QRDIR="$HOME"/documents/quickreferences/
 alias qr='cd $QRDIR && la'
-
-UNIDIR="$HOME"/documents/uni/
-alias uni='cd $UNIDIR && la'
 
 export LAZYDIR="$HOME"/sources/lazyscripts
 export INBOX="$HOME"/inbox

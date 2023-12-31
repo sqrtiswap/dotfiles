@@ -317,8 +317,7 @@ export FIREFLY_PRIMARY_BOX='malcha'
 export FIREFLY_PRIMARY_USER='alexanderm'
 alias firefly='firefly -c -k ~/.ssh/id_fuberlin'
 
-alias hooksync='lazyscript sync hook'
-alias unisync='lazyscript sync uni'
+alias hooksync='lazyscript sync'
 alias myscan='lazyscript scan'
 
 # DIRECTORIES & FILES

@@ -220,16 +220,10 @@ else
 	alias cal='cal -mwy'
 fi
 ## remind
-# -gaada
 alias remind='remind -m -b1'
-alias w2rem='remind -cu+2 ~/.reminders'
-alias m2rem='remind -cu2 ~/.reminders'
-remt() {
-	rem -n -b1 -@ \
-		| awk -v arg="$(date '+%Y/%m/%d ')" '{if(match($0,arg)){gsub(arg, "", $0); print $0}}' \
-		| sort
-}
 alias tkremind='tkremind -m -b1'
+alias rem='rem -m -b1 -@ -gaadd'
+alias remt='rem'
 if [ -n "$DISPLAY" ] || [ "$OS" = "macos" ] ; then
 	checkrun remind || backrem
 	[ "$OS" = "linux" ] && disown "$(pidof remind)"
@@ -239,17 +233,21 @@ if command -v khal > /dev/null ; then
 	alias khali='khal interactive'
 	alias khalt='khal list --day-format "" today 1d'
 	alias khalw='khal list today 7d'
-	alias calt='[ $(khalt | wc -l) -gt 1 ] && drawsep KHAL && khalt; [ $(remt | wc -l) -gt 0 ] && drawsep REMIND && remt'
+	alias calt='[ $(khalt | wc -l) -gt 0 ] && drawsep KHAL && khalt; [ $(remt | wc -l) -gt 0 ] && drawsep REMIND && remt'
 	alias calw='remind -cu+1 ~/.reminders; drawsep; khalw'
 	alias vsync='vdirsyncer sync'
 else
-	alias calt='[ $(remt | wc -l) -gt 0 ] && remt'
+	alias calt='[ $(remt | wc -l) -gt 0 ] && drawsep REMIND && remt'
 	alias calw='remind -cu+1 ~/.reminders'
 fi
 
 # WEATHER
-alias wberlin='lazyscript weather Berlin'
-alias wdetmold='lazyscript weather Detmold'
+weather() {
+	[ -n "$1" ] && location="$1" || location='Berlin'
+	curl https://wttr.in/"${location}"
+}
+alias wberlin='weather Berlin'
+alias wdetmold='weather Detmold'
 
 # MPV
 alias mpva='mpv --no-video'
@@ -285,7 +283,9 @@ alias ft='TODODIR=$FISTTODODIR todo'
 alias fticket='TODODIR=$FISTTODODIR ticket'
 
 # UNI
-export UNITODODIR="$HOME"/Cloud/fubox/Sonstiges/todo
+UNIDIR="$HOME"/documents/uni/
+alias uni='cd $UNIDIR && la'
+export UNITODODIR="$UNIDIR"/.todo
 alias ut='TODODIR=$UNITODODIR todo'
 alias uticket='TODODIR=$UNITODODIR ticket'
 
@@ -294,10 +294,8 @@ export FIREFLY_PRIMARY_BOX='malcha'
 export FIREFLY_PRIMARY_USER='alexanderm'
 alias firefly='firefly -c -k ~/.ssh/id_fuberlin'
 
-alias agenda=print_greeting
-
-alias hooksync='lazyscript sync hook'
-alias unisync='lazyscript sync uni'
+alias hooksync='lazyscript sync'
+alias myscan='lazyscript scan'
 
 # DIRECTORIES & FILES
 alias ..='cd ../'
@@ -309,9 +307,6 @@ alias lit='cd $LITDIR && la'
 
 QRDIR="$HOME"/documents/quickreferences/
 alias qr='cd $QRDIR && la'
-
-UNIDIR="$HOME"/documents/uni/
-alias uni='cd $UNIDIR && la'
 
 export LAZYDIR="$HOME"/sources/lazyscripts
 export INBOX="$HOME"/inbox
@@ -385,21 +380,16 @@ drawsep() {
 	fi
 }
 
-print_greeting() {
-	command -v khal > /dev/null \
-		&& [ $(khalt | wc -l) -gt 1 ] \
-		&& drawsep 'KHAL' \
-		&& khalt
-	[ $(remt | wc -l) -gt 0 ] \
-		&& drawsep 'REMIND' \
-		&& remt
+agenda() {
+	[ -z "$1" ] && command -v khal > /dev/null && khalt
+	[ -z "$1" ] && remt
 	drawsep 'PRIVATE todo (t)'
-	todo today
+	todo today "$1"
 	drawsep 'UNIVERSITY todo (ut)'
-	ut today
+	ut today "$1"
 	drawsep 'F.I.S.T. todo (ft)'
-	ft today
-	emailinfo greeting
+	ft today "$1"
+	[ -n "$1" ] || emailinfo greeting
 }
 
 tmux_start() {
@@ -439,13 +429,13 @@ else
 	else
 		if [ "$(id -u)" != 0 ] ; then
 			if grep -q "${_today}" "$LAZYDIR"/data/morning.run ; then
-				print_greeting
+				agenda
 			else
 				printf "${_fail}lazyscript morning seems to not have run yet.\nThe last run was on %s.${_rset}\nDo it now (%s)? [y/n] " "$(tail -1 "$LAZYDIR/data/morning.run")" "$(date +%F)"
 				IFS= read -r _morningrun
 				[ "${_morningrun}" = "y" ] \
 					&& lazyscript morning \
-					&& print_greeting
+					&& agenda
 			fi
 		fi
 	fi

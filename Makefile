@@ -70,6 +70,7 @@ remove:
 	rm -f ~/bin/mymail
 	rm -f ~/bin/pass
 	rm -f ~/bin/upgrade
+	rm -f ~/bin/vpn
 
 uninstall: remove unlink
 
@@ -139,5 +140,6 @@ update:
 	cp -f bin/mymail ~/bin/mymail
 	cp -f bin/pass ~/bin/pass
 	cp -f bin/upgrade ~/bin/upgrade
+	cp -f bin/vpn ~/bin/vpn
 
 .PHONY: install link remove uninstall unlink update

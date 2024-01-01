@@ -8,7 +8,8 @@ Structure:
 │   ├── kbdlswitch
 │   ├── mymail
 │   ├── pass
-│   └── upgrade
+│   ├── upgrade
+│   └── vpn
 ├── config
 │   ├── alacritty
 │   │   └── alacritty.yml

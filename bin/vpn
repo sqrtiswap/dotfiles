@@ -1,0 +1,47 @@
+#!/bin/ksh
+
+clean_up_nics() {
+	set -A nic "em0" "iwm0" "ure0"
+
+	_lanstat=$(ifconfig "${nic[0]}" | grep -c 'status: active')
+	[[ ${_lanstat} -ne 0 ]] \
+		&& doas ifconfig "${nic[0]}" down \
+		&& doas ifconfig "${nic[0]}" up
+
+	_wlanstat=$(ifconfig "${nic[1]}" | grep -c 'status: active')
+	[[ ${_wlanstat} -ne 0 ]] \
+		&& doas ifconfig "${nic[1]}" down \
+		&& doas ifconfig "${nic[1]}" up
+
+	_hublanexist=$(ifconfig | grep -c "${nic[2]}:")
+	if [[ ${_hublanexist} -ne 0 ]] ; then
+		_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
+		[[ ${_hublanup} -ne 0 ]] \
+			&& doas ifconfig "${nic[2]}" down \
+			&& doas ifconfig "${nic[2]}" up
+	fi
+}
+
+fuberlin() {
+	pass work/fuberlin/zedat | doas openconnect --verbose --protocol=anyconnect --user=alexanderm@zedat.fu-berlin.de --passwd-on-stdin vpn.fu-berlin.de
+}
+
+tuberlin() {
+	#pass work/tuberlin/tubit
+	#doas openconnect --verbose --protocol=anyconnect --user=xan7@tu-berlin.de vpn.tu-berlin.de
+	pass work/tuberlin/tubit | doas openconnect --verbose --protocol=anyconnect --user=xan7@tu-berlin.de --passwd-on-stdin --authgroup=2 vpn.tu-berlin.de
+}
+
+case $1 in
+cleanup)
+	clean_up_nics
+	;;
+fuberlin)
+	fuberlin
+	clean_up_nics
+	;;
+tuberlin)
+	tuberlin
+	clean_up_nics
+	;;
+esac

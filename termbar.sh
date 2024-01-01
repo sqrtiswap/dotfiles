@@ -22,7 +22,7 @@ _dred="\033[31m"	# dark red
 
 set -A bat "${_good}" "${_warn}" "${_crit}" "${_hide}" "${_alrt}"
 set -A net "${_good}" "${_hide}" "${_crit}" "${_hide}${_line}"
-set -A nic "em0" "iwm0" "ure0"
+set -A nic "em0" "iwm0" "ure0" "vpn"
 set -A vol "${_good}" "${_crit}"
 
 battery() {
@@ -140,6 +140,19 @@ network() {
 	else
 		_hublanstate=" ${net[3]}${nic[2]}"
 	fi
+
+	#_vpnopen=$(ifconfig | grep -c "${nic[3]}:")
+	#if [[ "${_vpnopen}" -eq 1 ]] ; then
+	#	_vpnup=$(ifconfig "${nic[3]}" | grep -c UP)
+	#	_vpnstat=$(ifconfig "${nic[3]}" | grep -c inet)
+	#	[[ ${_vpnup} -eq 1 && ${_vpnstat} -gt 0 ]] \
+	#		&& _vpnstate=" ${net[0]}${nic[3]}" \
+	#		|| _vpnstate=" ${net[2]}${nic[3]}"
+	#else
+	#	_vpnstate=" ${net[3]}${nic[3]}"
+	#fi
+
+	#echo -n "${_lanstate}${_wlanstate}${_hublanstate}${_vpnstate}${_rset}${pipe}"
 	echo -n "${_lanstate}${_wlanstate}${_hublanstate}${_rset}${pipe}"
 }
 

@@ -5,6 +5,6 @@ Name=TkRemind
 Comment=Frontend for Dianne Skoll's Remind
 Path=/usr/local/bin
 Exec=tkremind -m -b1
-Icon=calendar.png
+Icon=/home/alexander/.icons/tkremind.png
 Terminal=false
 Categories=Utility;

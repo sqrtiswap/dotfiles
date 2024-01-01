@@ -119,16 +119,19 @@ music() {
 
 network() {
 	_lanstat=$(ifconfig "${nic[0]}" | grep -c 'status: active')
-	_wlanstat=$(ifconfig "${nic[1]}" | grep -c 'status: active')
-	_wlan=$(ifconfig "${nic[1]}" | awk '/ieee80211:/ { print $3 "(" $8 ")" }')
-	_hublanexist=$(ifconfig | grep -c "${nic[2]}:")
 	[[ ${_lanstat} -eq 1 ]] \
 		&& _lanstate="${net[0]}${nic[0]}${_rset} " \
 		|| _lanstate="${net[1]}${nic[0]}${_rset} "
+
+	_wlanstat=$(ifconfig "${nic[1]}" | grep -c 'status: active')
+	_wlan=$(ifconfig "${nic[1]}" | awk '/ieee80211:/ { print $3 "(" $8 ")" }')
 	[[ ${_wlanstat} -eq 1 ]] \
 		&& _wlanstate="${net[0]}${_wlan}${_rset}" \
 		|| _wlanstate="${net[1]}${nic[1]}${_rset}"
-	if [[ ${_hublanexist} -eq 1 ]] ; then
+
+	_hublanexist=$(ifconfig | grep -c "${nic[2]}:")
+	#if ifconfig "${nic[2]}" > /dev/null ; then
+	if [[ "${_hublanexist}" -eq 1 ]] ; then
 		_hublanup=$(ifconfig "${nic[2]}" | grep -c UP)
 		_hublanstat=$(ifconfig "${nic[2]}" | grep -c inet)
 		[[ ${_hublanup} -eq 1 && ${_hublanstat} -gt 0 ]] \

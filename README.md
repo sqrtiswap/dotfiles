@@ -9,6 +9,7 @@ Structure:
 │   ├── mymail
 │   ├── pass
 │   ├── upgrade
+│   ├── videocall
 │   └── vpn
 ├── config
 │   ├── alacritty

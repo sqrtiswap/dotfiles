@@ -5,6 +5,7 @@ Structure:
 ├── bin
 │   ├── check_mutt_mailboxes
 │   ├── emailinfo
+│   ├── kbdlswitch
 │   ├── mymail
 │   ├── pass
 │   └── upgrade

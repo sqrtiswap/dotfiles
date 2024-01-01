@@ -66,6 +66,7 @@ link:
 remove:
 	rm -f ~/bin/check_mutt_mailboxes
 	rm -f ~/bin/emailinfo
+	rm -f ~/bin/kbdlswitch
 	rm -f ~/bin/mymail
 	rm -f ~/bin/pass
 	rm -f ~/bin/upgrade
@@ -134,6 +135,7 @@ update:
 	@mkdir -p ~/bin/
 	cp -f bin/check_mutt_mailboxes ~/bin/check_mutt_mailboxes
 	cp -f bin/emailinfo ~/bin/emailinfo
+	cp -f bin/kbdlswitch ~/bin/kbdlswitch
 	cp -f bin/mymail ~/bin/mymail
 	cp -f bin/pass ~/bin/pass
 	cp -f bin/upgrade ~/bin/upgrade

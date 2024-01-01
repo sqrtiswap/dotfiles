@@ -2,19 +2,20 @@
 
 make_wallpaper() {
 	_wallpaperdir="$HOME"/Pictures/Wallpapers/
-	xwallpaper --output eDP-1 --maximize "$(find "${_wallpaperdir}" -type f | sort -R | head -1)" --output DP-1 --maximize "$(find "${_wallpaperdir}" -type f | sort -R | head -1)"
+	xwallpaper \
+		--output eDP-1 --maximize "$(find "${_wallpaperdir}" -type f | sort -R | head -1)" \
+		--output DP-1 --maximize "$(find "${_wallpaperdir}" -type f | sort -R | head -1)"
 }
 
 make_xbmpaper() {
-	BLACK="#000000"
-	#BLUE="#3b48e3"
-	#GREEN="#18b218"
-	GREY="#656565"
-	#RED="#b81313"
-	#YELLOW="#b4801e"
+	_black="#000000"
+	_grey="#656565"
+	_red="#b81313"
 	_xbmdir="$HOME"/Pictures/XBMpapers/current/
 	while true ; do
-		xsetroot -bitmap "$(find "${_xbmdir}" -iname '*.xbm' | sort -R | head -1)" -bg $GREY -fg $BLACK
+		xsetroot -bitmap "$(find "${_xbmdir}" -iname '*.xbm' | sort -R | head -1)" \
+			-bg "${_grey}" \
+			-fg "${_black}"
 		sleep 3600
 	done
 }

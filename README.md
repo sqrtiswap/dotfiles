@@ -8,6 +8,7 @@ Structure:
 │   ├── kbdlswitch
 │   ├── mymail
 │   ├── pass
+│   ├── see
 │   ├── tellme
 │   ├── upgrade
 │   ├── videocall

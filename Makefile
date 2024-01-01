@@ -147,16 +147,16 @@ unlink:
 update:
 	@echo "==== Updating tools in ~/bin ==================================================="
 	@mkdir -p ~/bin/
-	cp -f barstarter ~/bin/barstarter
+	cp -f bin/barstarter ~/bin/barstarter
 	cp -f bin/check_mutt_mailboxes ~/bin/check_mutt_mailboxes
 	cp -f bin/emailinfo ~/bin/emailinfo
 	cp -f bin/kbdlswitch ~/bin/kbdlswitch
-	cp -f lemonscript.sh ~/bin/lemonscript.sh
+	cp -f bin/lemonscript.sh ~/bin/lemonscript.sh
 	cp -f bin/mymail ~/bin/mymail
 	cp -f bin/pass ~/bin/pass
 	cp -f bin/see ~/bin/see
 	cp -f bin/tellme ~/bin/tellme
-	cp -f termbar.sh ~/bin/termbar.sh
+	cp -f bin/termbar.sh ~/bin/termbar.sh
 	cp -f bin/upgrade ~/bin/upgrade
 	cp -f bin/videocall ~/bin/videocall
 	cp -f bin/vpn ~/bin/vpn

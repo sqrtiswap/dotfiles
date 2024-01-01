@@ -73,6 +73,7 @@ remove:
 	rm -f ~/bin/upgrade
 	rm -f ~/bin/videocall
 	rm -f ~/bin/vpn
+	rm -f ~/bin/wallpapermaker
 
 uninstall: remove unlink
 
@@ -145,5 +146,6 @@ update:
 	cp -f bin/upgrade ~/bin/upgrade
 	cp -f bin/videocall ~/bin/videocall
 	cp -f bin/vpn ~/bin/vpn
+	cp -f bin/wallpapermaker ~/bin/wallpapermaker
 
 .PHONY: install link remove uninstall unlink update

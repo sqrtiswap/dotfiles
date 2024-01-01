@@ -11,7 +11,8 @@ Structure:
 │   ├── tellme
 │   ├── upgrade
 │   ├── videocall
-│   └── vpn
+│   ├── vpn
+│   └── wallpapermaker
 ├── config
 │   ├── alacritty
 │   │   └── alacritty.yml

@@ -1,0 +1,98 @@
+#!/bin/sh
+
+_os=$(uname -s)
+if [ "${_os}" != "OpenBSD" ] ; then
+	echo "Running this on anything other than OpenBSD doesn't make sense."
+	exit 1
+fi
+
+_monitors=$(xprop -root _NET_DESKTOP_GEOMETRY | awk -F " = " '{ print $2 }')
+
+autoselect() {
+	if command -v lemonbar > /dev/null ; then
+		make_lemonbar
+	else
+		make_termbar
+	fi
+}
+
+check_services() {
+	pgrep -q mpd || exit 1
+}
+
+clean_up_bars() {
+	pgrep -fq termbar && kill -9 $(pgrep -f termbar)
+	pgrep -q lemonbar && pkill lemonbar
+	pgrep -q xbattbar && pkill xbattbar
+}
+
+make_lemonbar() {
+	_font="-misc-fixed-medium-r-normal-*-15-*-*-*-*-*-iso10646-1"
+	_colour="#000000"
+	_fontcolour="#d8d8d8"
+	_left="1920x20+0+0"
+	_right="1920x20+1920+0"
+	if [ "${_monitors}" = "3840, 1080" ] ; then
+		~/bin/lemonscript.sh | lemonbar -dp -g "${_left}" -B "${_colour}" -F "${_fontcolour}" -f "${_font}" &
+		~/bin/lemonscript.sh | lemonbar -dp -g "${_right}" -B "${_colour}" -F "${_fontcolour}" -f "${_font}" &
+	elif [ "${_monitors}" = "1920, 1080" ] ; then
+		~/bin/lemonscript.sh | lemonbar -dp -g "${_left}" -B "${_colour}" -F "${_fontcolour}" -f "${_font}" &
+	fi
+}
+
+make_termbar() {
+	_left="214x1+0+0"
+	_right="214x1+1920+0"
+	if [ "${_monitors}" = "3840, 1080" ] ; then
+		xterm -name termbar -class termbar -geometry "${_left}" -e ~/bin/termbar.sh &
+		xterm -name termbar -class termbar -geometry "${_right}" -e ~/bin/termbar.sh &
+	elif [ "${_monitors}" = "1920, 1080" ] ; then
+		xterm -name termbar -class termbar -geometry "${_left}" -e ~/bin/termbar.sh &
+	fi
+}
+
+make_xbattbar() {
+	xbattbar -a -p 30 -T top &
+}
+
+usage() { printf "barstarter - starts bars.
+
+Commandline arguments can be passed:
+=> help		- Show this message.
+=> kill		- Just terminate the bar.
+=> lemonbar	- Start lemonbar.
+=> termbar	- Start termbar.
+=> xbattbar	- Start xbattbar.
+
+Not forcing a specific bar will start lemonbar if installed
+and termbar if not.
+"
+exit 0
+}
+
+case $1 in
+h*)
+	usage
+	;;
+k*)
+	clean_up_bars
+	;;
+l*)
+	clean_up_bars
+	check_services
+	make_lemonbar
+	;;
+t*)
+	clean_up_bars
+	check_services
+	make_termbar
+	;;
+x*)
+	clean_up_bars
+	make_xbattbar
+	;;
+*)
+	clean_up_bars
+	check_services
+	autoselect
+esac

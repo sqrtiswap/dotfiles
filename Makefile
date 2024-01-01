@@ -64,13 +64,16 @@ link:
 	@ln -sf ${dotdir}/config/zathura ~/.config/zathura
 
 remove:
+	rm -f ~/bin/barstarter
 	rm -f ~/bin/check_mutt_mailboxes
 	rm -f ~/bin/emailinfo
 	rm -f ~/bin/kbdlswitch
+	rm -f ~/bin/lemonscript.sh
 	rm -f ~/bin/mymail
 	rm -f ~/bin/pass
 	rm -f ~/bin/see
 	rm -f ~/bin/tellme
+	rm -f ~/bin/termbar.sh
 	rm -f ~/bin/upgrade
 	rm -f ~/bin/videocall
 	rm -f ~/bin/vpn
@@ -138,13 +141,16 @@ unlink:
 
 update:
 	@mkdir -p ~/bin/
+	cp -f barstarter ~/bin/barstarter
 	cp -f bin/check_mutt_mailboxes ~/bin/check_mutt_mailboxes
 	cp -f bin/emailinfo ~/bin/emailinfo
 	cp -f bin/kbdlswitch ~/bin/kbdlswitch
+	cp -f lemonscript.sh ~/bin/lemonscript.sh
 	cp -f bin/mymail ~/bin/mymail
 	cp -f bin/pass ~/bin/pass
 	cp -f bin/see ~/bin/see
 	cp -f bin/tellme ~/bin/tellme
+	cp -f termbar.sh ~/bin/termbar.sh
 	cp -f bin/upgrade ~/bin/upgrade
 	cp -f bin/videocall ~/bin/videocall
 	cp -f bin/vpn ~/bin/vpn

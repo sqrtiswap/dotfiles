@@ -3,13 +3,16 @@
 Structure:
 ```
 ├── bin
+│   ├── barstarter
 │   ├── check_mutt_mailboxes
 │   ├── emailinfo
 │   ├── kbdlswitch
+│   ├── lemonscript.sh
 │   ├── mymail
 │   ├── pass
 │   ├── see
 │   ├── tellme
+│   ├── termbar.sh
 │   ├── upgrade
 │   ├── videocall
 │   ├── vpn

@@ -50,21 +50,29 @@ download_stream() {
 }
 
 watch_with_mpv() {
+	if command -v iina > /dev/null ; then
+		_mpv=iina
+	elif command -v mpv > /dev/null ; then
+		_mpv=mpv
+	else
+		echo "No mpv found."
+		exit 1
+	fi
 	if [ -n "$2" ] ; then
 		shift 1
 		for i in "$@" ; do
 			get_stream_id "$i"
 			if [ "${_audio_only}" -eq 1 ] ; then
 				if [ "${_tor}" -eq 1 ] ; then
-					mpv --no-video --ytdl-raw-options=proxy="socks5://127.0.0.1:9150/" --ytdl-raw-options=format="${_stream_id}" "$i"
+					${_mpv} --no-video --ytdl-raw-options=proxy="socks5://127.0.0.1:9150/" --ytdl-raw-options=format="${_stream_id}" "$i"
 				else
-					mpv --no-video --ytdl-raw-options=format="${_stream_id}" "$i"
+					${_mpv} --no-video --ytdl-raw-options=format="${_stream_id}" "$i"
 				fi
 			else
 				if [ "${_tor}" -eq 1 ] ; then
-					mpv --ytdl-raw-options=proxy="socks5://127.0.0.1:9150/" --ytdl-raw-options=format="${_stream_id}" "$i"
+					${_mpv} --ytdl-raw-options=proxy="socks5://127.0.0.1:9150/" --ytdl-raw-options=format="${_stream_id}" "$i"
 				else
-					mpv --ytdl-raw-options=format="${_stream_id}" "$i"
+					${_mpv} --ytdl-raw-options=format="${_stream_id}" "$i"
 				fi
 			fi
 		done

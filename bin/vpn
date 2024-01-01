@@ -27,8 +27,6 @@ fuberlin() {
 }
 
 tuberlin() {
-	#pass work/tuberlin/tubit
-	#doas openconnect --verbose --protocol=anyconnect --user=xan7@tu-berlin.de vpn.tu-berlin.de
 	pass work/tuberlin/tubit | doas openconnect --verbose --protocol=anyconnect --user=xan7@tu-berlin.de --passwd-on-stdin --authgroup=2 vpn.tu-berlin.de
 }
 

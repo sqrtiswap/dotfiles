@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=TkRemind
+Comment=Frontend for Dianne Skoll's Remind
+Path=/usr/local/bin
+Exec=tkremind -m -b1
+Icon=/home/alexander/.icons/tkremind.png
+Terminal=false
+Categories=Utility;

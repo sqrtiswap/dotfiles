@@ -60,6 +60,10 @@ Structure:
 │   │   └── config
 │   └── zathura
 │       └── zathurarc
+├── desktopfiles
+│   ├── acme.desktop
+│   ├── email.desktop
+│   └── tkremind.desktop
 └── home
     ├── .bash_completions
     ├── .bash_logout

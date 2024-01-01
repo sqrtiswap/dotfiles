@@ -64,6 +64,7 @@ link:
 	@ln -sf ${dotdir}/config/zathura ~/.config/zathura
 
 remove:
+	@echo "==== Removing tools from ~/bin ================================================="
 	rm -f ~/bin/barstarter
 	rm -f ~/bin/check_mutt_mailboxes
 	rm -f ~/bin/emailinfo
@@ -78,6 +79,10 @@ remove:
 	rm -f ~/bin/videocall
 	rm -f ~/bin/vpn
 	rm -f ~/bin/wallpapermaker
+	@echo "==== Removing desktopfiles ====================================================="
+	rm -f ~/.local/share/applications/acme.desktop
+	rm -f ~/.local/share/applications/email.desktop
+	rm -f ~/.local/share/applications/tkremind.desktop
 
 uninstall: remove unlink
 
@@ -140,6 +145,7 @@ unlink:
 	@rm -f ~/.config/zathura
 
 update:
+	@echo "==== Updating tools in ~/bin ==================================================="
 	@mkdir -p ~/bin/
 	cp -f barstarter ~/bin/barstarter
 	cp -f bin/check_mutt_mailboxes ~/bin/check_mutt_mailboxes
@@ -155,5 +161,10 @@ update:
 	cp -f bin/videocall ~/bin/videocall
 	cp -f bin/vpn ~/bin/vpn
 	cp -f bin/wallpapermaker ~/bin/wallpapermaker
+	@echo "==== Updating desktopfiles ====================================================="
+	@mkdir -p ~/.local/share/applications
+	cp -f desktopfiles/acme.desktop ~/.local/share/applications/acme.desktop
+	cp -f desktopfiles/email.desktop ~/.local/share/applications/email.desktop
+	cp -f desktopfiles/tkremind.desktop ~/.local/share/applications/tkremind.desktop
 
 .PHONY: install link remove uninstall unlink update

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Email
+Comment=Wrapper for mymail
+Path=/home/alexander/bin
+Exec=/home/alexander/bin/mymail
+Icon=email.png
+Terminal=true
+Categories=ConsoleOnly;Utility;

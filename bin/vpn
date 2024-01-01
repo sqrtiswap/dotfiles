@@ -23,11 +23,18 @@ clean_up_nics() {
 }
 
 fuberlin() {
-	pass work/fuberlin/zedat | doas openconnect --verbose --protocol=anyconnect --user=alexanderm@zedat.fu-berlin.de --passwd-on-stdin vpn.fu-berlin.de
+	pass work/fuberlin/zedat | doas openconnect --verbose --passwd-on-stdin \
+		--protocol=anyconnect \
+		--user=alexanderm@zedat.fu-berlin.de \
+		vpn.fu-berlin.de
 }
 
 tuberlin() {
-	pass work/tuberlin/tubit | doas openconnect --verbose --protocol=anyconnect --user=xan7@tu-berlin.de --passwd-on-stdin --authgroup=2 vpn.tu-berlin.de
+	pass work/tuberlin/tubit | doas openconnect --verbose --passwd-on-stdin \
+		--protocol=anyconnect \
+		--user=xan7@tu-berlin.de \
+		--authgroup=2 \
+		vpn.tu-berlin.de
 }
 
 case $1 in

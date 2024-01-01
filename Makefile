@@ -69,6 +69,7 @@ remove:
 	rm -f ~/bin/kbdlswitch
 	rm -f ~/bin/mymail
 	rm -f ~/bin/pass
+	rm -f ~/bin/tellme
 	rm -f ~/bin/upgrade
 	rm -f ~/bin/videocall
 	rm -f ~/bin/vpn
@@ -140,6 +141,7 @@ update:
 	cp -f bin/kbdlswitch ~/bin/kbdlswitch
 	cp -f bin/mymail ~/bin/mymail
 	cp -f bin/pass ~/bin/pass
+	cp -f bin/tellme ~/bin/tellme
 	cp -f bin/upgrade ~/bin/upgrade
 	cp -f bin/videocall ~/bin/videocall
 	cp -f bin/vpn ~/bin/vpn

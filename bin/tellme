@@ -1,0 +1,15 @@
+#!/bin/sh
+
+_message="I am done. You can check for me."
+
+if command -v notify-send > /dev/null ; then
+	notify-send -w "${_message}"
+elif command -v terminal-notifier > /dev/null ; then
+	terminal-notifier -message "${_message}" -title tellme
+else
+	xmessage -nearmouse "${_message}"
+fi
+
+if command -v say > /dev/null ; then
+	say "${_message}"
+fi

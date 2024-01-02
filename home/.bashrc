@@ -331,7 +331,7 @@ alias lit='cd $LITDIR && la'
 QRDIR="$HOME"/documents/quickreferences/
 alias qr='cd $QRDIR && la'
 
-export LAZYDIR="$HOME"/sources/lazyscripts
+export LAZYDIR="$HOME"/sources/housekeeping
 export INBOX="$HOME"/inbox
 
 # PLAN 9 FROM USER SPACE

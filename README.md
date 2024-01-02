@@ -64,18 +64,21 @@ Structure:
 │   ├── acme.desktop
 │   ├── email.desktop
 │   └── tkremind.desktop
-└── home
-    ├── .bash_completions
-    ├── .bash_logout
-    ├── .bash_paths
-    ├── .bash_profile
-    ├── .bashrc
-    ├── .exrc
-    ├── .gitconfig
-    ├── .gitignore
-    ├── .ksh_completions
-    ├── .ksh_paths
-    └── .kshrc
+├── home
+│   ├── .bash_completions
+│   ├── .bash_logout
+│   ├── .bash_paths
+│   ├── .bash_profile
+│   ├── .bashrc
+│   ├── .exrc
+│   ├── .gitconfig
+│   ├── .gitignore
+│   ├── .ksh_completions
+│   ├── .ksh_paths
+│   └── .kshrc
+└── xbar-plugins
+    ├── mpd_control.10s.sh
+    └── todo_today.1s.sh
 ```
 
 ## Setup/Updating

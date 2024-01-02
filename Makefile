@@ -83,6 +83,9 @@ remove:
 	rm -f ~/.local/share/applications/acme.desktop
 	rm -f ~/.local/share/applications/email.desktop
 	rm -f ~/.local/share/applications/tkremind.desktop
+	@echo "==== Removing xbar-plugins ====================================================="
+	rm -f ~/Library/Application\ Support/xbar/plugins/mpd_control.10s.sh
+	rm -f ~/Library/Application\ Support/xbar/plugins/todo_today.1s.sh
 
 uninstall: remove unlink
 
@@ -166,5 +169,9 @@ update:
 	cp -f desktopfiles/acme.desktop ~/.local/share/applications/acme.desktop
 	cp -f desktopfiles/email.desktop ~/.local/share/applications/email.desktop
 	cp -f desktopfiles/tkremind.desktop ~/.local/share/applications/tkremind.desktop
+	@echo "==== Updating xbar-plugins ====================================================="
+	@mkdir -p ~/Library/Application\ Support/xbar/plugins
+	cp -f xbar-plugins/mpd_control.10s.sh ~/Library/Application\ Support/xbar/plugins/mpd_control.10s.sh
+	cp -f xbar-plugins/todo_today.1s.sh ~/Library/Application\ Support/xbar/plugins/todo_today.1s.sh
 
 .PHONY: install link remove uninstall unlink update

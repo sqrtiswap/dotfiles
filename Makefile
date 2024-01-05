@@ -67,6 +67,7 @@ remove:
 	@echo "==== Removing tools from ~/bin ================================================="
 	rm -f ~/bin/barstarter
 	rm -f ~/bin/check_mutt_mailboxes
+	rm -f ~/bin/drawsep
 	rm -f ~/bin/emailinfo
 	rm -f ~/bin/kbdlswitch
 	rm -f ~/bin/lemonscript.sh
@@ -152,6 +153,7 @@ update:
 	@mkdir -p ~/bin/
 	cp -f bin/barstarter ~/bin/barstarter
 	cp -f bin/check_mutt_mailboxes ~/bin/check_mutt_mailboxes
+	cp -f bin/drawsep ~/bin/drawsep
 	cp -f bin/emailinfo ~/bin/emailinfo
 	cp -f bin/kbdlswitch ~/bin/kbdlswitch
 	cp -f bin/lemonscript.sh ~/bin/lemonscript.sh

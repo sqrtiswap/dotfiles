@@ -5,6 +5,7 @@ Structure:
 ├── bin
 │   ├── barstarter
 │   ├── check_mutt_mailboxes
+│   ├── drawsep
 │   ├── emailinfo
 │   ├── kbdlswitch
 │   ├── lemonscript.sh

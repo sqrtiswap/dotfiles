@@ -398,21 +398,6 @@ _rset="\033[0m"
 
 # TERMINAL GREETING
 
-drawsep() {
-	if [ -z "$1" ] ; then
-		_minus=''
-		printf "======"
-	else
-		_minus="$1"
-		printf "==== %s " "${_minus}"
-	fi
-	if command -v jot > /dev/null ; then
-		printf "=%.0s" $(jot $((${#_uptime}-${#_minus}-6))) ; printf '\n'
-	else
-		perl -e 'print("=" x $ARGV[0], "\n" )' "$((${#_uptime}-${#_minus}-6))"
-	fi
-}
-
 agenda() {
 	[ -z "$1" ] && command -v khal > /dev/null && drawsep 'KHAL' && khalt
 	[ -z "$1" ] && drawsep 'REMIND' && remt
@@ -438,7 +423,7 @@ if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] &&
 		tmux_start
 	fi
 else
-	uptime && _uptime=$(uptime)
+	uptime && export UPTIMETXT=$(uptime)
 
 	if [ "$OS" = "obsd" ] ; then
 		drawsep

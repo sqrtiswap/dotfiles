@@ -429,9 +429,9 @@ else
 		drawsep
 		[ "$(sysctl -n kern.audio.record)" -eq 0 ] || echo "\033[1;34m[Recording] Audio recording is on.\033[0m"
 		[ "$(sysctl -n kern.video.record)" -eq 0 ] || echo "\033[1;34m[Recording] Video recording is on.\033[0m"
-		#echo "proc:    $(sysctl -n kern.nprocs)/$(sysctl -n kern.maxproc)
-		#files:   $(sysctl -n kern.nfiles)/$(sysctl -n kern.maxfiles)
-		#threads: $(sysctl -n kern.nthreads)/$(sysctl -n kern.maxthread)"
+		echo "proc:    $(sysctl -n kern.nprocs)/$(sysctl -n kern.maxproc)
+		files:   $(sysctl -n kern.nfiles)/$(sysctl -n kern.maxfiles)
+		threads: $(sysctl -n kern.nthreads)/$(sysctl -n kern.maxthread)"
 		drawsep
 	fi
 
@@ -449,7 +449,9 @@ else
 			if grep -q "${_today}" "$LAZYDIR"/data/morning.run ; then
 				agenda
 			else
-				printf "${_fail}lazyscript morning seems to not have run yet.\nThe last run was on %s.${_rset}\nDo it now (%s)? [y/n] " "$(tail -1 "$LAZYDIR/data/morning.run")" "$(date +%F)"
+				printf "${_fail}lazyscript morning seems to not have run yet.\nThe last run was on %s.${_rset}\nDo it now (%s)? [y/n] " \
+					"$(tail -1 "$LAZYDIR/data/morning.run")" \
+					"$(date +%F)"
 				IFS= read -r _morningrun
 				[ "${_morningrun}" = "y" ] \
 					&& lazyscript morning \
@@ -464,5 +466,4 @@ else
 	eval "$(ssh-agent)" > /dev/null
 	ssh-add --apple-use-keychain ~/.ssh/gitlab-fuphysik 2>/dev/null
 	ssh-add --apple-use-keychain ~/.ssh/github-sqrtiswap 2>/dev/null
-
 fi

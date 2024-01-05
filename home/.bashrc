@@ -414,8 +414,8 @@ drawsep() {
 }
 
 agenda() {
-	[ -z "$1" ] && command -v khal > /dev/null && khalt
-	[ -z "$1" ] && remt
+	[ -z "$1" ] && command -v khal > /dev/null && drawsep 'KHAL' && khalt
+	[ -z "$1" ] && drawsep 'REMIND' && remt
 	drawsep 'PRIVATE todo (t)'
 	todo today "$1"
 	drawsep 'UNIVERSITY todo (ut)'

@@ -1,4 +1,5 @@
 #!/bin/ksh
+# based on https://www.tumfatig.net/2020/a-simple-shell-status-bar-for-openbsd-and-cwm1/
 
 trap 'exec $0' HUP	# restart itself
 trap 'tput cnorm; exit 1' INT QUIT TERM

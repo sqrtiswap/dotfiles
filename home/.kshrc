@@ -172,6 +172,7 @@ elif [ "$OS" = "macos" ] ; then
 
 	alias skim='open -a Skim.app'
 	alias bmpd='brew services restart mpd'
+	alias sha256sum='shasum -a 256'
 fi
 alias ll='ls -l'
 alias la='ls -lA'

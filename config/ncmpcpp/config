@@ -114,7 +114,7 @@ browser_sort_format = {%a - }{%t}|{%f} {(%l)}
 # sequence of tags: similar to classic song format, e.g. {a|c|p:Owner} creates
 #                   column named "Owner" that tries to display artist tag and
 #                   then composer and performer if previous ones are unavailable
-song_columns_list_format = (20)[]{a} (6f)[green]{NE} (50)[white]{t|f:Title} (20)[cyan]{b} (7f)[magenta]{lr}
+song_columns_list_format = (20)[white]{a} (5f)[green]{dE} (6f)[green]{NE} (50)[white]{t|f:Title} (6f)[cyan]{yE} (20)[cyan]{b} (7f)[magenta]{lr}
 
 # various settings #############################################################
 #execute_on_song_change                         = ""

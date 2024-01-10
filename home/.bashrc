@@ -466,5 +466,6 @@ else
 	#fi
 	eval "$(ssh-agent)" > /dev/null
 	ssh-add --apple-use-keychain ~/.ssh/gitlab-fuphysik 2>/dev/null
-	ssh-add --apple-use-keychain ~/.ssh/github-sqrtiswap 2>/dev/null
+	ssh-add --apple-use-keychain ~/.ssh/github 2>/dev/null
+	ssh-add --apple-use-keychain ~/.ssh/sourcehut 2>/dev/null
 fi

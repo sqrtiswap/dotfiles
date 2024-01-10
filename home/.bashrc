@@ -468,4 +468,5 @@ else
 	ssh-add --apple-use-keychain ~/.ssh/gitlab-fuphysik 2>/dev/null
 	ssh-add --apple-use-keychain ~/.ssh/github 2>/dev/null
 	ssh-add --apple-use-keychain ~/.ssh/sourcehut 2>/dev/null
+	ssh-add --apple-use-keychain ~/.ssh/gitlab 2>/dev/null
 fi

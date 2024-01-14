@@ -16,9 +16,6 @@ if [ -e "$HOME"/.bash_paths ] ; then
 	# shellcheck source=$HOME/.bash_paths
 	. "$HOME"/.bash_paths
 fi
-if command -v brew > /dev/null ; then
-	export HOMEBREW_NO_ANALYTICS=1
-fi
 
 # check the window size after each command and, if necessary, update the values
 # of LINES and COLUMNS.

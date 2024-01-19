@@ -182,7 +182,7 @@ elif [ "$OS" = "macos" ] ; then
 
 	alias checkrun='pgrep -qi'
 
-	alias backrem='remind -z -k"terminal-notifier -message %s -title Remind" ~/.reminders &'
+	alias backrem='remind -z -k"terminal-notifier -message %s -title Remind" ~/.reminders > /dev/null 2>&1 &'
 
 	export TERMINFO_DIRS=$TERMINFO_DIRS:$HOME/.local/share/terminfo
 	export LC_ALL=en_GB.UTF-8

@@ -1,15 +1,12 @@
-# .bash_profile
+#!/bin/bash
 
 # Set PATH, MANPATH, etc., for Homebrew.
 eval "$(/opt/homebrew/bin/brew shellenv)"
 export HOMEBREW_NO_ANALYTICS=1
 
-# Get the aliases and functions
-if [ -n "$BASH_VERSION" ] ; then
-	# include .bashrc if it exists
-	if [ -f "$HOME"/.bashrc ] ; then
-		. "$HOME"/.bashrc
-	fi
+# include ~/.bashrc if it exists
+if [ -f "$HOME"/.bashrc ] ; then
+	. "$HOME"/.bashrc
 fi
 
 # User specific environment and startup programs

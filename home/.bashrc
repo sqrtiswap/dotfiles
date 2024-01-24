@@ -243,7 +243,7 @@ fi
 ## remind
 alias remind='remind -m -b1'
 alias tkremind='tkremind -m -b1'
-alias rem='rem -m -b1 -@ -gaadd'
+alias rem='rem -m -b1 -@2,0 -gaadd'
 alias remt='rem'
 if [ -n "$DISPLAY" ] || [ "$OS" = "macos" ] ; then
 	checkrun remind || backrem

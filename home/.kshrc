@@ -223,7 +223,7 @@ fi
 ## remind
 alias remind='remind -m -b1'
 alias tkremind='tkremind -m -b1'
-alias rem='rem -m -b1 -@ -gaadd'
+alias rem='rem -m -b1 -@2,0 -gaadd'
 alias remt='rem'
 if [ -n "$DISPLAY" ] || [ "$OS" = "macos" ] ; then
 	checkrun remind || backrem
@@ -428,11 +428,17 @@ else
 		fi
 	fi
 
-	#if [ -e "$HOME"/.ssh/ssh_auth_sock ] || [ -h "$HOME"/.ssh/ssh_auth_sock ] ; then
-		#export SSH_AUTH_SOCK="$HOME"/.ssh/ssh_auth_sock
-	#fi
-	eval "$(ssh-agent)" > /dev/null
-	ssh-add --apple-use-keychain ~/.ssh/gitlab-fuphysik 2>/dev/null
-	ssh-add --apple-use-keychain ~/.ssh/github 2>/dev/null
-	ssh-add --apple-use-keychain ~/.ssh/sourcehut 2>/dev/null
+	if ! checkrun ssh-agent ; then
+		eval "$(ssh-agent)" > /dev/null
+		if [ "$OS" = "macos" ] && [ "$(ssh-add -l | wc -l)" -lt 4 ] ; then
+			ssh-add --apple-use-keychain ~/.ssh/gitlab-fuphysik 2>/dev/null
+			ssh-add --apple-use-keychain ~/.ssh/github 2>/dev/null
+			ssh-add --apple-use-keychain ~/.ssh/sourcehut 2>/dev/null
+			ssh-add --apple-use-keychain ~/.ssh/gitlab 2>/dev/null
+		#else
+		#	if [ -e "$HOME"/.ssh/ssh_auth_sock ] || [ -h "$HOME"/.ssh/ssh_auth_sock ] ; then
+		#		export SSH_AUTH_SOCK="$HOME"/.ssh/ssh_auth_sock
+		#	fi
+		fi
+	fi
 fi

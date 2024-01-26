@@ -3,6 +3,7 @@
 Structure:
 ```
 ├── bin
+│   ├── agenda
 │   ├── barstarter
 │   ├── check_mutt_mailboxes
 │   ├── drawsep

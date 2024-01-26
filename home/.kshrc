@@ -364,18 +364,6 @@ _rset="\033[0m"
 
 # TERMINAL GREETING
 
-agenda() {
-	[ -z "$1" ] && command -v khal > /dev/null && drawsep 'KHAL' && khalt
-	[ -z "$1" ] && drawsep 'REMIND' && remt
-	drawsep 'PRIVATE todo (t)'
-	todo today "$1"
-	drawsep 'UNIVERSITY todo (ut)'
-	ut today "$1"
-	drawsep 'F.I.S.T. todo (ft)'
-	ft today "$1"
-	[ -n "$1" ] || emailinfo greeting
-}
-
 tmux_start() {
 	if tmux list-sessions > /dev/null ; then
 		exec tmux attach

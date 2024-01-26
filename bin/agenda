@@ -1,0 +1,29 @@
+#!/bin/sh
+
+show_cal() {
+	if command -v khal > /dev/null && [ "$(khal list --day-format "" today 1d | wc -l)" -gt 0 ] ; then
+		drawsep 'KHAL'
+		khal list --day-format "" today 1d
+	fi
+	if [ "$(rem -m -b1 -@2,0 -gaadd | wc -l)" -gt 0 ] ; then
+		drawsep 'REMIND'
+		rem -m -b1 -@2,0 -gaadd
+	fi
+}
+
+show_tasks() {
+	drawsep 'PRIVATE todo (t)'
+	todo today "$1"
+	drawsep 'UNIVERSITY todo (ut)'
+	TODODIR=$UNITODODIR todo today "$1"
+	drawsep 'F.I.S.T. todo (ft)'
+	TODODIR=$FISTTODODIR todo today "$1"
+}
+
+if [ -z "$1" ] ; then
+	show_cal
+	show_tasks
+	emailinfo greeting
+else
+	show_tasks "$@"
+fi

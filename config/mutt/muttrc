@@ -17,5 +17,4 @@ macro index,pager i4 "<sync-mailbox><enter-command>source ~/.config/mutt/account
 macro index,pager i5 "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/5-moeller_at_f-i-s-t.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
 macro index,pager i6 "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/6-info_at_f-i-s-t.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
 macro index,pager ib "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/b-biberlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
-macro index,pager ig "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/g-gmail.com.muttrc<enter><change-folder>!<enter>;<check-stats>"
 macro index,pager iw "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/w-web.de.muttrc<enter><change-folder>!<enter>;<check-stats>"

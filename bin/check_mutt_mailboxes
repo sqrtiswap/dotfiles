@@ -32,9 +32,6 @@ find_missing() {
 			IFS='
 	'
 			for i in ${_mailboxes} ; do
-				if [ "$f" = "g-gmail.com" ] ; then
-					i=$(echo "$i" | sed 's/\[Gmail\]/\\[Gmail\\]/')
-				fi
 				if grep -q "=$i" "${_configfile}" ; then
 					if [ "${_debug}" -eq 1 ] ; then
 						printf "${_good}%s: %s found${_rset}\n" "$f" "$i"

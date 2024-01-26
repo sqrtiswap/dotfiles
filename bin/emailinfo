@@ -26,7 +26,6 @@ _mailboxes=$(find "$HOME"/Emails -type d -depth 1 \
 _unread=$(find "$HOME"/Emails/*/INBOX -type f \
         | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 _drafts=$(find "$HOME"/Emails/*/Drafts \
-               "$HOME"/Emails/*/\[Gmail\]/Drafts \
                "$HOME"/Emails/*/Entwurf -type f \
         | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 _upcoming=$(find "$HOME"/Emails/*/UPCOMING -type f \
@@ -48,7 +47,6 @@ show_drafts() {
 		printf -- "---> Drafts: ${_alrt}%s${_rset}\n" "${_drafts}"
 		for box in ${_mailboxes} ; do
 			_drafts=$(find "$HOME"/Emails/"${box}"/Drafts \
-						   "$HOME"/Emails/"${box}"/\[Gmail\]/Drafts \
 						   "$HOME"/Emails/"${box}"/Entwurf -type f 2> /dev/null \
 					| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${_drafts}" -gt 0 ] ; then
@@ -85,14 +83,12 @@ show_upcoming() {
 
 show_spam() {
 	_spam=$(find "$HOME"/Emails/*/Spam \
-	             "$HOME"/Emails/*/\[Gmail\]/Spam \
 	             "$HOME"/Emails/*/'Unerw&APw-nscht' -type f \
 	      | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 	if [ "${_spam}" -gt 0 ] ; then
 		printf -- "---> Spam: ${_alrt}%s${_rset}\n" "${_spam}"
 		for box in ${_mailboxes} ; do
 			_spam=$(find "$HOME"/Emails/"${box}"/Spam \
-						   "$HOME"/Emails/"${box}"/\[Gmail\]/Spam \
 						   "$HOME"/Emails/"${box}"/'Unerw&APw-nscht' -type f 2> /dev/null \
 					| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${_spam}" -gt 0 ] ; then

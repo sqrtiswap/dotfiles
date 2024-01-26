@@ -182,7 +182,7 @@ elif [ "$OS" = "macos" ] ; then
 
 	alias checkrun='pgrep -qi'
 
-	alias backrem='remind -z -k"terminal-notifier -message %s -title Remind" ~/.reminders > /dev/null 2>&1 &'
+	alias backrem='remind -z -k"terminal-notifier -message %s -title Remind" ~/.reminders &'
 
 	export TERMINFO_DIRS=$TERMINFO_DIRS:$HOME/.local/share/terminfo
 	export LC_ALL=en_GB.UTF-8
@@ -274,7 +274,7 @@ alias wdetmold='weather Detmold'
 alias mpva='mpv --no-video'
 alias mpv='mpv --no-audio-display'
 alias mpvy='mpv --ytdl-format="bestvideo[ext=mp4][height<=?1080]+bestaudio"'
-alias mpvg='mpv --ytdl-format="bestvideo[ext=mp4][height<=?1080]+bestaudio" --ytdl-raw-options=proxy="socks5://127.0.0.1:9150/"'
+alias mpvg='mpvy --ytdl-raw-options=proxy="socks5://127.0.0.1:9150/"'
 
 # YOUTUBE-DL
 alias ytdl-a='youtube-dl -x -f bestaudio'
@@ -301,14 +301,12 @@ export BACKUP_DATADIR="$HOME"/sources/dotfiles-data/Data
 # F.I.S.T.
 export FISTTODODIR="$HOME"/documents/fist/.todo
 alias ft='TODODIR=$FISTTODODIR todo'
-alias fticket='TODODIR=$FISTTODODIR ticket'
 
 # UNI
-UNIDIR="$HOME"/documents/uni/
+UNIDIR="$HOME"/documents/uni
 alias uni='cd $UNIDIR && la'
 export UNITODODIR="$UNIDIR"/.todo
 alias ut='TODODIR=$UNITODODIR todo'
-alias uticket='TODODIR=$UNITODODIR ticket'
 
 # FIREFLY
 export FIREFLY_PRIMARY_BOX='malcha'
@@ -416,7 +414,7 @@ tmux_start() {
 	fi
 }
 
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ] ; then
+if command -v tmux &> /dev/null && [ -n "$PS1" ]  && [ ! "$TERM" = 'tmux-256color' ] && [ -z "$TMUX" ] ; then
 	if [ -n "$DISPLAY" ] || [ "$OS" = "macos" ] ; then
 		tmux_start
 	fi

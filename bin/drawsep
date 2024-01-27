@@ -14,8 +14,10 @@ drawsep() {
 	fi
 	if command -v jot > /dev/null ; then
 		printf "=%.0s" $(jot $((${#_uptime}-${#_minus}-6))) ; printf '\n'
-	else
+	elif command -v perl > /dev/null ; then
 		perl -e 'print("=" x $ARGV[0], "\n" )' "$((${#_uptime}-${#_minus}-6))"
+	else
+		printf '%*s' $((${#_uptime}-${#_minus}-6)) "" | tr ' ' '=' ; printf '\n'
 	fi
 }
 

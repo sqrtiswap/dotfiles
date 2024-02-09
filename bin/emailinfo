@@ -44,13 +44,13 @@ heading() {
 
 show_drafts() {
 	if [ "${_drafts}" -gt 0 ] ; then
-		printf -- "---> Drafts: ${_alrt}%s${_rset}\n" "${_drafts}"
+		printf -- "----> Drafts: ${_alrt}%s${_rset}\n" "${_drafts}"
 		for box in ${_mailboxes} ; do
 			_drafts=$(find "$HOME"/Emails/"${box}"/Drafts \
 						   "$HOME"/Emails/"${box}"/Entwurf -type f 2> /dev/null \
 					| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${_drafts}" -gt 0 ] ; then
-				printf "${_alrt}%4.4s${_rset} in %s\n" "${_drafts}" "${box}"
+				printf "${_alrt}%5.5s${_rset} in %s\n" "${_drafts}" "${box}"
 			fi
 		done
 	fi
@@ -58,12 +58,12 @@ show_drafts() {
 
 show_unread() {
 	if [ "${_unread}" -gt 0 ] ; then
-		printf -- "---> Unread emails: ${_fail}%s${_rset}\n" "${_unread}"
+		printf -- "----> Unread emails: ${_fail}%s${_rset}\n" "${_unread}"
 		for box in ${_mailboxes} ; do
 			_unread=$(find "$HOME"/Emails/"${box}"/INBOX -type f \
 					| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${_unread}" -gt 0 ] ; then
-				printf "${_fail}%4.4s${_rset} in %s\n" "${_unread}" "${box}"
+				printf "${_fail}%5.5s${_rset} in %s\n" "${_unread}" "${box}"
 			fi
 		done
 	fi
@@ -71,11 +71,11 @@ show_unread() {
 
 show_upcoming() {
 	if [ "${_upcoming}" -gt 0 ] ; then
-		printf -- "---> Upcoming: ${_warn}%s${_rset}\n" "${_upcoming}"
+		printf -- "----> Upcoming: ${_warn}%s${_rset}\n" "${_upcoming}"
 		for box in ${_mailboxes} ; do
 			_upcoming=$(find "$HOME"/Emails/"${box}"/UPCOMING -type f 2> /dev/null | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${_upcoming}" -gt 0 ] ; then
-				printf "${_warn}%4.4s${_rset} in %s\n" "${_upcoming}" "${box}"
+				printf "${_warn}%5.5s${_rset} in %s\n" "${_upcoming}" "${box}"
 			fi
 		done
 	fi
@@ -86,13 +86,13 @@ show_spam() {
 	             "$HOME"/Emails/*/'Unerw&APw-nscht' -type f \
 	      | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 	if [ "${_spam}" -gt 0 ] ; then
-		printf -- "---> Spam: ${_alrt}%s${_rset}\n" "${_spam}"
+		printf -- "----> Spam: ${_alrt}%s${_rset}\n" "${_spam}"
 		for box in ${_mailboxes} ; do
 			_spam=$(find "$HOME"/Emails/"${box}"/Spam \
 						   "$HOME"/Emails/"${box}"/'Unerw&APw-nscht' -type f 2> /dev/null \
 					| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${_spam}" -gt 0 ] ; then
-				printf "${_alrt}%4.4s${_rset} in %s\n" "${_spam}" "${box}"
+				printf "${_alrt}%5.5s${_rset} in %s\n" "${_spam}" "${box}"
 			fi
 		done
 	fi
@@ -100,7 +100,7 @@ show_spam() {
 
 check_missing() {
 	if [ "$(check_mutt_mailboxes | wc -l)" -gt 0 ] ; then
-		echo "---> Missing mailboxes:"
+		echo "----> Missing mailboxes:"
 		check_mutt_mailboxes
 	fi
 }

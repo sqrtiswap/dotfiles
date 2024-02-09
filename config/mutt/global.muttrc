@@ -21,7 +21,7 @@ set delete = ask-yes                      # Ask before deleting
 set charset = utf-8
 set send_charset = utf-8"
 #set ascii_chars = yes                     # Use ascii when displaying trees
-#set edit_headers                          # Edit basic headers during compose
+set edit_headers                          # Edit basic headers during compose
 #set nobeep                                # We don't need no beeping software.
 #set nosmart_wrap                          # Don't want smart wrapping.
 #set nomarkers                             # Don't want any wrap markers.

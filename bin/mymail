@@ -42,7 +42,7 @@ check_unlock() {
 		printf '%s' "Unlock accounts? [y/n] "
 		IFS= read -r _unlock
 	fi
-	if [ "${_unlock}" = "y" ] ; then
+	if [ "${_unlock}" = "y" ] || [ "${_unlock}" = "" ] ; then
 		unlock
 	elif [ "${_unlock}" = "n" ] ; then
 		run_mutt
@@ -72,7 +72,7 @@ unlock() {
 	emailinfo -q greeting
 	printf '%s' "Open $MUTT? [y/n] "
 	IFS= read -r _open
-	if [ "${_open}" = "y" ] ; then
+	if [ "${_open}" = "y" ] || [ "${_open}" = "" ] ; then
 		[ -n "$TMUX" ] && tmux rename-window email
 		run_mutt
 	fi

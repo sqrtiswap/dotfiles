@@ -162,7 +162,7 @@ elif [ "$OS" = "macos" ] ; then
 
 	alias checkrun='pgrep -qi'
 
-	alias backrem='remind -z -k"terminal-notifier -message %s -title Remind" ~/.reminders &'
+	alias backrem='remind -z -k"terminal-notifier -message %s -title Remind &" ~/.reminders &'
 
 	export TERMINFO_DIRS=$TERMINFO_DIRS:$HOME/.local/share/terminfo
 	export LC_ALL=en_GB.UTF-8
@@ -198,6 +198,9 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # PROGRAMS
 alias clbin='man 1 clbin'
 alias python='python3'
+
+alias urldecode='python -c "import sys, urllib.parse as ul; print(ul.unquote_plus(sys.argv[1]))"'
+alias urlencode='python -c "import sys, urllib.parse as ul; print (ul.quote_plus(sys.argv[1]))"'
 
 if [ "$OS" = "obsd" ] || [ "$OS" = "linux" ] ; then
 	alias doc=zathura

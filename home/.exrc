@@ -1,18 +1,21 @@
 " display current mode (insert/normal)
 set showmode
 
+" show filename
+set showfilename
+
 " show matching parens, braces, etc
 set showmatch
 
 " display row/column info
 set ruler
 
-" autoindent width = 2 spaces
+" autoindent width = 4 spaces
 set autoindent
-set shiftwidth=2
+set shiftwidth=4
 
-" tab width = 2 spaces
-set tabstop=8
+" tab width = 4 spaces
+set tabstop=4
 
 " display all error messages
 "set verbose

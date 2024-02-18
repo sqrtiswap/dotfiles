@@ -14,94 +14,94 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-_fail="\033[31m" # red
-_warn="\033[33m" # yellow
-_alrt="\033[34m" # blue
-_rset="\033[0m"
+fail="\033[31m" # red
+warn="\033[33m" # yellow
+alrt="\033[34m" # blue
+rset="\033[0m"
 
-_sep=1
+sep=1
 
-_mailboxes=$(find "$HOME"/Emails -type d -depth 1 \
-           | grep -v 'notmuch' | cut -d '/' -f 5 | sort)
-_unread=$(find "$HOME"/Emails/*/INBOX -type f \
-        | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
-_drafts=$(find "$HOME"/Emails/*/Drafts \
-               "$HOME"/Emails/*/Entwurf -type f \
-        | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
-_upcoming=$(find "$HOME"/Emails/*/UPCOMING -type f \
-          | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+mailboxes=$(find "$HOME"/Emails -type d -depth 1 \
+          | grep -v 'notmuch' | cut -d '/' -f 5 | sort)
+unread=$(find "$HOME"/Emails/*/INBOX -type f \
+       | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+drafts=$(find "$HOME"/Emails/*/Drafts \
+              "$HOME"/Emails/*/Entwurf -type f \
+       | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+upcoming=$(find "$HOME"/Emails/*/UPCOMING -type f \
+         | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+checkmissing=$(check_mutt_mailboxes)
 
 heading() {
-	if [ "${_sep}" -eq 1 ] ; then
-		if [ "${_drafts}" -gt 0 ] \
-			|| [ "${_unread}" -gt 0 ] \
-			|| [ "${_upcoming}" -gt 0 ] \
-			|| [ "$(check_mutt_mailboxes | wc -l)" -gt 0 ] ; then
+	if [ "${sep}" -eq 1 ] ; then
+		if [ "${drafts}" -gt 0 ] \
+			|| [ "${unread}" -gt 0 ] \
+			|| [ "${upcoming}" -gt 0 ] \
+			|| [ "$(printf "%s\n" "${checkmissing}" | grep -cv '^$')" -gt 0 ] ; then
 			drawsep 'EMAIL'
 		fi
 	fi
 }
 
 show_drafts() {
-	if [ "${_drafts}" -gt 0 ] ; then
-		printf -- "----> Drafts: ${_alrt}%s${_rset}\n" "${_drafts}"
-		for box in ${_mailboxes} ; do
-			_drafts=$(find "$HOME"/Emails/"${box}"/Drafts \
-						   "$HOME"/Emails/"${box}"/Entwurf -type f 2> /dev/null \
+	if [ "${drafts}" -gt 0 ] ; then
+		printf -- "----> Drafts: ${alrt}%s${rset}\n" "${drafts}"
+		for box in ${mailboxes} ; do
+			drafts=$(find "$HOME"/Emails/"${box}"/Drafts \
+						  "$HOME"/Emails/"${box}"/Entwurf -type f 2> /dev/null \
 					| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
-			if [ "${_drafts}" -gt 0 ] ; then
-				printf "${_alrt}%5.5s${_rset} in %s\n" "${_drafts}" "${box}"
+			if [ "${drafts}" -gt 0 ] ; then
+				printf "${alrt}%5.5s${rset} in %s\n" "${drafts}" "${box}"
 			fi
 		done
 	fi
 }
 
 show_unread() {
-	if [ "${_unread}" -gt 0 ] ; then
-		printf -- "----> Unread emails: ${_fail}%s${_rset}\n" "${_unread}"
-		for box in ${_mailboxes} ; do
-			_unread=$(find "$HOME"/Emails/"${box}"/INBOX -type f \
-					| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
-			if [ "${_unread}" -gt 0 ] ; then
-				printf "${_fail}%5.5s${_rset} in %s\n" "${_unread}" "${box}"
+	if [ "${unread}" -gt 0 ] ; then
+		printf -- "----> Unread emails: ${fail}%s${rset}\n" "${unread}"
+		for box in ${mailboxes} ; do
+			unread=$(find "$HOME"/Emails/"${box}"/INBOX -type f \
+				   | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+			if [ "${unread}" -gt 0 ] ; then
+				printf "${fail}%5.5s${rset} in %s\n" "${unread}" "${box}"
 			fi
 		done
 	fi
 }
 
 show_upcoming() {
-	if [ "${_upcoming}" -gt 0 ] ; then
-		printf -- "----> Upcoming: ${_warn}%s${_rset}\n" "${_upcoming}"
-		for box in ${_mailboxes} ; do
-			_upcoming=$(find "$HOME"/Emails/"${box}"/UPCOMING -type f 2> /dev/null | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
-			if [ "${_upcoming}" -gt 0 ] ; then
-				printf "${_warn}%5.5s${_rset} in %s\n" "${_upcoming}" "${box}"
+	if [ "${upcoming}" -gt 0 ] ; then
+		printf -- "----> Upcoming: ${warn}%s${rset}\n" "${upcoming}"
+		for box in ${mailboxes} ; do
+			upcoming=$(find "$HOME"/Emails/"${box}"/UPCOMING -type f 2> /dev/null | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+			if [ "${upcoming}" -gt 0 ] ; then
+				printf "${warn}%5.5s${rset} in %s\n" "${upcoming}" "${box}"
 			fi
 		done
 	fi
 }
 
 show_spam() {
-	_spam=$(find "$HOME"/Emails/*/Spam \
-	             "$HOME"/Emails/*/'Unerw&APw-nscht' -type f \
-	      | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
-	if [ "${_spam}" -gt 0 ] ; then
-		printf -- "----> Spam: ${_alrt}%s${_rset}\n" "${_spam}"
-		for box in ${_mailboxes} ; do
-			_spam=$(find "$HOME"/Emails/"${box}"/Spam \
-						   "$HOME"/Emails/"${box}"/'Unerw&APw-nscht' -type f 2> /dev/null \
-					| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
-			if [ "${_spam}" -gt 0 ] ; then
-				printf "${_alrt}%5.5s${_rset} in %s\n" "${_spam}" "${box}"
+	spam=$(find "$HOME"/Emails/*/Spam \
+		        "$HOME"/Emails/*/'Unerw&APw-nscht' -type f \
+		 | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+	if [ "${spam}" -gt 0 ] ; then
+		printf -- "----> Spam: ${alrt}%s${rset}\n" "${spam}"
+		for box in ${mailboxes} ; do
+			spam=$(find "$HOME"/Emails/"${box}"/Spam \
+				        "$HOME"/Emails/"${box}"/'Unerw&APw-nscht' -type f 2> /dev/null \
+				 | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+			if [ "${spam}" -gt 0 ] ; then
+				printf "${alrt}%5.5s${rset} in %s\n" "${spam}" "${box}"
 			fi
 		done
 	fi
 }
 
 check_missing() {
-	if [ "$(check_mutt_mailboxes | wc -l)" -gt 0 ] ; then
-		echo "----> Missing mailboxes:"
-		check_mutt_mailboxes
+	if [ "$(printf "%s\n" "${checkmissing}" | grep -cv '^$')" -gt 0 ] ; then
+		printf -- "----> Missing mailboxes:\n%s\n" "${checkmissing}"
 	fi
 }
 
@@ -114,7 +114,7 @@ USAGE
 
 while getopts q arg; do
 	case ${arg} in
-		q) _sep=0 ;;
+		q) sep=0 ;;
 		*) usage
 	esac
 done

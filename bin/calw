@@ -1,0 +1,16 @@
+#!/bin/sh
+
+khalw() {
+	khal list -a Birthdays -a Seminars -a "Group Seminar" -a Important \
+		--format "{calendar-color}{start-style} [{calendar}] {title} @ {location}" \
+		--day-format "---> {date-long}" \
+		today 7d
+}
+
+
+if command -v khal > /dev/null && [ "$(khalw | wc -l)" -gt 0 ] ; then
+	drawsep KHAL
+	khalw
+fi
+drawsep REMIND
+rem -m -b1 -@2,0 -gaadd -cu+1

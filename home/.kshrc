@@ -232,18 +232,9 @@ if [ -n "$DISPLAY" ] || [ "$OS" = "macos" ] ; then
 	checkrun remind || backrem
 	[ "$OS" = "linux" ] && disown "$(pidof remind)"
 fi
-## khal
-if command -v khal > /dev/null ; then
-	alias khali='khal interactive'
-	alias khalt='khal list --day-format "" today 1d'
-	alias khalw='khal list today 7d'
-	alias calt='[ $(khalt | wc -l) -gt 0 ] && drawsep KHAL && khalt; [ $(remt | wc -l) -gt 0 ] && drawsep REMIND && remt'
-	alias calw='remind -cu+1 ~/.reminders; drawsep; khalw'
-	alias vsync='vdirsyncer sync'
-else
-	alias calt='[ $(remt | wc -l) -gt 0 ] && drawsep REMIND && remt'
-	alias calw='remind -cu+1 ~/.reminders'
-fi
+## khal & vdirsyncer
+alias khali='khal interactive'
+alias vsync='vdirsyncer sync'
 
 # WEATHER
 weather() {

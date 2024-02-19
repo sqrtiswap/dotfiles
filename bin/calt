@@ -1,0 +1,21 @@
+#!/bin/sh
+
+khalt() {
+	khal list -a Birthdays -a Seminars -a "Group Seminar" -a Important \
+	--format "{calendar-color}{start-style} [{calendar}] {title} @ {location}" \
+	--day-format "" \
+	today 1d
+}
+
+remt() {
+	rem -m -b1 -@2,0 -gaadd
+}
+
+if command -v khal > /dev/null && [ "$(khalt | wc -l)" -gt 0 ] ; then
+	drawsep KHAL
+	khalt
+fi
+if [ "$(remt | wc -l)" -gt 0 ] ; then
+	drawsep REMIND
+	remt
+fi

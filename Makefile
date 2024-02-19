@@ -67,6 +67,8 @@ remove:
 	@echo "==== Removing tools from ~/bin ================================================="
 	rm -f ~/bin/agenda
 	rm -f ~/bin/barstarter
+	rm -f ~/bin/calt
+	rm -f ~/bin/calw
 	rm -f ~/bin/check_mutt_mailboxes
 	rm -f ~/bin/drawsep
 	rm -f ~/bin/emailinfo
@@ -154,6 +156,8 @@ update:
 	@mkdir -p ~/bin/
 	cp -f bin/agenda ~/bin/agenda
 	cp -f bin/barstarter ~/bin/barstarter
+	cp -f bin/calt ~/bin/calt
+	cp -f bin/calw ~/bin/calw
 	cp -f bin/check_mutt_mailboxes ~/bin/check_mutt_mailboxes
 	cp -f bin/drawsep ~/bin/drawsep
 	cp -f bin/emailinfo ~/bin/emailinfo

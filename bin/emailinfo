@@ -23,21 +23,50 @@ sep=1
 
 mailboxes=$(find "$HOME"/Emails -type d -depth 1 \
           | grep -v 'notmuch' | cut -d '/' -f 5 | sort)
-unread=$(find "$HOME"/Emails/*/INBOX -type f \
-       | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+
+checkmissing=$(check_mutt_mailboxes)
 drafts=$(find "$HOME"/Emails/*/Drafts -type f \
+       | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+spam=$(find "$HOME"/Emails/*/Spam -type f \
+     | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+unread=$(find "$HOME"/Emails/*/INBOX -type f \
        | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 upcoming=$(find "$HOME"/Emails/*/UPCOMING -type f \
          | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
-checkmissing=$(check_mutt_mailboxes)
 
 heading() {
 	if [ "${sep}" -eq 1 ] ; then
-		if [ "${drafts}" -gt 0 ] \
-			|| [ "${unread}" -gt 0 ] \
-			|| [ "${upcoming}" -gt 0 ] \
-			|| [ "$(printf "%s\n" "${checkmissing}" | grep -cv '^$')" -gt 0 ] ; then
+		if [ "$(printf "%s\n" "${checkmissing}" | grep -cv '^$')" -gt 0 ] ; then
 			drawsep 'EMAIL'
+			printf -- "----> Missing mailboxes:\n%s\n" "${checkmissing}"
+		else
+			case $1 in
+				check)
+					[ "${spam}" -gt 0 ] \
+						&& drawsep 'EMAIL'
+					;;
+				drafts)
+					[ "${drafts}" -gt 0 ] \
+						&& drawsep 'EMAIL'
+					;;
+				greeting)
+					[ "${drafts}" -gt 0 ] || [ "${unread}" -gt 0 ] \
+						&& drawsep 'EMAIL'
+					;;
+				unread)
+					[ "${unread}" -gt 0 ] \
+						&& drawsep 'EMAIL'
+					;;
+				Upcoming)
+					[ "${upcoming}" -gt 0 ] \
+						&& drawsep 'EMAIL'
+					;;
+				*)
+					[ "${drafts}" -gt 0 ] || [ "${spam}" -gt 0 ] \
+						|| [ "${unread}" -gt 0 ] || [ "${upcoming}" -gt 0 ] \
+						&& drawsep 'EMAIL'
+					;;
+			esac
 		fi
 	fi
 }
@@ -47,7 +76,7 @@ show_drafts() {
 		printf -- "----> Drafts: ${alrt}%s${rset}\n" "${drafts}"
 		for box in ${mailboxes} ; do
 			drafts=$(find "$HOME"/Emails/"${box}"/Drafts -type f 2> /dev/null \
-				   | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+				| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${drafts}" -gt 0 ] ; then
 				printf "${alrt}%5.5s${rset} in %s\n" "${drafts}" "${box}"
 			fi
@@ -60,7 +89,7 @@ show_unread() {
 		printf -- "----> Unread emails: ${fail}%s${rset}\n" "${unread}"
 		for box in ${mailboxes} ; do
 			unread=$(find "$HOME"/Emails/"${box}"/INBOX -type f \
-				   | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+				| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${unread}" -gt 0 ] ; then
 				printf "${fail}%5.5s${rset} in %s\n" "${unread}" "${box}"
 			fi
@@ -72,8 +101,8 @@ show_upcoming() {
 	if [ "${upcoming}" -gt 0 ] ; then
 		printf -- "----> Upcoming: ${warn}%s${rset}\n" "${upcoming}"
 		for box in ${mailboxes} ; do
-			upcoming=$(find "$HOME"/Emails/"${box}"/UPCOMING -type f 2> /dev/null \
-				     | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+			upcoming=$(find "$HOME"/Emails/"${box}"/UPCOMING -type f \
+				2> /dev/null | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${upcoming}" -gt 0 ] ; then
 				printf "${warn}%5.5s${rset} in %s\n" "${upcoming}" "${box}"
 			fi
@@ -82,23 +111,15 @@ show_upcoming() {
 }
 
 show_spam() {
-	spam=$(find "$HOME"/Emails/*/Spam -type f \
-		 | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 	if [ "${spam}" -gt 0 ] ; then
 		printf -- "----> Spam: ${alrt}%s${rset}\n" "${spam}"
 		for box in ${mailboxes} ; do
 			spam=$(find "$HOME"/Emails/"${box}"/Spam -type f 2> /dev/null \
-				 | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+				| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${spam}" -gt 0 ] ; then
 				printf "${alrt}%5.5s${rset} in %s\n" "${spam}" "${box}"
 			fi
 		done
-	fi
-}
-
-check_missing() {
-	if [ "$(printf "%s\n" "${checkmissing}" | grep -cv '^$')" -gt 0 ] ; then
-		printf -- "----> Missing mailboxes:\n%s\n" "${checkmissing}"
 	fi
 }
 
@@ -117,34 +138,36 @@ while getopts q arg; do
 done
 shift $((OPTIND - 1))
 
-heading
 case $1 in
 c*)
+	heading "check"
 	show_spam
-	check_missing
 	;;
 d*)
+	heading "drafts"
 	show_drafts
 	;;
 g*)
+	heading "greeting"
 	show_drafts
 	show_unread
-	check_missing
 	;;
 h*)
 	usage
 	;;
 u*)
+	heading "unread"
 	show_unread
 	;;
 U*)
+	heading "Upcoming"
 	show_upcoming
 	;;
 *)
+	heading
 	show_drafts
 	show_unread
 	show_upcoming
 	show_spam
-	check_missing
 	;;
 esac

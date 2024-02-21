@@ -25,8 +25,7 @@ mailboxes=$(find "$HOME"/Emails -type d -depth 1 \
           | grep -v 'notmuch' | cut -d '/' -f 5 | sort)
 unread=$(find "$HOME"/Emails/*/INBOX -type f \
        | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
-drafts=$(find "$HOME"/Emails/*/Drafts \
-              "$HOME"/Emails/*/Entwurf -type f \
+drafts=$(find "$HOME"/Emails/*/Drafts -type f \
        | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 upcoming=$(find "$HOME"/Emails/*/UPCOMING -type f \
          | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
@@ -47,9 +46,8 @@ show_drafts() {
 	if [ "${drafts}" -gt 0 ] ; then
 		printf -- "----> Drafts: ${alrt}%s${rset}\n" "${drafts}"
 		for box in ${mailboxes} ; do
-			drafts=$(find "$HOME"/Emails/"${box}"/Drafts \
-						  "$HOME"/Emails/"${box}"/Entwurf -type f 2> /dev/null \
-					| grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+			drafts=$(find "$HOME"/Emails/"${box}"/Drafts -type f 2> /dev/null \
+				   | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${drafts}" -gt 0 ] ; then
 				printf "${alrt}%5.5s${rset} in %s\n" "${drafts}" "${box}"
 			fi
@@ -74,7 +72,8 @@ show_upcoming() {
 	if [ "${upcoming}" -gt 0 ] ; then
 		printf -- "----> Upcoming: ${warn}%s${rset}\n" "${upcoming}"
 		for box in ${mailboxes} ; do
-			upcoming=$(find "$HOME"/Emails/"${box}"/UPCOMING -type f 2> /dev/null | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
+			upcoming=$(find "$HOME"/Emails/"${box}"/UPCOMING -type f 2> /dev/null \
+				     | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${upcoming}" -gt 0 ] ; then
 				printf "${warn}%5.5s${rset} in %s\n" "${upcoming}" "${box}"
 			fi
@@ -83,14 +82,12 @@ show_upcoming() {
 }
 
 show_spam() {
-	spam=$(find "$HOME"/Emails/*/Spam \
-		        "$HOME"/Emails/*/'Unerw&APw-nscht' -type f \
+	spam=$(find "$HOME"/Emails/*/Spam -type f \
 		 | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 	if [ "${spam}" -gt 0 ] ; then
 		printf -- "----> Spam: ${alrt}%s${rset}\n" "${spam}"
 		for box in ${mailboxes} ; do
-			spam=$(find "$HOME"/Emails/"${box}"/Spam \
-				        "$HOME"/Emails/"${box}"/'Unerw&APw-nscht' -type f 2> /dev/null \
+			spam=$(find "$HOME"/Emails/"${box}"/Spam -type f 2> /dev/null \
 				 | grep -cv -e '.uidvalidity' -e '.mbsyncstate')
 			if [ "${spam}" -gt 0 ] ; then
 				printf "${alrt}%5.5s${rset} in %s\n" "${spam}" "${box}"

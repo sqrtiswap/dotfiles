@@ -60,6 +60,9 @@ if [ -z "$1" ] ; then
 	calt
 	show_tasks
 	emailinfo greeting
+elif [ "$1" = "email" ] || [ "$1" = "mail" ] ; then
+	show_tasks "$@"
+	emailinfo
 else
 	show_tasks "$@"
 fi

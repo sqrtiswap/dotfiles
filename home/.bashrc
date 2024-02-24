@@ -440,7 +440,7 @@ else
 
 	if ! checkrun ssh-agent ; then
 		eval "$(ssh-agent)" > /dev/null
-		if [ "$OS" = "macos" ] && [ "$(ssh-add -l | wc -l)" -lt 4 ] ; then
+		if [ "$OS" = "macos" ] && [ "$(ssh-add -l | grep -c '')" -lt 4 ] ; then
 			ssh-add --apple-use-keychain ~/.ssh/gitlab-fuphysik 2>/dev/null
 			ssh-add --apple-use-keychain ~/.ssh/github 2>/dev/null
 			ssh-add --apple-use-keychain ~/.ssh/sourcehut 2>/dev/null

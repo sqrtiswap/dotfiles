@@ -1,0 +1,61 @@
+Config {
+	-- BLACK
+	-- color0:  #d8d8d8
+	-- color8:  #f8f8f8
+	-- RED
+	-- color1:  #b81313
+	-- color9:  #e92e2e
+	-- GREEN
+	-- color2:  #18b218
+	-- color10: #0ed839
+	-- YELLOW
+	-- color3:  #b4801e
+	-- color11: #e1a126
+	-- BLUE
+	-- color4:  #3b48e3
+	-- color12: #289cd5
+	-- MAGENTA
+	-- color5:  #991557
+	-- color13: #ff2491
+	-- CYAN
+	-- color6:  #076e5b
+	-- color14: #0a9a7f
+	-- WHITE
+	-- color7:  #000000
+	-- color15: #343434
+
+	font               = "-misc-fixed-medium-r-normal-*-15-*-*-*-*-*-iso10646-1"
+	--, font             = "xft:monospace-8,Noto Mono-8,Noto Color Emoji-8,DejaVuMono-8,VL Gothic-8"
+	, additionalFonts  = []
+	, borderColor      = "black"   -- border colour
+	--, border           = TopB    -- draws a border at the top of xmobar's window
+	, border           = NoBorder
+	, bgColor          = "#000000" -- background colour
+	, fgColor          = "#d8d8d8" -- default text colour
+	, alpha            = 255
+	, position         = Top       -- position: top left, taking 100% of the screen
+	, textOffset       = -1
+	, iconOffset       = -1
+	, lowerOnStart     = True      -- send to bottom of window stack on start
+	, pickBroadest     = False     -- choose widest display (multi-monitor)
+	, persistent       = False     -- enable/disable hiding (True = disabled)
+	, hideOnStart      = False     -- start with window unmapped (hidden)
+	, iconRoot         = "."
+	, allDesktops      = True      -- show on all desktops
+	, overrideRedirect = True      -- set the Override Redirect flag (Xlib)
+	, commands =
+		[ Run Battery
+			["-t"
+			,"Power: <fc=#b81313><status></fc> at <fc=#b81313><left></fc> Time left: <fc=#b81313><minleft></fc>"
+			] 10
+		--, Run MPD ["-t", "<state>: <artist> - <title> <ppos>/<plength>"] 10
+		, Run MPD ["-t",
+			"<composer> <title> (<album>) <track>/<plength> <statei> [<flags>]",
+			"--", "-P", ">>", "-Z", "|", "-S", "><"] 10
+		, Run Date "Date: <fc=#b81313>%A %e. %B %Y</fc> Time: <fc=#b81313>%H:%M:%S %Z %z</fc> Week: <fc=#b81313>%V</fc> Day: <fc=#b81313>%j</fc>" "date" 10
+		, Run Com "uname" ["-r","-v"] "" 36000
+	]
+	, sepChar  = "%"                                                                          -- delineator between plugin names and straight text
+	, alignSep = "}{"                                                                         -- separator between left and right alignment
+	, template = " %date% | <fc=#656565>%mpd%</fc> }{| %battery% | <fc=#656565>%uname%</fc> "
+}

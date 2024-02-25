@@ -21,6 +21,8 @@ link:
 	@ln -sf ${dotdir}/home/.ksh_completions ~/.ksh_completions
 	@ln -sf ${dotdir}/home/.ksh_paths ~/.ksh_paths
 	@ln -sf ${dotdir}/home/.kshrc ~/.kshrc
+	@echo "---> xmobar(1) config"
+	@ln -sf ${dotdir}/home/.xmobarrc ~/.xmobarrc
 	@echo "==== Linking .config ==========================================================="
 	@echo "---> alacritty(1) config"
 	@ln -sf ${dotdir}/config/alacritty ~/.config/alacritty
@@ -110,6 +112,8 @@ unlink:
 	@rm -f ~/.ksh_completions
 	@rm -f ~/.ksh_paths
 	@rm -f ~/.kshrc
+	@echo "---> xmobar(1) config"
+	@rm -f ~/.xmobarrc
 	@echo "==== Removing links from .config ==============================================="
 	@echo "---> alacritty(1) config"
 	@rm -f ~/.config/alacritty

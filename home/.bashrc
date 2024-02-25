@@ -307,6 +307,10 @@ export FIREFLY_PRIMARY_BOX='malcha'
 export FIREFLY_PRIMARY_USER='alexanderm'
 alias firefly='firefly -c -k ~/.ssh/id_fuberlin'
 
+# WORK
+export WORKTODODIR="$HOME"/sources/dotfiles-data/todo/work
+alias wt='TODODIR=$WORKTODODIR todo'
+
 # DIRECTORIES & FILES
 alias ..='cd ../'
 alias ...='cd ../../'

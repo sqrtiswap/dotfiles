@@ -269,6 +269,8 @@ export TODO_COLOUR_B="\033[33m" # yellow
 export TODO_COLOUR_C="\033[32m" # green
 export TODO_COLOUR_D="\033[34m" # blue
 
+alias hooksync='lazyscript sync'
+
 export BACKUP_LISTDIR="$HOME"/sources/backup
 export BACKUP_DATADIR="$HOME"/sources/dotfiles-data/Data
 
@@ -281,14 +283,9 @@ UNIDIR="$HOME"/documents/uni
 alias uni='cd $UNIDIR && la'
 export UNITODODIR="$UNIDIR"/.todo
 alias ut='TODODIR=$UNITODODIR todo'
-
-# FIREFLY
 export FIREFLY_PRIMARY_BOX='malcha'
 export FIREFLY_PRIMARY_USER='alexanderm'
 alias firefly='firefly -c -k ~/.ssh/id_fuberlin'
-
-alias hooksync='lazyscript sync'
-alias myscan='lazyscript scan'
 
 # DIRECTORIES & FILES
 alias ..='cd ../'

@@ -5,4 +5,5 @@ config/mpd/pid
 config/mpd/state
 config/mpd/database
 config/mpd/sticker.sql
+config/qtile/default_config.py
 config/vis/plugins

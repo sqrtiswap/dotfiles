@@ -51,6 +51,8 @@ link:
 	@ln -sf ${dotdir}/config/mutt/scripts ~/.config/mutt/scripts
 	@echo "---> ncmpcpp(1) config"
 	@ln -sf ${dotdir}/config/ncmpcpp ~/.config/ncmpcpp
+	@echo "---> qtile(1) config"
+	@ln -sf ${dotdir}/config/qtile ~/.config/qtile
 	@echo "---> tkremind(1) config"
 	@ln -sf ${dotdir}/config/tkremindrc ~/.config/tkremindrc
 	@echo "---> xdg config"
@@ -141,6 +143,8 @@ unlink:
 	@rm -f ~/.config/mutt/scripts
 	@echo "---> ncmpcpp(1) config"
 	@rm -f ~/.config/ncmpcpp
+	@echo "---> qtile(1) config"
+	@rm -f ~/.config/qtile
 	@echo "---> tkremind(1) config"
 	@rm -f ~/.config/tkremindrc
 	@echo "---> xdg config"

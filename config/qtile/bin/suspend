@@ -1,0 +1,24 @@
+#!/bin/sh
+#Needs the entry "%sudo   ALL=NOPASSWD: /usr/sbin/s2ram" in /etc/sudoers
+
+if ! pgrep xscreensaver >/dev/null 2>&1
+then
+    /usr/bin/xscreensaver -no-capture-stderr -no-splash &
+fi
+
+/usr/bin/xscreensaver-command -lock
+
+while [ $(/usr/bin/xscreensaver-command -time | egrep -o ' blanked|non-blanked|locked') != "locked" ]
+do
+	sleep 0.1
+done
+
+/usr/bin/sudo /usr/sbin/s2ram
+
+while [ $(/usr/bin/xscreensaver-command -time | egrep -o ' blanked|non-blanked|locked') != "non-blanked" ]
+do
+	sleep 0.1
+done
+
+~/.config/qtile/bin/xsetup
+feh --bg-fill --randomize /home/alexander/Pictures/Wallpaper/backgrounds/*

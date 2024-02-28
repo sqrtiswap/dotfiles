@@ -8,13 +8,3 @@ source ~/.config/mutt/bindings.muttrc               # bindings
 source ~/.config/mutt/macros.muttrc                 # macros
 
 source ~/.config/mutt/accounts/1-detmold.com.muttrc # first open detmold.com
-
-# SWITCHES TO OPEN DIFFERENT ACCOUNTS
-macro index,pager i1 "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/1-detmold.com.muttrc<enter><change-folder>!<enter>;<check-stats>"
-macro index,pager i2 "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/2-physik.tu-berlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
-macro index,pager i3 "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/3-zedat.fu-berlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
-macro index,pager i4 "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/4-posteo.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
-macro index,pager i5 "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/5-moeller_at_f-i-s-t.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
-macro index,pager i6 "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/6-info_at_f-i-s-t.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
-macro index,pager ib "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/b-biberlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
-macro index,pager iw "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/w-web.de.muttrc<enter><change-folder>!<enter>;<check-stats>"

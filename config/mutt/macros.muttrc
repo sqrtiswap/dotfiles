@@ -1,13 +1,29 @@
 # vim: set ft=muttrc:
 
 # INDEX ########################################################################
-macro index E      "<shell-escape>~/.config/mutt/scripts/get_overview<enter>"
-macro index \Cr    "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
-macro index O      "<shell-escape>mpop -a && mbsync -a && notmuch new<enter>" "sync all mail"
-macro index \Cf    "<enter-command>unset wait_key<enter><shell-escape>printf 'Enter a search term to find with notmuch: '; read x; echo \$x >~/.cache/mutt_terms<enter><limit>~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=<>;s/\^id:// for@a;$,=\"|\";print@a' | perl -le '@a=<>; chomp@a; s/\\+/\\\\+/ for@a;print@a' \`\"<enter>" "show only messages matching a notmuch pattern"
-macro index A      "<limit>all\n" "show all messages (undo limit)"
+macro index i1  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/1-detmold.com.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro index i2  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/2-physik.tu-berlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro index i3  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/3-zedat.fu-berlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro index i4  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/4-posteo.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro index i5  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/5-moeller_at_f-i-s-t.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro index i6  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/6-info_at_f-i-s-t.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro index ib  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/b-biberlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro index iw  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/w-web.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro index E   "<shell-escape>~/.config/mutt/scripts/get_overview<enter>"
+macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
+macro index O   "<shell-escape>mpop -a && mbsync -a && notmuch new<enter>" "sync all mail"
+macro index \Cf "<enter-command>unset wait_key<enter><shell-escape>printf 'Enter a search term to find with notmuch: '; read x; echo \$x >~/.cache/mutt_terms<enter><limit>~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=<>;s/\^id:// for@a;$,=\"|\";print@a' | perl -le '@a=<>; chomp@a; s/\\+/\\\\+/ for@a;print@a' \`\"<enter>" "show only messages matching a notmuch pattern"
+macro index A   "<limit>all\n" "show all messages (undo limit)"
 
 # PAGER ########################################################################
+macro pager i1  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/1-detmold.com.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro pager i2  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/2-physik.tu-berlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro pager i3  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/3-zedat.fu-berlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro pager i4  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/4-posteo.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro pager i5  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/5-moeller_at_f-i-s-t.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro pager i6  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/6-info_at_f-i-s-t.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro pager ib  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/b-biberlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro pager iw  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/w-web.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
 #macro pager w   "<enter-command>set invsmart_wrap invmarkers<enter>" # Toggle wrap stuff
 #macro pager y   "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
 #macro pager \e1 "<enter-command>set pager_index_lines=1<enter>"      # Change PIL size

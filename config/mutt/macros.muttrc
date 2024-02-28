@@ -1,27 +1,30 @@
 # vim: set ft=muttrc:
 
-# Macros for use in the index
-#macro index "\Cx\Cb" "<change-folder>?"                                   # Folder list
-#macro index "\Cx\Cs" "<pipe-message>cat > ~/"                             # Save message
-#macro index "\'"     "<clear-flag>r"                                      # Mark as un-replied
-#macro index "y"      "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
-#macro index "\ev"    "<pipe-message>less<enter>"                          # View the message in less
-macro index "E"      "<shell-escape>~/.config/mutt/scripts/get_overview<enter>"
+# INDEX ########################################################################
+macro index E      "<shell-escape>~/.config/mutt/scripts/get_overview<enter>"
+macro index \Cr    "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
+macro index O      "<shell-escape>mpop -a && mbsync -a && notmuch new<enter>" "sync all mail"
+macro index \Cf    "<enter-command>unset wait_key<enter><shell-escape>printf 'Enter a search term to find with notmuch: '; read x; echo \$x >~/.cache/mutt_terms<enter><limit>~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=<>;s/\^id:// for@a;$,=\"|\";print@a' | perl -le '@a=<>; chomp@a; s/\\+/\\\\+/ for@a;print@a' \`\"<enter>" "show only messages matching a notmuch pattern"
+macro index A      "<limit>all\n" "show all messages (undo limit)"
 
-# Macros for use in the pager
-#macro pager "w"      "<enter-command>set invsmart_wrap invmarkers<enter>" # Toggle wrap stuff
-#macro pager "y"      "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
-#macro pager "\e1"    "<enter-command>set pager_index_lines=1<enter>"      # Change PIL size
-#macro pager "\e2"    "<enter-command>set pager_index_lines=2<enter>"      # Change PIL size
-#macro pager "\e3"    "<enter-command>set pager_index_lines=3<enter>"      # Change PIL size
-#macro pager "\e4"    "<enter-command>set pager_index_lines=4<enter>"      # Change PIL size
-#macro pager "\e5"    "<enter-command>set pager_index_lines=5<enter>"      # Change PIL size
-#macro pager "\e6"    "<enter-command>set pager_index_lines=6<enter>"      # Change PIL size
-#macro pager "\e7"    "<enter-command>set pager_index_lines=7<enter>"      # Change PIL size
-#macro pager "\e8"    "<enter-command>set pager_index_lines=8<enter>"      # Change PIL size
-#macro pager "\e9"    "<enter-command>set pager_index_lines=9<enter>"      # Change PIL size
-#macro pager "\e0"    "<enter-command>set pager_index_lines=0<enter>"      # Change PIL size
-#macro pager "\ev"    "<pipe-message>less<enter>"                          # View the message in less
+# PAGER ########################################################################
+#macro pager w   "<enter-command>set invsmart_wrap invmarkers<enter>" # Toggle wrap stuff
+#macro pager y   "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
+#macro pager \e1 "<enter-command>set pager_index_lines=1<enter>"      # Change PIL size
+#macro pager \e2 "<enter-command>set pager_index_lines=2<enter>"      # Change PIL size
+#macro pager \e3 "<enter-command>set pager_index_lines=3<enter>"      # Change PIL size
+#macro pager \e4 "<enter-command>set pager_index_lines=4<enter>"      # Change PIL size
+#macro pager \e5 "<enter-command>set pager_index_lines=5<enter>"      # Change PIL size
+#macro pager \e6 "<enter-command>set pager_index_lines=6<enter>"      # Change PIL size
+#macro pager \e7 "<enter-command>set pager_index_lines=7<enter>"      # Change PIL size
+#macro pager \e8 "<enter-command>set pager_index_lines=8<enter>"      # Change PIL size
+#macro pager \e9 "<enter-command>set pager_index_lines=9<enter>"      # Change PIL size
+#macro pager \e0 "<enter-command>set pager_index_lines=0<enter>"      # Change PIL size
+#macro pager \ev "<pipe-message>less<enter>"                          # View the message in less
+#macro pager l   "| elinks -force-html; clear\n"
 
-# Macros for use in the browser
-#macro browser "q" "<exit><quit>"                                          # quit in the browser
+# BROWSER ######################################################################
+macro browser h "<change-dir><kill-line>..<enter>" "Go to parent folder"
+
+# ATTACH #######################################################################
+#macro attach l "| elinks -force-html; clear\n"

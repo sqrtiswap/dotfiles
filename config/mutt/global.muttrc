@@ -73,52 +73,6 @@ attachments +I image/.*
 unignore *                                  # show full header
 hdr_order Date: Local-Date: From: To: CC: BCC: Reply-To: Mail-Followup-To: Subject: Organization: User-Agent: X-Mailer:
 
-##########
-# BINDINGS
-##########
-
-# UNBIND
-#bind index @ noop      # null out any folder specific bindings
-bind index,pager i noop
-bind index,pager g noop
-bind index \Cf noop
-bind index h noop
-bind editor <space> noop
-
-# General rebindings
-bind index j next-entry
-bind index k previous-entry
-bind attach <return> view-mailcap
-bind attach l view-mailcap
-bind index G last-entry
-bind index gg first-entry
-bind pager,attach h exit
-bind pager j next-line
-bind pager k previous-line
-bind pager l view-attachments
-bind index,pager D delete-message
-bind index U undelete-message
-bind index L limit
-bind index l display-message
-bind index,query <space> tag-entry
-#bind browser h goto-parent
-#bind index,pager H view-raw-message
-bind browser l select-entry
-#bind pager,browser gg top-page
-#bind pager,browser G bottom-page
-bind index,pager,browser d half-down
-bind index,pager,browser u half-up
-bind index,pager S sync-mailbox
-bind index,pager R group-reply
-bind index \031 previous-undeleted	# Mouse wheel
-bind index \005 next-undeleted		# Mouse wheel
-bind pager \031 previous-line		# Mouse wheel
-bind pager \005 next-line		# Mouse wheel
-#scroll inside the message rather than the index
-bind pager <up> previous-line
-bind pager <down> next-line
-#bind editor <Tab> complete-query	# needs to be unset to allow tab completion for aliases to work
-
 #########
 # SIDEBAR
 #########
@@ -137,11 +91,3 @@ set sidebar_next_new_wrap = yes
 set mail_check_stats
 set sidebar_format = '%B%?F? [%F]?%* %?N?%N/? %?S?%S?'
 #set sidebar_format = '%.24B%?F? [%F]?%* %?N?%N/? %?S?%S?'
-
-# BINDINGS
-bind index,pager \Ck sidebar-prev
-bind index,pager \Cj sidebar-next
-bind index,pager \Cl sidebar-open
-#bind index,pager \Cp sidebar-prev-new
-#bind index,pager \Cn sidebar-next-new
-bind index,pager B sidebar-toggle-visible

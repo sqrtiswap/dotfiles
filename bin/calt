@@ -11,11 +11,11 @@ remt() {
 	rem -m -b1 -@2,0 -gaadd
 }
 
-if command -v khal > /dev/null && [ "$(khalt | wc -l)" -gt 0 ] ; then
+if command -v khal > /dev/null && [ "$(khalt | grep -c '')" -gt 0 ] ; then
 	drawsep KHAL
 	khalt
 fi
-if [ "$(remt | wc -l)" -gt 0 ] ; then
+if [ "$(remt | grep -c '')" -gt 0 ] ; then
 	drawsep REMIND
 	remt
 fi

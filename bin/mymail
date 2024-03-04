@@ -56,11 +56,11 @@ check_unlock() {
 
 get_new() {
 	if command -v getmail > /dev/null ; then
-		[ "${delete_pop}" -eq 0 ] \
-			&& getpop='getmail -d' \
-			|| getpop='getmail -l'
+		[ "${delete_pop}" -eq 1 ] \
+			&& getpop='getmail --delete' \
+			|| getpop='getmail --dont-delete'
 	else
-		[ "${delete_pop}" -eq 0 ] \
+		[ "${delete_pop}" -eq 1 ] \
 			&& getpop='mpop --keep=off' \
 			|| getpop='mpop --keep=on'
 	fi

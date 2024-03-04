@@ -20,6 +20,7 @@ PATH=$PATH:$HOME/bin
 export LANG=en_GB.UTF-8
 export LC_CTYPE=en_GB.UTF-8
 
+_delete_pop=0
 _force_client=0
 _open_without_asking=0
 _unlock_without_asking=0
@@ -55,9 +56,13 @@ check_unlock() {
 
 get_new() {
 	if command -v getmail > /dev/null ; then
-		getpop='getmail'
+		[ "${_delete_pop}" -eq 0 ] \
+			&& getpop='getmail -d' \
+			|| getpop='getmail -l'
 	else
-		getpop='mpop'
+		[ "${_delete_pop}" -eq 0 ] \
+			&& getpop='mpop --keep=off' \
+			|| getpop='mpop --keep=on'
 	fi
 	TERM=xterm-256color $getpop -a
 	TERM=xterm-256color mbsync -a
@@ -88,8 +93,9 @@ USAGE
 	exit 1
 }
 
-while getopts m:oy arg; do
+while getopts m:doy arg; do
 	case ${arg} in
+		d) _delete_pop=1 ;;
 		m) _force_client=1 && _mutt="${OPTARG}" ;;
 		o) _open_without_asking=1 ;;
 		y) _unlock_without_asking=1 ;;

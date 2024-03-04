@@ -21,6 +21,8 @@ link:
 	@ln -sf ${dotdir}/home/.ksh_completions ~/.ksh_completions
 	@ln -sf ${dotdir}/home/.ksh_paths ~/.ksh_paths
 	@ln -sf ${dotdir}/home/.kshrc ~/.kshrc
+	@echo "---> tmux(1) config"
+	@ln -sf ${dotdir}/home/.tmux.conf ~/.tmux.conf
 	@echo "---> xmobar(1) config"
 	@ln -sf ${dotdir}/home/.xmobarrc ~/.xmobarrc
 	@echo "==== Linking .config ==========================================================="
@@ -81,6 +83,7 @@ remove:
 	rm -f ~/bin/mymail
 	rm -f ~/bin/pass
 	rm -f ~/bin/see
+	rm -f ~/bin/shortpath
 	rm -f ~/bin/tellme
 	rm -f ~/bin/termbar.sh
 	rm -f ~/bin/upgrade
@@ -114,6 +117,8 @@ unlink:
 	@rm -f ~/.ksh_completions
 	@rm -f ~/.ksh_paths
 	@rm -f ~/.kshrc
+	@echo "---> tmux(1) config"
+	@rm -f ~/.tmux.conf
 	@echo "---> xmobar(1) config"
 	@rm -f ~/.xmobarrc
 	@echo "==== Removing links from .config ==============================================="
@@ -174,6 +179,7 @@ update:
 	cp -f bin/mymail ~/bin/mymail
 	cp -f bin/pass ~/bin/pass
 	cp -f bin/see ~/bin/see
+	cp -f bin/shortpath ~/bin/shortpath
 	cp -f bin/tellme ~/bin/tellme
 	cp -f bin/termbar.sh ~/bin/termbar.sh
 	cp -f bin/upgrade ~/bin/upgrade

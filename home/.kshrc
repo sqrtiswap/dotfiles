@@ -47,7 +47,7 @@ ahead_behind() {
 #_shell='\[[$0]'
 _shell='$0'
 _exit_code="\[\033[0;\$((\$?==0?0:31))m\]\[[\${?}]"
-if [[ "$TERM" =~ tmux ]] ; then
+if [ "$TERM" = 'tmux-256color' ] ; then
 	_basics="$_XTERM_TITLE$_SH_COLOUR$_shell $_exit_code $_PS1_COLOUR\u $_PS1_BLUE\w$_PS1_CLEAR"
 else
 	_basics="$_XTERM_TITLE$_SH_COLOUR$_shell $_exit_code $_PS1_COLOUR\u@$_PS1_CLEAR\h $_PS1_BLUE\w$_PS1_CLEAR"

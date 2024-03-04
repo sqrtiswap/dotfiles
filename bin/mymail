@@ -104,10 +104,9 @@ while getopts m:doy arg ; do
 done
 shift $((OPTIND - 1))
 
+check_mutt
 if pgrep mutt > /dev/null ; then
-	check_mutt
 	run_mutt
 else
-	check_mutt
 	check_unlock
 fi

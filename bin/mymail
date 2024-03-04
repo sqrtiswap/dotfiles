@@ -81,19 +81,19 @@ unlock() {
 		IFS= read -r _open
 	fi
 	if [ "${_open_without_asking}" -eq 1 ] || [ "${_open}" = "y" ] || [ "${_open}" = "" ] ; then
-		[ -n "$TMUX" ] && tmux rename-window email
+		[ -n "$TMUX" ] && tmux rename-window EMAIL
 		run_mutt
 	fi
 }
 
 usage() { cat << USAGE
-${0##*/} - simple (neo)mutt manager
-usage: ${0##*/}	[-m client] [-y] command
+${0##*/} - simple email management
+usage: ${0##*/}	[-d] [-m client] [-o] [-y] command
 USAGE
 	exit 1
 }
 
-while getopts m:doy arg; do
+while getopts m:doy arg ; do
 	case ${arg} in
 		d) _delete_pop=1 ;;
 		m) _force_client=1 && _mutt="${OPTARG}" ;;

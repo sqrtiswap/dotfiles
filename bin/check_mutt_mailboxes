@@ -14,30 +14,30 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-_fail='\033[31m' # red
-_good='\033[32m' # green
-_rset='\033[0m'  # reset colour
+fail='\033[31m' # red
+good='\033[32m' # green
+rset='\033[0m'  # reset colour
 
-_debug=0
+debug=0
 
-_accounts=$(find -L "$HOME"/Emails -depth 1 -type d | cut -d '/' -f 5 | grep -v '^[.]' | sort)
+accounts=$(find -L "$HOME"/Emails -depth 1 -type d | cut -d '/' -f 5 | grep -v '^[.]' | sort)
 
 find_missing() {
-	for f in ${_accounts} ; do
-		_accountpath="$HOME"/Emails/"$f"
-		_configfile=$(find -L "$HOME"/.config/mutt/accounts -maxdepth 1 -type f -name "*$f*")
-		_escaped_accountpath=$(echo "${_accountpath}" | sed 's/\//\\\//g')
-		_mailboxes=$(find -L "${_accountpath}" -mindepth 1 -type d | grep -v -e '/cur$' -e '/new$' -e '/tmp$' | sed "s/${_escaped_accountpath}\///g")
-		if [ -n "${_mailboxes}" ] ; then
+	for f in ${accounts} ; do
+		accountpath="$HOME"/Emails/"$f"
+		configfile=$(find -L "$HOME"/.config/mutt/accounts -maxdepth 1 -type f -name "*$f*")
+		escaped_accountpath=$(echo "${accountpath}" | sed 's/\//\\\//g')
+		mailboxes=$(find -L "${accountpath}" -mindepth 1 -type d | grep -v -e '/cur$' -e '/new$' -e '/tmp$' | sed "s/${escaped_accountpath}\///g")
+		if [ -n "${mailboxes}" ] ; then
 			IFS='
 	'
-			for i in ${_mailboxes} ; do
-				if grep -q "=$i" "${_configfile}" ; then
-					if [ "${_debug}" -eq 1 ] ; then
-						printf "${_good}%s: %s found${_rset}\n" "$f" "$i"
+			for i in ${mailboxes} ; do
+				if grep -q "=$i" "${configfile}" ; then
+					if [ "${debug}" -eq 1 ] ; then
+						printf "%s: ${good}%s${rset}\n" "$f" "$i"
 					fi
 				else
-					printf "${_fail}%s: %s is missing${_rset}\n" "$f" "$i"
+					printf "%s: ${fail}%s${rset}\n" "$f" "$i"
 				fi
 			done
 		fi
@@ -51,7 +51,7 @@ usage() {
 
 while getopts d arg; do
 	case ${arg} in
-		d) _debug=1 ;;
+		d) debug=1 ;;
 		*) usage
 	esac
 done

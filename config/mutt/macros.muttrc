@@ -9,6 +9,7 @@ macro index i5  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/5-m
 macro index i6  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/6-info_at_f-i-s-t.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
 macro index ib  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/b-biberlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
 macro index iw  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/w-web.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro index ic  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/c-campus.tu-berlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
 macro index E   "<shell-escape>~/.config/mutt/scripts/get_overview<enter>"
 macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
 macro index O   "<shell-escape>mpop -a && mbsync -a && notmuch new<enter>" "sync all mail"
@@ -24,6 +25,7 @@ macro pager i5  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/5-m
 macro pager i6  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/6-info_at_f-i-s-t.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
 macro pager ib  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/b-biberlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
 macro pager iw  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/w-web.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
+macro pager ic  "<sync-mailbox><enter-command>source ~/.config/mutt/accounts/c-campus.tu-berlin.de.muttrc<enter><change-folder>!<enter>;<check-stats>"
 #macro pager w   "<enter-command>set invsmart_wrap invmarkers<enter>" # Toggle wrap stuff
 #macro pager y   "<sync-mailbox><change-folder>?<toggle-mailboxes>"   # "-y" screen
 #macro pager \e1 "<enter-command>set pager_index_lines=1<enter>"      # Change PIL size

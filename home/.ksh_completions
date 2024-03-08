@@ -34,6 +34,8 @@ set -A complete_backup -- all \
 	prep \
 	restic
 
+set -A complete_agenda -- email
+
 set -A complete_upgrade -- after \
 	brew \
 	check \
@@ -53,9 +55,10 @@ set -A complete_lazyscript_1 -- all \
 	morning \
 	pw \
 	qr \
-	sync \
-	threemafiles \
-	weather
+	sync
+set -A complete_lazyscript_2 -- all \
+	email \
+	$(date +%F)
 
 set -A complete_notmuch -- count \
 	dump \

@@ -153,16 +153,12 @@ elif [ "$OS" = "linux" ] ; then
 	alias checkrun='pidof -q'
 	alias top='top -i'
 
-	alias backrem='remind -z -k"notify-send -w %s &" ~/.reminders &'
-
 	# Uncomment to disable systemctl's auto-paging feature
 	# export SYSTEMD_PAGER=
 elif [ "$OS" = "macos" ] ; then
 	alias ls='LANG=C ls --color=auto -FHh'
 
 	alias checkrun='pgrep -qi'
-
-	alias backrem='remind -z -k"terminal-notifier -message %s -title Remind &" ~/.reminders &'
 
 	export TERMINFO_DIRS=$TERMINFO_DIRS:$HOME/.local/share/terminfo
 	export LC_ALL=en_GB.UTF-8
@@ -202,6 +198,8 @@ alias python='python3'
 alias urldecode='python -c "import sys, urllib.parse as ul; print(ul.unquote_plus(sys.argv[1]))"'
 alias urlencode='python -c "import sys, urllib.parse as ul; print (ul.quote_plus(sys.argv[1]))"'
 
+alias ledger='ledger --pedantic'
+
 if [ "$OS" = "obsd" ] || [ "$OS" = "linux" ] ; then
 	alias doc=zathura
 	alias mup=mupdf
@@ -228,10 +226,6 @@ alias remind='remind -m -b1'
 alias tkremind='tkremind -m -b1'
 alias rem='rem -m -b1 -@2,0 -gaadd'
 alias remt='rem'
-if [ -n "$DISPLAY" ] || [ "$OS" = "macos" ] ; then
-	checkrun remind || backrem
-	[ "$OS" = "linux" ] && disown "$(pidof remind)"
-fi
 ## khal & vdirsyncer
 alias khali='khal interactive'
 alias vsync='vdirsyncer sync'

@@ -7,6 +7,7 @@ set sort = threads                       # Sort emails in threads
 set sort_aux = last-date-received        # Sort threads by the date of the last received email
 set sleep_time = 0                       # Pause 0 seconds for informational messages
 set markers = no                         # Disables the `+` displayed at line wraps
+set smart_wrap = no                      # Don't want smart wrapping.
 set mark_old = no                        # Unread mail stay unread until read
 set wait_key = no                        # mutt won't ask "press key to continue"
 set fast_reply                           # skip to compose when replying
@@ -18,22 +19,18 @@ set include                              # include message in replies
 set mail_check = 60                      # to avoid lags using IMAP with some email providers, e.g. yahoo
 set print = ask-yes                      # Ask before printing
 set delete = ask-yes                     # Ask before deleting
-set charset = utf-8
-set send_charset = utf-8"
-set edit_headers                          # Edit basic headers during compose
-set nobeep                                # We don't need no beeping software.
-set fcc_clear                             # Keep fcc's clear of signatures and encryption.
-push <show-version>                       # Show version on startup
+set charset = utf-8                      # Expect UTF-8 always, irrespective of local LANG/LC_TYPE
+set send_charset = utf-8                 # Only use UTF-8 for sending
+set edit_headers                         # Edit basic headers during compose
+set nobeep                               # We don't need no beeping software.
+set fcc_clear                            # Keep fcc's clear of signatures and encryption.
+push <show-version>                      # Show version on startup
+set to_chars = " +TCFL"                  # default value
 #set smtp_authenticators = 'gssapi:login' # List of auth methods to try when connecting to an smtp server
-#set ascii_chars = yes                    # Use ascii when displaying trees
-#set nosmart_wrap                         # Don't want smart wrapping.
-#set nomarkers                            # Don't want any wrap markers.
-#set mime_forward                         # Forward message as MIME attachments.
+#set mime_forward = ask-no                # Forward message as MIME attachments.
 #set tilde                                # Fill out messages with '~'.
-#set noconfirmappend                      # Just append, don't hassle me.
+#set confirmappend = no                   # Just append, don't hassle me.
 #set quote_regexp = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
-#set to_chars = " +TCF "                  # Drop the "L".
-#set display_filter = "tac | sed '/\\\[-- Autoview/,+1d' | tac" # Suppress autoview messages
 
 # FORMATS ######################################################################
 set date_format = "%Y/%m/%d %k:%M"
@@ -48,8 +45,9 @@ set mime_type_query_command = "file --mime-type -b %s"  # How to figure out file
 set mime_forward = yes                                  # Attachments are forwarded with mail
 set rfc2047_parameters = yes                            # Decode RFC2047-encoded MIME parameters
 alternative_order text/plain text/enriched text/html    # Order in which email is displayed
-auto_view text/html application/pgp-encrypted
 set editor = "nvim +'set ft=mail'"
+auto_view text/html application/pgp-encrypted
+#set display_filter = "tac | sed '/\\\[-- Autoview/,+1d' | tac" # Suppress autoview messages
 
 # ALIASES ######################################################################
 set alias_file = ~/.config/mutt/aliases # Path to alias file
